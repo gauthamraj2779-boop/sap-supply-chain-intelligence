@@ -43,6 +43,9 @@ def health(request: Request) -> dict:
             "avoidance_planning": graph_ok,
             "natural_language_query": graph_ok,
             "llm_narrative": llm.available,
+            # The agent is the one capability that cannot degrade: with no model
+            # there is nothing to choose the tools, so /api/agent returns 503.
+            "agentic_reasoning": graph_ok and get_llm().supports_tools,
             "raw_cypher": backend.supports_cypher if graph_ok else False,
         },
         "note": (

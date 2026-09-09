@@ -7,6 +7,7 @@ import FinancialDashboard from './components/FinancialDashboard';
 import AvoidancePanel from './components/AvoidancePanel';
 import ImpactTimeline from './components/ImpactTimeline';
 import LineageTrail from './components/LineageTrail';
+import InspectorPage from './components/InspectorPage';
 import { analyseQuestion, checkHealth, ApiError } from './utils/api';
 import { formatMoney, formatQty } from './utils/format';
 import { useCountUp } from './utils/useAnimatedNumber';
@@ -463,7 +464,22 @@ function ErrorPanel({ error, onDismiss }) {
 }
 
 // ── App ────────────────────────────────────────────────────────────────────
+// Read once at module load: the value cannot change without a reload, so the
+// early return below never reorders hooks. Hash routing keeps the inspector
+// reachable on a static host with no rewrite rules; crossing the route boundary
+// by editing the hash is turned into a real navigation.
+const onInspectRoute = () =>
+  typeof window !== 'undefined' && window.location.hash.startsWith('#/inspect');
+const INSPECT_ROUTE = onInspectRoute();
+if (typeof window !== 'undefined') {
+  window.addEventListener('hashchange', () => {
+    if (onInspectRoute() !== INSPECT_ROUTE) window.location.reload();
+  });
+}
+
 export default function App() {
+  if (INSPECT_ROUTE) return <InspectorPage />;
+
   const [report, setReport]                 = useState(null);
   const [loading, setLoading]               = useState(false);
   const [loadStep, setLoadStep]             = useState(0);

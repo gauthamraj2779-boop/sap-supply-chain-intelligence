@@ -67,6 +67,17 @@ export const getGraphSchema = () => request('/api/schema');
 export const runQuery = (question) =>
   request('/api/query', { method: 'POST', body: { question } });
 
+/**
+ * Run the tool-calling agent. Returns { answer, trajectory, report?, cross_check? }.
+ *
+ * Generous timeout: a run is up to eight model turns with a graph query between
+ * each, so it is minutes-scale in the worst case rather than seconds. Throws an
+ * ApiError with status 503 when no model is configured — there is no fallback
+ * trajectory, by design.
+ */
+export const runAgent = (question) =>
+  request('/api/agent', { method: 'POST', body: { question }, timeout: 180000 });
+
 export const runImpact = (supplier_id, delay_days, horizon_days) =>
   request('/api/impact', {
     method: 'POST',

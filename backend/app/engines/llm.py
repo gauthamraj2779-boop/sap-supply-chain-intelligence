@@ -36,6 +36,34 @@ class LLMStatus:
     reason: str
 
 
+@dataclass
+class ToolCall:
+    """One tool the model asked for, with its arguments already parsed.
+
+    ``arguments`` is ``{}`` when the model emitted malformed JSON; the caller
+    decides what to do about that rather than the client raising.
+    """
+
+    id: str
+    name: str
+    arguments: dict
+    raw_arguments: str
+
+
+@dataclass
+class ToolTurn:
+    """One assistant turn of a tool-calling conversation.
+
+    ``assistant_message`` is the exact dict to append to the running message
+    list, so the caller never has to reconstruct the wire format.
+    """
+
+    content: str | None
+    tool_calls: list[ToolCall]
+    assistant_message: dict
+    finish_reason: str | None
+
+
 class LLMClient:
     def __init__(self, settings=None) -> None:
         self.settings = settings or get_settings()
@@ -141,6 +169,73 @@ class LLMClient:
             return (getattr(r, "text", "") or "").strip() or None
         except Exception as exc:
             logger.warning("LLM completion failed: %s", exc)
+            return None
+
+    @property
+    def supports_tools(self) -> bool:
+        """Tool calling rides the OpenAI wire format only.
+
+        Gemini's SDK exposes function calling through a different surface; until
+        that is implemented the agent degrades to "unavailable" rather than
+        silently pretending it reasoned over tools.
+        """
+        return self.available and self._kind == "openai"
+
+    def complete_with_tools(
+        self,
+        messages: list[dict],
+        tools: list[dict] | None = None,
+        max_tokens: int = 1200,
+    ) -> ToolTurn | None:
+        """One turn of a tool-calling conversation. Returns None on any failure.
+
+        ``messages`` is the full running history in OpenAI wire format (system,
+        user, assistant-with-tool_calls, tool results). Passing no ``tools``
+        forces a prose answer, which is how the loop closes out at its cap.
+        """
+        if not self.supports_tools:
+            return None
+        try:
+            kwargs: dict[str, Any] = {}
+            if tools:
+                kwargs["tools"] = tools
+                kwargs["tool_choice"] = "auto"
+            r = self._client.chat.completions.create(
+                model=self._model, max_tokens=max_tokens, temperature=0.0,
+                messages=messages, **kwargs,
+            )
+            choice = r.choices[0]
+            msg = choice.message
+            content = (msg.content or "").strip() or None
+
+            calls: list[ToolCall] = []
+            wire_calls: list[dict] = []
+            for tc in getattr(msg, "tool_calls", None) or []:
+                raw = tc.function.arguments or "{}"
+                try:
+                    parsed = json.loads(raw)
+                except (ValueError, TypeError):
+                    logger.warning("Tool call %s had unparseable arguments", tc.function.name)
+                    parsed = {}
+                if not isinstance(parsed, dict):
+                    parsed = {}
+                calls.append(ToolCall(id=tc.id, name=tc.function.name,
+                                      arguments=parsed, raw_arguments=raw))
+                wire_calls.append({
+                    "id": tc.id, "type": "function",
+                    "function": {"name": tc.function.name, "arguments": raw},
+                })
+
+            assistant: dict[str, Any] = {"role": "assistant", "content": msg.content or ""}
+            if wire_calls:
+                assistant["tool_calls"] = wire_calls
+
+            return ToolTurn(
+                content=content, tool_calls=calls, assistant_message=assistant,
+                finish_reason=choice.finish_reason,
+            )
+        except Exception as exc:
+            logger.warning("LLM tool-calling turn failed: %s", exc)
             return None
 
     def complete_json(
