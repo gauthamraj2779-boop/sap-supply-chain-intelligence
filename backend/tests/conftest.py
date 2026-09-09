@@ -1,9 +1,19 @@
+import os
 import sys
 from pathlib import Path
 
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+# The suite must be hermetic: no network, no spend, identical results on any
+# machine. A developer .env holding real LLM credentials would otherwise make
+# every /api/impact call generate a narrative over the wire -- slow, costly, and
+# non-deterministic. Pin the provider off before anything reads settings.
+# Degradation itself is still exercised: tests/test_faulttolerance.py asserts
+# the full report is produced with no LLM at all.
+os.environ["LLM_PROVIDER"] = "none"
+os.environ["GRAPH_BACKEND"] = "memory"
 
 from app.engines.avoidance import find_actions          # noqa: E402
 from app.engines.deterministic import run_traversal      # noqa: E402

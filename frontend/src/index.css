@@ -741,3 +741,8 @@ body {
   padding: 60px 24px; text-align: center;
   font-size: 14px; color: var(--ink-3); font-style: italic;
 }
+
+.loading-elapsed {
+  margin-left: 10px; font-family: var(--mono); font-size: 13px;
+  color: var(--ink-4); font-weight: 400;
+}

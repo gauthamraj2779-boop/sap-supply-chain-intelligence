@@ -28,6 +28,7 @@ def test_full_report_without_any_llm(backend):
 
 def test_llm_client_never_raises_without_credentials():
     c = LLMClient(Settings(llm_provider="openai", openai_api_key=None))
+    assert c.status().provider == "openai"
     assert not c.available
     assert c.complete("s", "u") is None
     assert c.complete_json("s", "u", {"type": "object"}) is None
@@ -35,7 +36,15 @@ def test_llm_client_never_raises_without_credentials():
 
 @pytest.mark.parametrize("provider", ["openai", "deepseek", "groq", "azure", "gemini", "none"])
 def test_every_provider_degrades_cleanly(provider):
-    c = LLMClient(Settings(llm_provider=provider))
+    # Explicitly blank every credential: Settings reads .env, and a developer
+    # machine with real keys would otherwise make this assert the opposite of
+    # what it is testing.
+    c = LLMClient(Settings(
+        llm_provider=provider,
+        openai_api_key=None, deepseek_api_key=None, groq_api_key=None,
+        gemini_api_key=None, azure_openai_key=None, azure_openai_api_key=None,
+        azure_openai_endpoint=None, azure_openai_deployment=None,
+    ))
     assert not c.available
     assert c.status().reason
     assert c.complete("s", "u") is None
@@ -106,3 +115,50 @@ def test_partial_traversal_lowers_coverage_not_correctness(backend):
     assert c.traversal_coverage < 1.0
     assert "graph_traversal" in c.degraded_modes
     t.hops_failed = []
+
+
+def test_cross_check_ignores_numbers_that_are_not_money(exposure, traversal, plan):
+    """Prose is full of non-monetary numbers.
+
+    Plant codes, quantities, order numbers, day counts and percentages must not
+    be read as currency. Flagging those produced false hallucination reports,
+    which is worse than no check at all: it condemns a faithful narrative and
+    teaches the reader to ignore the warning.
+    """
+    faithful = (
+        f"Total exposure is {exposure.total_financial_exposure:,.0f} USD. "
+        "Plant 1010 is short 2,850 units of MCU-32 and 200 units of PWR-IC-7, "
+        "while Plant 1020 is short 900 units. Defer production order 000009002 "
+        "for FCB-100. Delivery 0080001 is 12 days late. This removes 94.0 percent "
+        "of the exposure over 45 days."
+    )
+    result = verify_narrative(faithful, exposure, traversal, plan)
+    assert result.clean, [
+        (d.stated, d.context) for d in result.discrepancies
+    ]
+    assert result.checked == 1, "only the marked USD figure should be checked"
+
+
+def test_cross_check_still_catches_a_marked_wrong_figure(exposure, traversal, plan):
+    """Tightening the extractor must not blunt it."""
+    result = verify_narrative(
+        "Plant 1010 is short 2,850 units. Total exposure is $500,000,000.",
+        exposure, traversal, plan,
+    )
+    assert not result.clean
+    assert len(result.discrepancies) == 1
+    assert result.discrepancies[0].stated == 500_000_000
+
+
+def test_cross_check_accepts_common_money_notations(exposure, traversal, plan):
+    from app.validation.cross_check import _extract
+
+    total = exposure.total_financial_exposure
+    for text in (f"${total:,.0f}", f"{total:,.0f} USD", f"USD {total:,.0f}", "$95.6M"):
+        assert _extract(text), f"failed to read {text!r} as money"
+
+
+def test_cross_check_ignores_numbers_glued_to_identifiers():
+    from app.validation.cross_check import _extract
+
+    assert _extract("order 000009002 and part PWR-IC-7 and SO 0004502-10") == []

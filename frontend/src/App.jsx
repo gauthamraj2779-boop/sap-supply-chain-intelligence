@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import QueryInput from './components/QueryInput';
@@ -19,13 +19,18 @@ const SECTIONS = [
   { id: 'trust',     label: 'Lineage & trust' },
 ];
 
+// The deterministic pipeline finishes in well under a second; when a narrative
+// is generated it dominates the wait. Stepping at a uniform cadence made the
+// list race to the end and then sit silent, so each step declares its own
+// dwell and the slow one is named for what it is actually waiting on.
 const LOADING_STEPS = [
-  'Parsing query and resolving entity…',
-  'Traversing the supply chain graph…',
-  'Computing financial exposure per hop…',
-  'Searching for avoidance paths…',
-  'Cross-checking and scoring confidence…',
+  { label: 'Parsing query and resolving entity…',      ms: 260 },
+  { label: 'Traversing the supply chain graph…',        ms: 320 },
+  { label: 'Computing financial exposure per hop…',     ms: 320 },
+  { label: 'Searching for avoidance paths…',            ms: 300 },
+  { label: 'Cross-checking figures and scoring confidence…', ms: 400 },
 ];
+const NARRATIVE_STEP = { label: 'Writing the executive summary…', ms: null };
 
 // ── Lineage & trust ────────────────────────────────────────────────────────
 function TrustSection({ confidence, lineage, subject, derivation, assumptions }) {
@@ -372,12 +377,15 @@ function NarrativeBanner({ data, onNavigate }) {
 }
 
 // ── Loading ────────────────────────────────────────────────────────────────
-function LoadingScreen({ step }) {
+function LoadingScreen({ step, steps, elapsed }) {
   return (
     <div className="loading-state">
-      <h2 className="loading-title">Analysing supply chain…</h2>
+      <h2 className="loading-title">
+        Analysing supply chain…
+        {elapsed >= 3 && <span className="loading-elapsed">{elapsed}s</span>}
+      </h2>
       <div className="loading-steps">
-        {LOADING_STEPS.map((s, i) => {
+        {steps.map((s, i) => {
           const state = i < step ? 'done' : i === step ? 'active' : 'pending';
           return (
             <motion.div
@@ -388,7 +396,7 @@ function LoadingScreen({ step }) {
               transition={{ delay: i * 0.15 }}
             >
               <div className={`ls-dot ${state}`} />
-              {s}
+              {s.label}
             </motion.div>
           );
         })}
@@ -422,17 +430,25 @@ export default function App() {
   const [report, setReport]                 = useState(null);
   const [loading, setLoading]               = useState(false);
   const [loadStep, setLoadStep]             = useState(0);
+  const [loadSteps, setLoadSteps]           = useState(LOADING_STEPS);
+  const [elapsed, setElapsed]               = useState(0);
   const [activeSection, setActiveSection]   = useState('overview');
   const [selectedNode, setSelectedNode]     = useState(null);
   const [avoidanceApplied, setAvoidanceApplied] = useState(false);
   const [health, setHealth]                 = useState(null);
   const [error, setError]                   = useState(null);
+  // Read inside the query callback without making it depend on health.
+  const llmOnlineRef = useRef(false);
 
   // Probe the backend once so the console can state its real capabilities.
   useEffect(() => {
     let live = true;
     checkHealth()
-      .then((h) => live && setHealth(h))
+      .then((h) => {
+        if (!live) return;
+        setHealth(h);
+        llmOnlineRef.current = Boolean(h?.llm?.available);
+      })
       .catch(() => live && setHealth(null));
     return () => { live = false; };
   }, []);
@@ -445,16 +461,35 @@ export default function App() {
     setAvoidanceApplied(false);
     setError(null);
 
-    const stepTimer = setInterval(
-      () => setLoadStep((s) => Math.min(s + 1, LOADING_STEPS.length - 1)),
-      350,
+    // Advance through the fast stages on their own timings, then hold on the
+    // last one — whatever it is — until the response actually lands.
+    const steps = llmOnlineRef.current
+      ? [...LOADING_STEPS, NARRATIVE_STEP]
+      : LOADING_STEPS;
+    setLoadSteps(steps);
+
+    const timers = [];
+    let acc = 0;
+    steps.slice(0, -1).forEach((s, i) => {
+      acc += s.ms ?? 300;
+      timers.push(setTimeout(() => setLoadStep(i + 1), acc));
+    });
+    const started = Date.now();
+    const tick = setInterval(
+      () => setElapsed(Math.floor((Date.now() - started) / 1000)),
+      1000,
     );
 
     try {
       const { view } = await analyseQuestion(question);
       setReport(view);
       setActiveSection('overview');
-      checkHealth().then(setHealth).catch(() => {});
+      checkHealth()
+        .then((h) => {
+          setHealth(h);
+          llmOnlineRef.current = Boolean(h?.llm?.available);
+        })
+        .catch(() => {});
     } catch (err) {
       setError(
         err instanceof ApiError
@@ -462,7 +497,9 @@ export default function App() {
           : new ApiError(err.message || 'Unexpected error while analysing.'),
       );
     } finally {
-      clearInterval(stepTimer);
+      timers.forEach(clearTimeout);
+      clearInterval(tick);
+      setElapsed(0);
       setLoading(false);
     }
   }, []);
@@ -515,7 +552,7 @@ export default function App() {
           {error && <ErrorPanel error={error} onDismiss={() => setError(null)} />}
 
           {loading ? (
-            <LoadingScreen step={loadStep} />
+            <LoadingScreen step={loadStep} steps={loadSteps} elapsed={elapsed} />
           ) : (
             !error && (
               <div className="landing-hero">

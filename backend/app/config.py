@@ -46,8 +46,26 @@ class Settings(BaseSettings):
 
     azure_openai_endpoint: str | None = None
     azure_openai_key: str | None = None
+    # Azure AI Foundry docs name this variable AZURE_OPENAI_API_KEY; the classic
+    # Azure OpenAI docs name it AZURE_OPENAI_KEY. Accept either.
+    azure_openai_api_key: str | None = None
     azure_openai_deployment: str | None = None
     azure_openai_api_version: str = "2024-12-01-preview"
+
+    @property
+    def azure_key(self) -> str | None:
+        return self.azure_openai_key or self.azure_openai_api_key
+
+    @property
+    def azure_is_v1_endpoint(self) -> bool:
+        """Foundry `/openai/v1` endpoints speak the plain OpenAI wire protocol.
+
+        Classic Azure OpenAI (`<resource>.openai.azure.com`) needs the
+        AzureOpenAI client, an api_version, and deployment-as-model. The newer
+        Foundry v1 endpoint needs none of that and works with the standard
+        client plus a base_url, so the two are handled separately.
+        """
+        return bool(self.azure_openai_endpoint and "/openai/v1" in self.azure_openai_endpoint)
 
     gemini_api_key: str | None = None
     gemini_model: str = "gemini-2.0-flash"
@@ -84,7 +102,7 @@ class Settings(BaseSettings):
                 "openai": self.openai_api_key,
                 "deepseek": self.deepseek_api_key,
                 "groq": self.groq_api_key,
-                "azure": self.azure_openai_key and self.azure_openai_endpoint,
+                "azure": self.azure_key and self.azure_openai_endpoint,
                 "gemini": self.gemini_api_key,
             }.get(p)
         )

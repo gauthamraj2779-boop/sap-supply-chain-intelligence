@@ -14,14 +14,31 @@ from dataclasses import dataclass, field
 from app.config import get_settings
 from app.models import AvoidancePlan, FinancialExposure, TraversalResult
 
-# $1,234,567.89 | $95.6M | $4.2K | 1,234,567 USD
-_MONEY = re.compile(
-    r"(?:USD\s*)?\$?\s*([0-9][0-9,]*(?:\.[0-9]+)?)\s*([KMB])?(?:\s*(?:USD|dollars))?",
+# A monetary figure must be *marked* as one. Prose is full of numbers that are
+# not money -- plant codes ("Plant 1010"), quantities ("2,850 units"), order
+# numbers ("000009002"), day counts, percentages. Treating those as currency
+# produced false hallucination reports, which is worse than not checking at all:
+# it flags a faithful narrative and trains the reader to ignore the warning.
+#
+# So: only figures carrying an explicit currency marker are checked. The
+# narrator is instructed to mark every one (see engines/generative.py), which
+# makes an unmarked monetary claim itself a detectable failure.
+_NUM = r"([0-9][0-9,]*(?:\.[0-9]+)?)\s*([KMB])?"
+
+_MONEY_PATTERNS = (
+    re.compile(r"\$\s*" + _NUM, re.IGNORECASE),                    # $95.6M, $1,234
+    re.compile(_NUM + r"\s*(?:USD|dollars)\b", re.IGNORECASE),     # 95,552,000 USD
+    re.compile(r"USD\s*" + _NUM, re.IGNORECASE),                    # USD 95,552,000
+)
+
+# Units that prove a number is not currency, even if it sits near money words.
+_NON_MONEY_SUFFIX = re.compile(
+    r"^\s*(?:units?|pcs|ea|days?|hours?|weeks?|percent|%|deliveries|delivery|"
+    r"customers?|plants?|materials?|orders?|lines?|hops?|items?)\b",
     re.IGNORECASE,
 )
+
 _SCALE = {"k": 1e3, "m": 1e6, "b": 1e9}
-
-
 @dataclass
 class Discrepancy:
     stated: float
@@ -44,23 +61,34 @@ class CrossCheckResult:
 
 
 def _extract(text: str) -> list[tuple[float, str]]:
-    out: list[tuple[float, str]] = []
-    for m in _MONEY.finditer(text):
-        raw, suffix = m.group(1), (m.group(2) or "").lower()
-        try:
-            value = float(raw.replace(",", ""))
-        except ValueError:
-            continue
-        if suffix:
-            value *= _SCALE[suffix]
-        elif value < 1000 and "," not in raw:
-            # Bare small integers are day counts, order counts, percentages --
-            # not money. Only treat them as money when explicitly marked.
-            if "$" not in m.group(0) and "usd" not in m.group(0).lower():
+    """Every explicitly-marked monetary figure in the text, with its context."""
+    found: dict[int, tuple[float, str]] = {}
+
+    for pattern in _MONEY_PATTERNS:
+        for m in pattern.finditer(text):
+            raw, suffix = m.group(1), (m.group(2) or "").lower()
+
+            # Skip a number glued to an identifier, e.g. the "9002" inside
+            # "000009002" or the "7" in "PWR-IC-7".
+            lead = text[m.start(1) - 1] if m.start(1) > 0 else " "
+            if lead.isalnum() or lead in "-_/":
                 continue
-        start, end = max(0, m.start() - 45), min(len(text), m.end() + 45)
-        out.append((value, text[start:end].replace("\n", " ").strip()))
-    return out
+            if _NON_MONEY_SUFFIX.match(text[m.end():]):
+                continue
+
+            try:
+                value = float(raw.replace(",", ""))
+            except ValueError:
+                continue
+            if suffix:
+                value *= _SCALE[suffix]
+            if value == 0:
+                continue
+
+            lo, hi = max(0, m.start() - 45), min(len(text), m.end() + 45)
+            found[m.start(1)] = (value, text[lo:hi].replace("\n", " ").strip())
+
+    return list(found.values())
 
 
 def computed_figures(

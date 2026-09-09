@@ -67,19 +67,31 @@ class LLMClient:
                 self._kind, self._model = "openai", getattr(s, model_attr)
 
             elif provider == "azure":
-                if not (s.azure_openai_key and s.azure_openai_endpoint
+                if not (s.azure_key and s.azure_openai_endpoint
                         and s.azure_openai_deployment):
-                    self._reason = ("AZURE_OPENAI_KEY / _ENDPOINT / _DEPLOYMENT "
+                    self._reason = ("AZURE_OPENAI_API_KEY / _ENDPOINT / _DEPLOYMENT "
                                     "are not all set")
                     return
-                from openai import AzureOpenAI
 
-                self._client = AzureOpenAI(
-                    api_key=s.azure_openai_key,
-                    azure_endpoint=s.azure_openai_endpoint,
-                    api_version=s.azure_openai_api_version,
-                    timeout=30.0, max_retries=1,
-                )
+                if s.azure_is_v1_endpoint:
+                    # Azure AI Foundry v1: plain OpenAI protocol, bearer auth,
+                    # model name is the deployment name.
+                    from openai import OpenAI
+
+                    self._client = OpenAI(
+                        api_key=s.azure_key,
+                        base_url=s.azure_openai_endpoint.rstrip("/"),
+                        timeout=60.0, max_retries=1,
+                    )
+                else:
+                    from openai import AzureOpenAI
+
+                    self._client = AzureOpenAI(
+                        api_key=s.azure_key,
+                        azure_endpoint=s.azure_openai_endpoint,
+                        api_version=s.azure_openai_api_version,
+                        timeout=60.0, max_retries=1,
+                    )
                 self._kind, self._model = "openai", s.azure_openai_deployment
 
             elif provider == "gemini":
