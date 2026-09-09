@@ -31,6 +31,10 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_HORIZON_DAYS = 45
 
+# Real bills of material are a handful of levels deep. This is not a modelling
+# limit, it is the stopping condition for a BOM that references itself.
+MAX_BOM_LEVELS = 12
+
 
 class SupplierNotFound(LookupError):
     pass
@@ -64,6 +68,138 @@ def _severity_from_days(days: float) -> str:
     if days <= 14:
         return "high"
     return "critical"
+
+
+def _explode_bom(backend: GraphBackend, result: TraversalResult) -> None:
+    """Carry a halted sub-assembly's slip up to the assemblies that consume it.
+
+    Walks the BOM one level at a time from every halted order, so a raw-material
+    shortfall travels raw -> sub-assembly -> finished good instead of stopping
+    at the order that happens to reserve the raw part.
+
+    The parent inherits the *root* blocking materials rather than the
+    sub-assembly's material number. Those are the parts a buyer can actually do
+    something about, and they are the keys the financial attribution and the
+    avoidance plan are built on; attaching exposure to a sub-assembly nobody can
+    purchase would strand it. The sub-assembly itself is recorded separately, in
+    ``blocking_subassemblies``, so the path stays visible.
+    """
+    # One pass lifts the halt by one BOM level, and a pass only reports a change
+    # when it adds an order or lengthens a halt -- both of which move in one
+    # direction only, so an acyclic bill of material settles. The cap is the
+    # safety net for a BOM that references itself: the walk stops and says so
+    # rather than climbing for ever.
+    for _ in range(MAX_BOM_LEVELS):
+        if not _propagate_one_level(backend, result):
+            return
+    logger.warning(
+        "BOM explosion stopped after %d levels; MAST/STPO may contain a cycle",
+        MAX_BOM_LEVELS,
+    )
+
+
+def _propagate_one_level(backend: GraphBackend, result: TraversalResult) -> bool:
+    changed = False
+    for child in list(result.production_orders):
+        if child.halt_days <= 0:
+            continue
+        assemblies = {r["MATNR"] for r in backend.where_used(child.output_matnr)}
+        if not assemblies:
+            continue
+
+        # Sub-assembly stock already on the shelf is consumed in requirement-date
+        # order; only what it fails to cover has to wait for the halted order.
+        st = backend.stock(child.output_matnr, child.werks) or {}
+        running = float(st.get("LABST", 0.0))
+        for r in backend.reservations_for(child.output_matnr, child.werks):
+            allocated = min(running, r["BDMNG"])
+            running -= allocated
+            if r["BDMNG"] - allocated <= 0:
+                continue
+            parent = backend.production_order(r["AUFNR"])
+            if not parent or parent["output_MATNR"] not in assemblies:
+                continue  # a reservation the bill of material does not corroborate
+
+            bdter = _d(r["BDTER"])
+            # Same arithmetic as hop 5, with the revised *finish* of the feeding
+            # order standing in for the revised arrival of purchased goods.
+            halt = max(0, (child.projected_finish - bdter).days)
+            if halt <= 0:
+                continue
+
+            existing = next((x for x in result.production_orders
+                             if x.aufnr == parent["AUFNR"]), None)
+            if existing:
+                if existing is child:
+                    continue  # an order cannot be a component of itself
+                if child.output_matnr not in existing.blocking_subassemblies:
+                    existing.blocking_subassemblies.append(child.output_matnr)
+                    changed = True
+                for matnr in child.blocking_materials:
+                    if matnr not in existing.blocking_materials:
+                        existing.blocking_materials.append(matnr)
+                        changed = True
+                if halt > existing.halt_days:
+                    existing.halt_days = float(halt)
+                    existing.projected_finish = (
+                        existing.scheduled_finish + timedelta(days=halt)
+                    )
+                    existing.severity = _severity_from_days(halt)
+                    changed = True
+                continue
+
+            comp = next((c for c in backend.bom_for_material(parent["output_MATNR"])
+                         if c["IDNRK"] == child.output_matnr), {})
+            out_mat = backend.material(parent["output_MATNR"]) or {}
+            plant = backend.plant(parent["WERKS"]) or {}
+            sched_finish = _d(parent["GLTRP"])
+            new = AffectedProductionOrder(
+                aufnr=parent["AUFNR"], output_matnr=parent["output_MATNR"],
+                output_material_name=out_mat.get("MAKTX", parent["output_MATNR"]),
+                werks=parent["WERKS"], plant_name=plant.get("NAME1", parent["WERKS"]),
+                order_qty=parent["GAMNG"], scheduled_finish=sched_finish,
+                projected_finish=sched_finish + timedelta(days=halt),
+                halt_days=float(halt),
+                blocking_materials=list(child.blocking_materials),
+                blocking_subassemblies=[child.output_matnr],
+                severity=_severity_from_days(halt),
+                lineage=LineageTrail(
+                    subject=f"Production order {parent['AUFNR']}",
+                    steps=[
+                        LineageStep(
+                            sap_table="STPO", sap_field="IDNRK",
+                            key=f"STLNR={comp.get('STLNR', '')}/POSNR={comp.get('POSNR', '')}",
+                            value=child.output_matnr,
+                            meaning="Sub-assembly the bill of material puts into this order's output"),
+                        LineageStep(
+                            sap_table="STPO", sap_field="MENGE",
+                            key=f"STLNR={comp.get('STLNR', '')}/POSNR={comp.get('POSNR', '')}",
+                            value=f"{comp.get('MENGE', 0):,.0f} per {comp.get('BMENG', 1):,.0f}",
+                            meaning="Component quantity per BOM base quantity (STKO.BMENG)"),
+                        LineageStep(
+                            sap_table="RESB", sap_field="BDTER",
+                            key=f"RSNUM={r['RSNUM']}/RSPOS={r['RSPOS']}",
+                            value=bdter.isoformat(),
+                            meaning="Date this order needs the sub-assembly"),
+                        LineageStep(
+                            sap_table="AFKO", sap_field="GLTRP",
+                            key=f"AUFNR={child.aufnr}",
+                            value=child.projected_finish.isoformat(),
+                            meaning="Revised finish of the order that builds the sub-assembly"),
+                    ],
+                    derivation=(
+                        f"{parent['output_MATNR']} consumes {child.output_matnr} "
+                        f"(STPO.IDNRK); {r['BDMNG'] - allocated:,.0f} of the "
+                        f"{r['BDMNG']:,.0f} required are uncovered by stock, so the "
+                        f"order waits on {child.aufnr}: halt_days = revised finish "
+                        f"{child.projected_finish.isoformat()} - need date "
+                        f"{bdter.isoformat()} = {halt}d"
+                    ),
+                ),
+            )
+            result.production_orders.append(new)
+            changed = True
+    return changed
 
 
 def run_traversal(
@@ -291,6 +427,11 @@ def run_traversal(
                         ),
                     ),
                 ))
+
+        # RESB stops at the order that reserves the short component, so on its
+        # own the cascade ends at the sub-assembly. The BOM is what carries it
+        # the rest of the way to the finished good.
+        _explode_bom(backend, result)
         result.hops_completed.append("production_orders")
     except Exception:
         logger.exception("Hop production_orders failed")

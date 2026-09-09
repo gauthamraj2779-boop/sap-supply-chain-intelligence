@@ -52,6 +52,11 @@ biz:SourceList a owl:Class ;
     skos:definition "An approved supplier-material relationship with price and lead time." ;
     sap:sourceTable "EINA, EINE" .
 
+biz:BOMItem a owl:Class ;
+    rdfs:label "BOMItem" ;
+    skos:definition "A component line of a bill of material: what goes into an assembly, and how much of it per base quantity." ;
+    sap:sourceTable "MAST, STKO, STPO" .
+
 biz:ProductionOrder a owl:Class ;
     rdfs:label "ProductionOrder" ;
     skos:definition "An order to manufacture a quantity of a material by a date." ;
@@ -249,6 +254,62 @@ biz:lead_time_days a owl:DatatypeProperty ;
     rdfs:range xsd:string ;
     sap:sourceTable "EINE" ;
     sap:sourceField "APLFZ" .
+
+biz:stlnr a owl:DatatypeProperty ;
+    rdfs:label "Bill of Material Number" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "MAST" ;
+    sap:sourceField "STLNR" .
+
+biz:parent_matnr a owl:DatatypeProperty ;
+    rdfs:label "Assembly Material Number" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "MAST" ;
+    sap:sourceField "MATNR" .
+
+biz:werks a owl:DatatypeProperty ;
+    rdfs:label "Plant" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "MAST" ;
+    sap:sourceField "WERKS" .
+
+biz:base_qty a owl:DatatypeProperty ;
+    rdfs:label "Base Quantity" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "STKO" ;
+    sap:sourceField "BMENG" .
+
+biz:posnr a owl:DatatypeProperty ;
+    rdfs:label "BOM Item Number" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "STPO" ;
+    sap:sourceField "POSNR" .
+
+biz:idnrk a owl:DatatypeProperty ;
+    rdfs:label "BOM Component" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "STPO" ;
+    sap:sourceField "IDNRK" .
+
+biz:menge a owl:DatatypeProperty ;
+    rdfs:label "Component Quantity" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "STPO" ;
+    sap:sourceField "MENGE" .
+
+biz:uom a owl:DatatypeProperty ;
+    rdfs:label "Component Unit of Measure" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "STPO" ;
+    sap:sourceField "MEINS" .
 
 biz:aufnr a owl:DatatypeProperty ;
     rdfs:label "Order Number" ;
@@ -451,6 +512,20 @@ biz:stockedat a owl:ObjectProperty ;
     rdfs:range biz:Plant ;
     sap:derivedFrom "MARD.WERKS -> T001W.WERKS" .
 
+biz:componentof a owl:ObjectProperty ;
+    rdfs:label "COMPONENT_OF" ;
+    skos:definition "Material appears as this component line of a bill of material" ;
+    rdfs:domain biz:Material ;
+    rdfs:range biz:BOMItem ;
+    sap:derivedFrom "STPO.IDNRK -> MARA.MATNR" .
+
+biz:assemblesinto a owl:ObjectProperty ;
+    rdfs:label "ASSEMBLES_INTO" ;
+    skos:definition "Component line builds towards this assembly" ;
+    rdfs:domain biz:BOMItem ;
+    rdfs:range biz:Material ;
+    sap:derivedFrom "MAST.MATNR -> MARA.MATNR" .
+
 biz:produces a owl:ObjectProperty ;
     rdfs:label "PRODUCES" ;
     skos:definition "Production order manufactures this material" ;
@@ -621,6 +696,28 @@ biz:SourceListShape a sh:NodeShape ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:message "SourceList.lifnr is required (SAP source: EINA.LIFNR)" ;
+    ] ;
+    sh:closed false .
+
+biz:BOMItemShape a sh:NodeShape ;
+    sh:targetClass biz:BOMItem ;
+    sh:property [
+        sh:path biz:stlnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "BOMItem.stlnr is required (SAP source: MAST.STLNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:idnrk ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "BOMItem.idnrk is required (SAP source: STPO.IDNRK)" ;
+    ] ;
+    sh:property [
+        sh:path biz:menge ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:message "BOMItem.menge is required (SAP source: STPO.MENGE)" ;
     ] ;
     sh:closed false .
 

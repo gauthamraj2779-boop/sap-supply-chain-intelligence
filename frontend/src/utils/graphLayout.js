@@ -4,6 +4,7 @@ export const NODE_COLORS = {
   Supplier:        '#b8440a',
   PurchaseOrder:   '#8b7355',
   Material:        '#6b6560',
+  BOMItem:         '#8a6d3b',
   Plant:           '#1a5276',
   ProductionOrder: '#2e7d5e',
   SalesOrder:      '#0d6270',

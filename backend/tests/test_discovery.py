@@ -105,7 +105,12 @@ def test_catalog_still_declares_the_ordinary_foreign_keys(catalog):
 # ======================================================================
 def test_profile_is_complete(prof):
     assert prof["method"] == "deterministic"
-    assert len(prof["tables"]) == 17
+    # Derived, not pinned: the catalogue grows when the dataset does (the BOM
+    # tables were added after this test was written), and a hardcoded count
+    # fails for a reason that has nothing to do with what is being tested.
+    from data.synthetic.ddic_catalog import TABLE_DESCRIPTIONS
+
+    assert len(prof["tables"]) == len(TABLE_DESCRIPTIONS)
     for col in prof["columns"]:
         assert col["rows"] > 0
         assert 0.0 <= col["null_rate"] <= 1.0

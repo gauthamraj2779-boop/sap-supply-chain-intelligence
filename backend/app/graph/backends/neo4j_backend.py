@@ -187,6 +187,45 @@ class Neo4jBackend(GraphBackend):
                  "LABST": float(r["st"]["on_hand"]),
                  "EISBE": float(r["st"].get("safety_stock", 0.0))} for r in rows]
 
+    # -- bill of materials ----------------------------------------------
+    @staticmethod
+    def _bom_row(b, parent, component) -> dict[str, Any]:
+        base = float(b.get("base_qty", 1.0)) or 1.0
+        menge = float(b["menge"])
+        return {
+            "MATNR": b["parent_matnr"], "WERKS": b.get("werks", ""),
+            "STLAN": b.get("stlan", "1"), "STLNR": b["stlnr"],
+            "STLAL": b.get("stlal", "01"), "POSNR": b["posnr"],
+            "IDNRK": b["idnrk"], "MENGE": menge, "MEINS": b.get("uom", "EA"),
+            "BMENG": base, "qty_per_unit": menge / base,
+            "component_name": (component or {}).get("name", b["idnrk"]),
+            "component_type": (component or {}).get("material_type", ""),
+            "parent_name": (parent or {}).get("name", b["parent_matnr"]),
+            "parent_type": (parent or {}).get("material_type", ""),
+        }
+
+    def bom_for_material(self, matnr):
+        rows = self._q(
+            """
+            MATCH (b:BOMItem)-[:ASSEMBLES_INTO]->(p:Material {matnr:$m})
+            MATCH (c:Material)-[:COMPONENT_OF]->(b)
+            RETURN b, p, c ORDER BY b.posnr
+            """,
+            m=matnr,
+        )
+        return [self._bom_row(r["b"], r["p"], r["c"]) for r in rows]
+
+    def where_used(self, matnr):
+        rows = self._q(
+            """
+            MATCH (c:Material {matnr:$m})-[:COMPONENT_OF]->(b:BOMItem)
+                  -[:ASSEMBLES_INTO]->(p:Material)
+            RETURN b, p, c ORDER BY p.matnr, b.posnr
+            """,
+            m=matnr,
+        )
+        return [self._bom_row(r["b"], r["p"], r["c"]) for r in rows]
+
     # -- production -----------------------------------------------------
     def reservations_for(self, matnr, werks):
         rows = self._q(

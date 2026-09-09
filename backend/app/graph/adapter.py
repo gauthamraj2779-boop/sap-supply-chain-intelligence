@@ -72,6 +72,15 @@ class GraphBackend(ABC):
     @abstractmethod
     def stock_all_plants(self, matnr: str) -> list[dict[str, Any]]: ...
 
+    # -- bill of materials ----------------------------------------------
+    @abstractmethod
+    def bom_for_material(self, matnr: str) -> list[dict[str, Any]]:
+        """MAST/STKO/STPO: the direct components of one assembly, one level down."""
+
+    @abstractmethod
+    def where_used(self, matnr: str) -> list[dict[str, Any]]:
+        """The reverse read: which assemblies consume this material, one level up."""
+
     # -- production -----------------------------------------------------
     @abstractmethod
     def reservations_for(self, matnr: str, werks: str) -> list[dict[str, Any]]: ...

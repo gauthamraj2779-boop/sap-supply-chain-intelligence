@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-09T12:14:36+00:00",
-  "data_dir": "/Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/.claude/worktrees/agent-ae18a848b3482b5fe/backend/data/synthetic",
+  "generated_at": "2026-09-09T12:33:49+00:00",
+  "data_dir": "/Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/backend/data/synthetic",
   "method": "deterministic",
   "thresholds": {
     "foreign_key": 0.95,
@@ -10,12 +10,12 @@
   "tables": [
     {
       "table": "AFKO",
-      "rows": 8,
+      "rows": 9,
       "columns": 6
     },
     {
       "table": "AFPO",
-      "rows": 8,
+      "rows": 9,
       "columns": 5
     },
     {
@@ -74,8 +74,23 @@
       "columns": 4
     },
     {
+      "table": "MAST",
+      "rows": 10,
+      "columns": 6
+    },
+    {
       "table": "RESB",
-      "rows": 16,
+      "rows": 23,
+      "columns": 8
+    },
+    {
+      "table": "STKO",
+      "rows": 10,
+      "columns": 6
+    },
+    {
+      "table": "STPO",
+      "rows": 25,
       "columns": 8
     },
     {
@@ -1181,17 +1196,373 @@
       ]
     },
     {
+      "table": "MAST",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "ACU-500",
+      "max": "SENSOR-ARR-4",
+      "samples": [
+        "ACU-500",
+        "APU-600",
+        "CSM-300",
+        "ECS-400",
+        "FCB-100"
+      ]
+    },
+    {
+      "table": "MAST",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.3,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "MAST",
+      "field": "STLAN",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "1",
+      "max": "1",
+      "samples": [
+        "1"
+      ]
+    },
+    {
+      "table": "MAST",
+      "field": "STLNR",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "00010001",
+      "max": "00010010",
+      "samples": [
+        "00010001",
+        "00010002",
+        "00010003",
+        "00010004",
+        "00010005"
+      ]
+    },
+    {
+      "table": "MAST",
+      "field": "STLAL",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "01",
+      "max": "01",
+      "samples": [
+        "01"
+      ]
+    },
+    {
+      "table": "MAST",
+      "field": "STLTY",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "M",
+      "max": "M",
+      "samples": [
+        "M"
+      ]
+    },
+    {
+      "table": "STKO",
+      "field": "STLNR",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "00010001",
+      "max": "00010010",
+      "samples": [
+        "00010001",
+        "00010002",
+        "00010003",
+        "00010004",
+        "00010005"
+      ]
+    },
+    {
+      "table": "STKO",
+      "field": "STLAL",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "01",
+      "max": "01",
+      "samples": [
+        "01"
+      ]
+    },
+    {
+      "table": "STKO",
+      "field": "STLTY",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "M",
+      "max": "M",
+      "samples": [
+        "M"
+      ]
+    },
+    {
+      "table": "STKO",
+      "field": "BMENG",
+      "kind": "numeric",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 4,
+      "cardinality": 0.4,
+      "unique": false,
+      "min": 1.0,
+      "max": 6.0,
+      "samples": [
+        "1.0",
+        "2.0",
+        "3.0",
+        "6.0"
+      ]
+    },
+    {
+      "table": "STKO",
+      "field": "BMEIN",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "EA",
+      "max": "EA",
+      "samples": [
+        "EA"
+      ]
+    },
+    {
+      "table": "STKO",
+      "field": "STLST",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "01",
+      "max": "01",
+      "samples": [
+        "01"
+      ]
+    },
+    {
+      "table": "STPO",
+      "field": "STLNR",
+      "kind": "text",
+      "rows": 25,
+      "non_null": 25,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 0.4,
+      "unique": false,
+      "min": "00010001",
+      "max": "00010010",
+      "samples": [
+        "00010001",
+        "00010002",
+        "00010003",
+        "00010004",
+        "00010005"
+      ]
+    },
+    {
+      "table": "STPO",
+      "field": "STLAL",
+      "kind": "text",
+      "rows": 25,
+      "non_null": 25,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.04,
+      "unique": false,
+      "min": "01",
+      "max": "01",
+      "samples": [
+        "01"
+      ]
+    },
+    {
+      "table": "STPO",
+      "field": "STLKN",
+      "kind": "text",
+      "rows": 25,
+      "non_null": 25,
+      "null_rate": 0.0,
+      "distinct": 4,
+      "cardinality": 0.16,
+      "unique": false,
+      "min": "00000001",
+      "max": "00000004",
+      "samples": [
+        "00000001",
+        "00000002",
+        "00000003",
+        "00000004"
+      ]
+    },
+    {
+      "table": "STPO",
+      "field": "POSNR",
+      "kind": "text",
+      "rows": 25,
+      "non_null": 25,
+      "null_rate": 0.0,
+      "distinct": 4,
+      "cardinality": 0.16,
+      "unique": false,
+      "min": "0010",
+      "max": "0040",
+      "samples": [
+        "0010",
+        "0020",
+        "0030",
+        "0040"
+      ]
+    },
+    {
+      "table": "STPO",
+      "field": "IDNRK",
+      "kind": "text",
+      "rows": 25,
+      "non_null": 25,
+      "null_rate": 0.0,
+      "distinct": 13,
+      "cardinality": 0.52,
+      "unique": false,
+      "min": "CAP-TANT-22",
+      "max": "WIRE-HARN-2",
+      "samples": [
+        "CAP-TANT-22",
+        "CONN-D38",
+        "DISP-LCD-8",
+        "FAST-M8",
+        "FCB-100"
+      ]
+    },
+    {
+      "table": "STPO",
+      "field": "MENGE",
+      "kind": "numeric",
+      "rows": 25,
+      "non_null": 25,
+      "null_rate": 0.0,
+      "distinct": 15,
+      "cardinality": 0.6,
+      "unique": false,
+      "min": 1.0,
+      "max": 240.0,
+      "samples": [
+        "1.0",
+        "10.0",
+        "100.0",
+        "14.0",
+        "16.0"
+      ]
+    },
+    {
+      "table": "STPO",
+      "field": "MEINS",
+      "kind": "text",
+      "rows": 25,
+      "non_null": 25,
+      "null_rate": 0.0,
+      "distinct": 2,
+      "cardinality": 0.08,
+      "unique": false,
+      "min": "EA",
+      "max": "KG",
+      "samples": [
+        "EA",
+        "KG"
+      ]
+    },
+    {
+      "table": "STPO",
+      "field": "POSTP",
+      "kind": "text",
+      "rows": 25,
+      "non_null": 25,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.04,
+      "unique": false,
+      "min": "L",
+      "max": "L",
+      "samples": [
+        "L"
+      ]
+    },
+    {
       "table": "AFKO",
       "field": "AUFNR",
       "kind": "text",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
-      "distinct": 8,
+      "distinct": 9,
       "cardinality": 1.0,
       "unique": true,
       "min": "000009001",
-      "max": "000009008",
+      "max": "000009009",
       "samples": [
         "000009001",
         "000009002",
@@ -1204,14 +1575,14 @@
       "table": "AFKO",
       "field": "PLNBEZ",
       "kind": "text",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
-      "distinct": 8,
+      "distinct": 9,
       "cardinality": 1.0,
       "unique": true,
       "min": "ACU-500",
-      "max": "PSU-220",
+      "max": "SENSOR-ARR-4",
       "samples": [
         "ACU-500",
         "CSM-300",
@@ -1224,71 +1595,71 @@
       "table": "AFKO",
       "field": "GAMNG",
       "kind": "numeric",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
-      "distinct": 8,
+      "distinct": 9,
       "cardinality": 1.0,
       "unique": true,
       "min": 40.0,
-      "max": 200.0,
+      "max": 220.0,
       "samples": [
         "120.0",
         "150.0",
         "200.0",
-        "40.0",
-        "45.0"
+        "220.0",
+        "40.0"
       ]
     },
     {
       "table": "AFKO",
       "field": "GSTRP",
       "kind": "date",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
-      "distinct": 8,
+      "distinct": 9,
       "cardinality": 1.0,
       "unique": true,
-      "min": "2026-09-13",
+      "min": "2026-09-10",
       "max": "2026-09-23",
       "samples": [
+        "2026-09-10",
         "2026-09-13",
         "2026-09-14",
         "2026-09-15",
-        "2026-09-16",
-        "2026-09-17"
+        "2026-09-16"
       ]
     },
     {
       "table": "AFKO",
       "field": "GLTRP",
       "kind": "date",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
-      "distinct": 8,
+      "distinct": 9,
       "cardinality": 1.0,
       "unique": true,
-      "min": "2026-09-24",
+      "min": "2026-09-16",
       "max": "2026-10-14",
       "samples": [
+        "2026-09-16",
         "2026-09-24",
         "2026-09-27",
         "2026-09-29",
-        "2026-10-01",
-        "2026-10-04"
+        "2026-10-01"
       ]
     },
     {
       "table": "AFKO",
       "field": "WERKS",
       "kind": "text",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
       "distinct": 3,
-      "cardinality": 0.375,
+      "cardinality": 0.3333,
       "unique": false,
       "min": "1010",
       "max": "1030",
@@ -1302,14 +1673,14 @@
       "table": "AFPO",
       "field": "AUFNR",
       "kind": "text",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
-      "distinct": 8,
+      "distinct": 9,
       "cardinality": 1.0,
       "unique": true,
       "min": "000009001",
-      "max": "000009008",
+      "max": "000009009",
       "samples": [
         "000009001",
         "000009002",
@@ -1322,11 +1693,11 @@
       "table": "AFPO",
       "field": "POSNR",
       "kind": "text",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
       "distinct": 1,
-      "cardinality": 0.125,
+      "cardinality": 0.1111,
       "unique": false,
       "min": "0001",
       "max": "0001",
@@ -1338,14 +1709,14 @@
       "table": "AFPO",
       "field": "MATNR",
       "kind": "text",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
-      "distinct": 8,
+      "distinct": 9,
       "cardinality": 1.0,
       "unique": true,
       "min": "ACU-500",
-      "max": "PSU-220",
+      "max": "SENSOR-ARR-4",
       "samples": [
         "ACU-500",
         "CSM-300",
@@ -1358,31 +1729,31 @@
       "table": "AFPO",
       "field": "PSMNG",
       "kind": "numeric",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
-      "distinct": 8,
+      "distinct": 9,
       "cardinality": 1.0,
       "unique": true,
       "min": 40.0,
-      "max": 200.0,
+      "max": 220.0,
       "samples": [
         "120.0",
         "150.0",
         "200.0",
-        "40.0",
-        "45.0"
+        "220.0",
+        "40.0"
       ]
     },
     {
       "table": "AFPO",
       "field": "WERKS",
       "kind": "text",
-      "rows": 8,
-      "non_null": 8,
+      "rows": 9,
+      "non_null": 9,
       "null_rate": 0.0,
       "distinct": 3,
-      "cardinality": 0.375,
+      "cardinality": 0.3333,
       "unique": false,
       "min": "1010",
       "max": "1030",
@@ -1396,14 +1767,14 @@
       "table": "RESB",
       "field": "RSNUM",
       "kind": "text",
-      "rows": 16,
-      "non_null": 16,
+      "rows": 23,
+      "non_null": 23,
       "null_rate": 0.0,
-      "distinct": 8,
-      "cardinality": 0.5,
+      "distinct": 9,
+      "cardinality": 0.3913,
       "unique": false,
       "min": "1001",
-      "max": "1008",
+      "max": "1009",
       "samples": [
         "1001",
         "1002",
@@ -1416,32 +1787,33 @@
       "table": "RESB",
       "field": "RSPOS",
       "kind": "text",
-      "rows": 16,
-      "non_null": 16,
+      "rows": 23,
+      "non_null": 23,
       "null_rate": 0.0,
-      "distinct": 3,
-      "cardinality": 0.1875,
+      "distinct": 4,
+      "cardinality": 0.1739,
       "unique": false,
       "min": "0001",
-      "max": "0003",
+      "max": "0004",
       "samples": [
         "0001",
         "0002",
-        "0003"
+        "0003",
+        "0004"
       ]
     },
     {
       "table": "RESB",
       "field": "AUFNR",
       "kind": "text",
-      "rows": 16,
-      "non_null": 16,
+      "rows": 23,
+      "non_null": 23,
       "null_rate": 0.0,
-      "distinct": 8,
-      "cardinality": 0.5,
+      "distinct": 9,
+      "cardinality": 0.3913,
       "unique": false,
       "min": "000009001",
-      "max": "000009008",
+      "max": "000009009",
       "samples": [
         "000009001",
         "000009002",
@@ -1454,11 +1826,11 @@
       "table": "RESB",
       "field": "MATNR",
       "kind": "text",
-      "rows": 16,
-      "non_null": 16,
+      "rows": 23,
+      "non_null": 23,
       "null_rate": 0.0,
-      "distinct": 10,
-      "cardinality": 0.625,
+      "distinct": 12,
+      "cardinality": 0.5217,
       "unique": false,
       "min": "CAP-TANT-22",
       "max": "WIRE-HARN-2",
@@ -1467,18 +1839,18 @@
         "CONN-D38",
         "DISP-LCD-8",
         "FAST-M8",
-        "MCU-32"
+        "FCB-100"
       ]
     },
     {
       "table": "RESB",
       "field": "WERKS",
       "kind": "text",
-      "rows": 16,
-      "non_null": 16,
+      "rows": 23,
+      "non_null": 23,
       "null_rate": 0.0,
       "distinct": 3,
-      "cardinality": 0.1875,
+      "cardinality": 0.1304,
       "unique": false,
       "min": "1010",
       "max": "1030",
@@ -1492,51 +1864,51 @@
       "table": "RESB",
       "field": "BDMNG",
       "kind": "numeric",
-      "rows": 16,
-      "non_null": 16,
+      "rows": 23,
+      "non_null": 23,
       "null_rate": 0.0,
-      "distinct": 15,
-      "cardinality": 0.9375,
+      "distinct": 20,
+      "cardinality": 0.8696,
       "unique": false,
-      "min": 120.0,
+      "min": 45.0,
       "max": 4800.0,
       "samples": [
         "120.0",
         "1600.0",
         "180.0",
-        "2000.0",
-        "275.0"
+        "200.0",
+        "2000.0"
       ]
     },
     {
       "table": "RESB",
       "field": "BDTER",
       "kind": "date",
-      "rows": 16,
-      "non_null": 16,
+      "rows": 23,
+      "non_null": 23,
       "null_rate": 0.0,
-      "distinct": 8,
-      "cardinality": 0.5,
+      "distinct": 9,
+      "cardinality": 0.3913,
       "unique": false,
-      "min": "2026-09-17",
+      "min": "2026-09-12",
       "max": "2026-09-29",
       "samples": [
+        "2026-09-12",
         "2026-09-17",
         "2026-09-18",
         "2026-09-19",
-        "2026-09-20",
-        "2026-09-21"
+        "2026-09-20"
       ]
     },
     {
       "table": "RESB",
       "field": "ENMNG",
       "kind": "numeric",
-      "rows": 16,
-      "non_null": 16,
+      "rows": 23,
+      "non_null": 23,
       "null_rate": 0.0,
       "distinct": 1,
-      "cardinality": 0.0625,
+      "cardinality": 0.0435,
       "unique": false,
       "min": 0.0,
       "max": 0.0,
@@ -2079,57 +2451,65 @@
       "from": "AFKO.AUFNR",
       "to": "AFPO.AUFNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "AFKO.AUFNR",
       "to": "RESB.AUFNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "AFKO.GAMNG",
       "to": "AFPO.PSMNG",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "AFKO.PLNBEZ",
       "to": "AFPO.MATNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "AFKO.PLNBEZ",
       "to": "MARA.MATNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
+      "matched": 9,
+      "from_distinct": 9,
       "to_distinct": 20
     },
     {
       "from": "AFKO.PLNBEZ",
       "to": "MARC.MATNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
+      "matched": 9,
+      "from_distinct": 9,
       "to_distinct": 20
     },
     {
       "from": "AFKO.PLNBEZ",
       "to": "MARD.MATNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
+      "matched": 9,
+      "from_distinct": 9,
       "to_distinct": 20
+    },
+    {
+      "from": "AFKO.PLNBEZ",
+      "to": "MAST.MATNR",
+      "containment": 1.0,
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 10
     },
     {
       "from": "AFKO.WERKS",
@@ -2181,6 +2561,14 @@
     },
     {
       "from": "AFKO.WERKS",
+      "to": "MAST.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
       "to": "RESB.WERKS",
       "containment": 1.0,
       "matched": 3,
@@ -2207,57 +2595,65 @@
       "from": "AFPO.AUFNR",
       "to": "AFKO.AUFNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "AFPO.AUFNR",
       "to": "RESB.AUFNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "AFPO.MATNR",
       "to": "AFKO.PLNBEZ",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "AFPO.MATNR",
       "to": "MARA.MATNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
+      "matched": 9,
+      "from_distinct": 9,
       "to_distinct": 20
     },
     {
       "from": "AFPO.MATNR",
       "to": "MARC.MATNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
+      "matched": 9,
+      "from_distinct": 9,
       "to_distinct": 20
     },
     {
       "from": "AFPO.MATNR",
       "to": "MARD.MATNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
+      "matched": 9,
+      "from_distinct": 9,
       "to_distinct": 20
+    },
+    {
+      "from": "AFPO.MATNR",
+      "to": "MAST.MATNR",
+      "containment": 1.0,
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 10
     },
     {
       "from": "AFPO.PSMNG",
       "to": "AFKO.GAMNG",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "AFPO.WERKS",
@@ -2302,6 +2698,14 @@
     {
       "from": "AFPO.WERKS",
       "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "MAST.WERKS",
       "containment": 1.0,
       "matched": 3,
       "from_distinct": 3,
@@ -2385,7 +2789,15 @@
       "containment": 1.0,
       "matched": 10,
       "from_distinct": 10,
-      "to_distinct": 10
+      "to_distinct": 12
+    },
+    {
+      "from": "EINA.MATNR",
+      "to": "STPO.IDNRK",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 13
     },
     {
       "from": "EINA.unit_cost",
@@ -2529,7 +2941,15 @@
       "containment": 1.0,
       "matched": 10,
       "from_distinct": 10,
-      "to_distinct": 10
+      "to_distinct": 12
+    },
+    {
+      "from": "EKPO.MATNR",
+      "to": "STPO.IDNRK",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 13
     },
     {
       "from": "EKPO.MENGE",
@@ -2614,6 +3034,14 @@
     {
       "from": "EKPO.WERKS",
       "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "MAST.WERKS",
       "containment": 1.0,
       "matched": 3,
       "from_distinct": 3,
@@ -2749,6 +3177,14 @@
     },
     {
       "from": "LIKP.VSTEL",
+      "to": "MAST.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
       "to": "RESB.WERKS",
       "containment": 1.0,
       "matched": 3,
@@ -2802,6 +3238,14 @@
       "matched": 7,
       "from_distinct": 7,
       "to_distinct": 20
+    },
+    {
+      "from": "LIPS.MATNR",
+      "to": "MAST.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 10
     },
     {
       "from": "LIPS.MATNR",
@@ -2901,6 +3345,14 @@
     },
     {
       "from": "LIPS.WERKS",
+      "to": "MAST.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
       "to": "RESB.WERKS",
       "containment": 1.0,
       "matched": 3,
@@ -2938,6 +3390,14 @@
       "matched": 20,
       "from_distinct": 20,
       "to_distinct": 20
+    },
+    {
+      "from": "MARA.MEINS",
+      "to": "STPO.MEINS",
+      "containment": 1.0,
+      "matched": 2,
+      "from_distinct": 2,
+      "to_distinct": 2
     },
     {
       "from": "MARC.MATNR",
@@ -2998,6 +3458,14 @@
     {
       "from": "MARC.WERKS",
       "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "MAST.WERKS",
       "containment": 1.0,
       "matched": 3,
       "from_distinct": 3,
@@ -3093,6 +3561,14 @@
     },
     {
       "from": "MARD.WERKS",
+      "to": "MAST.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
       "to": "RESB.WERKS",
       "containment": 1.0,
       "matched": 3,
@@ -3109,6 +3585,126 @@
     },
     {
       "from": "MARD.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "MAST.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "MAST.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "MAST.STLNR",
+      "to": "STKO.STLNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "MAST.STLNR",
+      "to": "STPO.STLNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MAST.WERKS",
       "to": "VBAP.WERKS",
       "containment": 1.0,
       "matched": 3,
@@ -3119,57 +3715,49 @@
       "from": "RESB.AUFNR",
       "to": "AFKO.AUFNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "RESB.AUFNR",
       "to": "AFPO.AUFNR",
       "containment": 1.0,
-      "matched": 8,
-      "from_distinct": 8,
-      "to_distinct": 8
-    },
-    {
-      "from": "RESB.MATNR",
-      "to": "EINA.MATNR",
-      "containment": 1.0,
-      "matched": 10,
-      "from_distinct": 10,
-      "to_distinct": 10
-    },
-    {
-      "from": "RESB.MATNR",
-      "to": "EKPO.MATNR",
-      "containment": 1.0,
-      "matched": 10,
-      "from_distinct": 10,
-      "to_distinct": 10
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 9
     },
     {
       "from": "RESB.MATNR",
       "to": "MARA.MATNR",
       "containment": 1.0,
-      "matched": 10,
-      "from_distinct": 10,
+      "matched": 12,
+      "from_distinct": 12,
       "to_distinct": 20
     },
     {
       "from": "RESB.MATNR",
       "to": "MARC.MATNR",
       "containment": 1.0,
-      "matched": 10,
-      "from_distinct": 10,
+      "matched": 12,
+      "from_distinct": 12,
       "to_distinct": 20
     },
     {
       "from": "RESB.MATNR",
       "to": "MARD.MATNR",
       "containment": 1.0,
-      "matched": 10,
-      "from_distinct": 10,
+      "matched": 12,
+      "from_distinct": 12,
       "to_distinct": 20
+    },
+    {
+      "from": "RESB.MATNR",
+      "to": "STPO.IDNRK",
+      "containment": 1.0,
+      "matched": 12,
+      "from_distinct": 12,
+      "to_distinct": 13
     },
     {
       "from": "RESB.WERKS",
@@ -3222,6 +3810,14 @@
     {
       "from": "RESB.WERKS",
       "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "MAST.WERKS",
       "containment": 1.0,
       "matched": 3,
       "from_distinct": 3,
@@ -3244,6 +3840,70 @@
       "to_distinct": 3
     },
     {
+      "from": "STKO.STLNR",
+      "to": "MAST.STLNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "STKO.STLNR",
+      "to": "STPO.STLNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "STPO.IDNRK",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 13,
+      "from_distinct": 13,
+      "to_distinct": 20
+    },
+    {
+      "from": "STPO.IDNRK",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 13,
+      "from_distinct": 13,
+      "to_distinct": 20
+    },
+    {
+      "from": "STPO.IDNRK",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 13,
+      "from_distinct": 13,
+      "to_distinct": 20
+    },
+    {
+      "from": "STPO.MEINS",
+      "to": "MARA.MEINS",
+      "containment": 1.0,
+      "matched": 2,
+      "from_distinct": 2,
+      "to_distinct": 2
+    },
+    {
+      "from": "STPO.STLNR",
+      "to": "MAST.STLNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "STPO.STLNR",
+      "to": "STKO.STLNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
       "from": "T001W.WERKS",
       "to": "AFKO.WERKS",
       "containment": 1.0,
@@ -3294,6 +3954,14 @@
     {
       "from": "T001W.WERKS",
       "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "MAST.WERKS",
       "containment": 1.0,
       "matched": 3,
       "from_distinct": 3,
@@ -3388,6 +4056,14 @@
       "to_distinct": 20
     },
     {
+      "from": "VBAP.MATNR",
+      "to": "MAST.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 10
+    },
+    {
       "from": "VBAP.NETWR",
       "to": "VBAK.NETWR",
       "containment": 1.0,
@@ -3461,6 +4137,14 @@
     },
     {
       "from": "VBAP.WERKS",
+      "to": "MAST.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
       "to": "RESB.WERKS",
       "containment": 1.0,
       "matched": 3,
@@ -3476,6 +4160,14 @@
       "to_distinct": 3
     },
     {
+      "from": "STPO.IDNRK",
+      "to": "RESB.MATNR",
+      "containment": 0.9231,
+      "matched": 12,
+      "from_distinct": 13,
+      "to_distinct": 12
+    },
+    {
       "from": "MARC.PLIFZ",
       "to": "EINA.APLFZ",
       "containment": 0.9,
@@ -3484,12 +4176,28 @@
       "to_distinct": 11
     },
     {
+      "from": "MAST.MATNR",
+      "to": "AFKO.PLNBEZ",
+      "containment": 0.9,
+      "matched": 9,
+      "from_distinct": 10,
+      "to_distinct": 9
+    },
+    {
+      "from": "MAST.MATNR",
+      "to": "AFPO.MATNR",
+      "containment": 0.9,
+      "matched": 9,
+      "from_distinct": 10,
+      "to_distinct": 9
+    },
+    {
       "from": "LIPS.MATNR",
       "to": "AFKO.PLNBEZ",
       "containment": 0.8571,
       "matched": 6,
       "from_distinct": 7,
-      "to_distinct": 8
+      "to_distinct": 9
     },
     {
       "from": "LIPS.MATNR",
@@ -3497,7 +4205,7 @@
       "containment": 0.8571,
       "matched": 6,
       "from_distinct": 7,
-      "to_distinct": 8
+      "to_distinct": 9
     },
     {
       "from": "VBAP.MATNR",
@@ -3505,7 +4213,7 @@
       "containment": 0.8571,
       "matched": 6,
       "from_distinct": 7,
-      "to_distinct": 8
+      "to_distinct": 9
     },
     {
       "from": "VBAP.MATNR",
@@ -3513,7 +4221,7 @@
       "containment": 0.8571,
       "matched": 6,
       "from_distinct": 7,
-      "to_distinct": 8
+      "to_distinct": 9
     },
     {
       "from": "EINA.NETPR",
@@ -3530,6 +4238,22 @@
       "matched": 10,
       "from_distinct": 12,
       "to_distinct": 20
+    },
+    {
+      "from": "RESB.MATNR",
+      "to": "EINA.MATNR",
+      "containment": 0.8333,
+      "matched": 10,
+      "from_distinct": 12,
+      "to_distinct": 10
+    },
+    {
+      "from": "RESB.MATNR",
+      "to": "EKPO.MATNR",
+      "containment": 0.8333,
+      "matched": 10,
+      "from_distinct": 12,
+      "to_distinct": 10
     },
     {
       "from": "VBAK.NETWR",
@@ -3580,75 +4304,115 @@
       "to_distinct": 9
     },
     {
+      "from": "STPO.IDNRK",
+      "to": "EINA.MATNR",
+      "containment": 0.7692,
+      "matched": 10,
+      "from_distinct": 13,
+      "to_distinct": 10
+    },
+    {
+      "from": "STPO.IDNRK",
+      "to": "EKPO.MATNR",
+      "containment": 0.7692,
+      "matched": 10,
+      "from_distinct": 13,
+      "to_distinct": 10
+    },
+    {
+      "from": "STKO.BMENG",
+      "to": "STPO.MENGE",
+      "containment": 0.75,
+      "matched": 3,
+      "from_distinct": 4,
+      "to_distinct": 15
+    },
+    {
+      "from": "MAST.MATNR",
+      "to": "LIPS.MATNR",
+      "containment": 0.7,
+      "matched": 7,
+      "from_distinct": 10,
+      "to_distinct": 7
+    },
+    {
+      "from": "MAST.MATNR",
+      "to": "VBAP.MATNR",
+      "containment": 0.7,
+      "matched": 7,
+      "from_distinct": 10,
+      "to_distinct": 7
+    },
+    {
       "from": "AFKO.GAMNG",
       "to": "LIPS.LFIMG",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 9
     },
     {
       "from": "AFKO.GAMNG",
       "to": "VBAP.KWMENG",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 11
     },
     {
       "from": "AFKO.GSTRP",
       "to": "EKET.EINDT",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 16
     },
     {
       "from": "AFKO.PLNBEZ",
       "to": "LIPS.MATNR",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 7
     },
     {
       "from": "AFKO.PLNBEZ",
       "to": "VBAP.MATNR",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 7
     },
     {
       "from": "AFPO.MATNR",
       "to": "LIPS.MATNR",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 7
     },
     {
       "from": "AFPO.MATNR",
       "to": "VBAP.MATNR",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 7
     },
     {
       "from": "AFPO.PSMNG",
       "to": "LIPS.LFIMG",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 9
     },
     {
       "from": "AFPO.PSMNG",
       "to": "VBAP.KWMENG",
-      "containment": 0.75,
+      "containment": 0.6667,
       "matched": 6,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 11
     },
     {
@@ -3657,7 +4421,7 @@
       "containment": 0.6667,
       "matched": 6,
       "from_distinct": 9,
-      "to_distinct": 8
+      "to_distinct": 9
     },
     {
       "from": "LIPS.LFIMG",
@@ -3665,7 +4429,7 @@
       "containment": 0.6667,
       "matched": 6,
       "from_distinct": 9,
-      "to_distinct": 8
+      "to_distinct": 9
     },
     {
       "from": "T001W.LAND1",
@@ -3676,12 +4440,84 @@
       "to_distinct": 4
     },
     {
+      "from": "MARA.MATNR",
+      "to": "STPO.IDNRK",
+      "containment": 0.65,
+      "matched": 13,
+      "from_distinct": 20,
+      "to_distinct": 13
+    },
+    {
+      "from": "MARC.MATNR",
+      "to": "STPO.IDNRK",
+      "containment": 0.65,
+      "matched": 13,
+      "from_distinct": 20,
+      "to_distinct": 13
+    },
+    {
+      "from": "MARD.MATNR",
+      "to": "STPO.IDNRK",
+      "containment": 0.65,
+      "matched": 13,
+      "from_distinct": 20,
+      "to_distinct": 13
+    },
+    {
+      "from": "MARA.MATNR",
+      "to": "RESB.MATNR",
+      "containment": 0.6,
+      "matched": 12,
+      "from_distinct": 20,
+      "to_distinct": 12
+    },
+    {
+      "from": "MARC.MATNR",
+      "to": "RESB.MATNR",
+      "containment": 0.6,
+      "matched": 12,
+      "from_distinct": 20,
+      "to_distinct": 12
+    },
+    {
+      "from": "MARD.MATNR",
+      "to": "RESB.MATNR",
+      "containment": 0.6,
+      "matched": 12,
+      "from_distinct": 20,
+      "to_distinct": 12
+    },
+    {
+      "from": "AFKO.GAMNG",
+      "to": "RESB.BDMNG",
+      "containment": 0.5556,
+      "matched": 5,
+      "from_distinct": 9,
+      "to_distinct": 20
+    },
+    {
+      "from": "AFPO.PSMNG",
+      "to": "RESB.BDMNG",
+      "containment": 0.5556,
+      "matched": 5,
+      "from_distinct": 9,
+      "to_distinct": 20
+    },
+    {
       "from": "RESB.BDTER",
       "to": "EKET.EINDT",
-      "containment": 0.625,
+      "containment": 0.5556,
       "matched": 5,
-      "from_distinct": 8,
+      "from_distinct": 9,
       "to_distinct": 16
+    },
+    {
+      "from": "EINA.APLFZ",
+      "to": "STPO.MENGE",
+      "containment": 0.5455,
+      "matched": 6,
+      "from_distinct": 11,
+      "to_distinct": 15
     },
     {
       "from": "VBAP.KWMENG",
@@ -3689,7 +4525,7 @@
       "containment": 0.5455,
       "matched": 6,
       "from_distinct": 11,
-      "to_distinct": 8
+      "to_distinct": 9
     },
     {
       "from": "VBAP.KWMENG",
@@ -3697,15 +4533,7 @@
       "containment": 0.5455,
       "matched": 6,
       "from_distinct": 11,
-      "to_distinct": 8
-    },
-    {
-      "from": "AFKO.GSTRP",
-      "to": "RESB.BDTER",
-      "containment": 0.5,
-      "matched": 4,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "to_distinct": 9
     },
     {
       "from": "EKET.EBELP",
@@ -3805,7 +4633,7 @@
     },
     {
       "from": "MARA.MATNR",
-      "to": "RESB.MATNR",
+      "to": "MAST.MATNR",
       "containment": 0.5,
       "matched": 10,
       "from_distinct": 20,
@@ -3814,6 +4642,14 @@
     {
       "from": "MARA.MEINS",
       "to": "EKPO.MEINS",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "MARA.MEINS",
+      "to": "STKO.BMEIN",
       "containment": 0.5,
       "matched": 1,
       "from_distinct": 2,
@@ -3861,7 +4697,7 @@
     },
     {
       "from": "MARC.MATNR",
-      "to": "RESB.MATNR",
+      "to": "MAST.MATNR",
       "containment": 0.5,
       "matched": 10,
       "from_distinct": 20,
@@ -3885,19 +4721,43 @@
     },
     {
       "from": "MARD.MATNR",
-      "to": "RESB.MATNR",
+      "to": "MAST.MATNR",
       "containment": 0.5,
       "matched": 10,
       "from_distinct": 20,
       "to_distinct": 10
     },
     {
-      "from": "RESB.BDTER",
-      "to": "AFKO.GSTRP",
+      "from": "STKO.BMENG",
+      "to": "MARC.EISBE",
       "containment": 0.5,
-      "matched": 4,
-      "from_distinct": 8,
-      "to_distinct": 8
+      "matched": 2,
+      "from_distinct": 4,
+      "to_distinct": 15
+    },
+    {
+      "from": "STKO.BMENG",
+      "to": "MARD.LABST",
+      "containment": 0.5,
+      "matched": 2,
+      "from_distinct": 4,
+      "to_distinct": 23
+    },
+    {
+      "from": "STPO.MEINS",
+      "to": "EKPO.MEINS",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "STPO.MEINS",
+      "to": "STKO.BMEIN",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
     }
   ],
   "note": "containment[i] = |distinct(from) & distinct(to)| / |distinct(from)|, computed over the generated tables with no model involvement. Pairs below 0.5 are omitted; the near misses between 0.5 and 0.95 are kept so rejected candidates stay visible."

@@ -18,6 +18,7 @@ from app.graph.adapter import GraphBackend, GraphUnavailable
 _TABLES = (
     "plants", "suppliers", "customers", "materials", "material_plant",
     "material_stock", "source_list", "po_header", "po_item", "po_schedule",
+    "bom_link", "bom_header", "bom_item",
     "prod_order_header", "prod_order_item", "reservations",
     "so_header", "so_item", "delivery_header", "delivery_item",
 )
@@ -108,6 +109,30 @@ class MemoryBackend(GraphBackend):
         for r in self.t["prod_order_item"]:
             prod_by_output[r["MATNR"]].append(r)
         i["prod_by_output"] = dict(prod_by_output)
+
+        # MAST -> STKO -> STPO is flattened once into one row per component, so
+        # the BOM reads in either direction without re-joining three tables.
+        stko = {(r["STLNR"], r["STLAL"]): r for r in self.t["bom_header"]}
+        items_by_bom = defaultdict(list)
+        for r in self.t["bom_item"]:
+            items_by_bom[(r["STLNR"], r["STLAL"])].append(r)
+        bom_by_parent = defaultdict(list)
+        bom_by_component = defaultdict(list)
+        for link in self.t["bom_link"]:
+            key = (link["STLNR"], link["STLAL"])
+            hdr = stko.get(key, {})
+            for item in items_by_bom.get(key, []):
+                row = {
+                    "MATNR": link["MATNR"], "WERKS": link["WERKS"],
+                    "STLAN": link["STLAN"], "STLNR": item["STLNR"],
+                    "STLAL": item["STLAL"], "POSNR": item["POSNR"],
+                    "IDNRK": item["IDNRK"], "MENGE": float(item["MENGE"]),
+                    "MEINS": item["MEINS"], "BMENG": float(hdr.get("BMENG", 1.0)),
+                }
+                bom_by_parent[link["MATNR"]].append(row)
+                bom_by_component[item["IDNRK"]].append(row)
+        i["bom_by_parent"] = dict(bom_by_parent)
+        i["bom_by_component"] = dict(bom_by_component)
 
         self._idx = i
 
@@ -211,6 +236,31 @@ class MemoryBackend(GraphBackend):
             })
         return out
 
+    # -- bill of materials ----------------------------------------------
+    def bom_for_material(self, matnr):
+        out = []
+        for r in self._idx["bom_by_parent"].get(matnr, []):
+            comp = self.material(r["IDNRK"]) or {}
+            out.append({
+                **r,
+                "component_name": comp.get("MAKTX", r["IDNRK"]),
+                "component_type": comp.get("MTART", ""),
+                "qty_per_unit": r["MENGE"] / r["BMENG"] if r["BMENG"] else 0.0,
+            })
+        return sorted(out, key=lambda r: r["POSNR"])
+
+    def where_used(self, matnr):
+        out = []
+        for r in self._idx["bom_by_component"].get(matnr, []):
+            parent = self.material(r["MATNR"]) or {}
+            out.append({
+                **r,
+                "parent_name": parent.get("MAKTX", r["MATNR"]),
+                "parent_type": parent.get("MTART", ""),
+                "qty_per_unit": r["MENGE"] / r["BMENG"] if r["BMENG"] else 0.0,
+            })
+        return sorted(out, key=lambda r: (r["MATNR"], r["POSNR"]))
+
     # -- production -----------------------------------------------------
     def reservations_for(self, matnr, werks):
         rows = self._idx["resb_by_mat"].get((matnr, werks), [])
@@ -307,6 +357,18 @@ class MemoryBackend(GraphBackend):
                               "type": "ORDERS", "derived_from": "EKPO.MATNR -> MARA.MATNR"})
                 edges.append({"source": nid, "target": f"Plant:{it['WERKS']}",
                               "type": "DELIVERED_TO", "derived_from": "EKPO.WERKS -> T001W.WERKS"})
+        for parent, rows in self._idx["bom_by_parent"].items():
+            for r in rows:
+                nid = f"BOMItem:{r['STLNR']}/{r['STLAL']}/{r['POSNR']}"
+                add(nid, "BOMItem", f"{r['IDNRK']} -> {parent}",
+                    {"stlnr": r["STLNR"], "idnrk": r["IDNRK"], "menge": r["MENGE"],
+                     "base_qty": r["BMENG"]})
+                edges.append({"source": f"Material:{r['IDNRK']}", "target": nid,
+                              "type": "COMPONENT_OF",
+                              "derived_from": "STPO.IDNRK -> MARA.MATNR"})
+                edges.append({"source": nid, "target": f"Material:{parent}",
+                              "type": "ASSEMBLES_INTO",
+                              "derived_from": "MAST.MATNR -> MARA.MATNR"})
         for a in self.t["prod_order_header"]:
             nid = f"ProductionOrder:{a['AUFNR']}"
             add(nid, "ProductionOrder", f"Prod {a['AUFNR']}",

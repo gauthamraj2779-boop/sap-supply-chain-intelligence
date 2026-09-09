@@ -96,6 +96,19 @@ NODE_TYPES: dict[str, NodeType] = {
         + _fm("EINE", [("NETPR", "net_price", "Net Price"),
                        ("APLFZ", "lead_time_days", "Planned Delivery Time")]),
     ),
+    "BOMItem": NodeType(
+        "BOMItem", ("MAST", "STKO", "STPO"), "bom_item_key",
+        "A component line of a bill of material: what goes into an assembly, "
+        "and how much of it per base quantity.",
+        _fm("MAST", [("STLNR", "stlnr", "Bill of Material Number"),
+                     ("MATNR", "parent_matnr", "Assembly Material Number"),
+                     ("WERKS", "werks", "Plant")])
+        + _fm("STKO", [("BMENG", "base_qty", "Base Quantity")])
+        + _fm("STPO", [("POSNR", "posnr", "BOM Item Number"),
+                       ("IDNRK", "idnrk", "BOM Component"),
+                       ("MENGE", "menge", "Component Quantity"),
+                       ("MEINS", "uom", "Component Unit of Measure")]),
+    ),
     "ProductionOrder": NodeType(
         "ProductionOrder", ("AFKO", "AFPO"), "aufnr",
         "An order to manufacture a quantity of a material by a date.",
@@ -154,6 +167,10 @@ EDGE_TYPES: tuple[EdgeType, ...] = (
              "Receiving plant for the purchase order item"),
     EdgeType("STOCKED_AT", "Material", "Plant", "MARD.WERKS -> T001W.WERKS",
              "Material carries stock at this plant"),
+    EdgeType("COMPONENT_OF", "Material", "BOMItem", "STPO.IDNRK -> MARA.MATNR",
+             "Material appears as this component line of a bill of material"),
+    EdgeType("ASSEMBLES_INTO", "BOMItem", "Material", "MAST.MATNR -> MARA.MATNR",
+             "Component line builds towards this assembly"),
     EdgeType("PRODUCES", "ProductionOrder", "Material", "AFPO.MATNR -> MARA.MATNR",
              "Production order manufactures this material"),
     EdgeType("REQUIRES", "ProductionOrder", "Reservation", "RESB.AUFNR -> AFKO.AUFNR",

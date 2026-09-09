@@ -1,0 +1,252 @@
+[
+  {
+    "STLNR": "00010001",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "SENSOR-ARR-4",
+    "MENGE": 6.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010001",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "MCU-32",
+    "MENGE": 100.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010001",
+    "STLAL": "01",
+    "STLKN": "00000003",
+    "POSNR": "0030",
+    "IDNRK": "CAP-TANT-22",
+    "MENGE": 240.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010001",
+    "STLAL": "01",
+    "STLKN": "00000004",
+    "POSNR": "0040",
+    "IDNRK": "CONN-D38",
+    "MENGE": 24.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010002",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "SENSOR-ARR-4",
+    "MENGE": 1.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010002",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "MCU-32",
+    "MENGE": 10.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010002",
+    "STLAL": "01",
+    "STLKN": "00000003",
+    "POSNR": "0030",
+    "IDNRK": "SEAL-PLY-4",
+    "MENGE": 8.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010003",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "PWR-IC-7",
+    "MENGE": 25.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010003",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "DISP-LCD-8",
+    "MENGE": 6.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010004",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "TI-ALLOY-6",
+    "MENGE": 16.0,
+    "MEINS": "KG",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010004",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "FAST-M8",
+    "MENGE": 40.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010005",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "SEAL-PLY-4",
+    "MENGE": 16.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010005",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "WIRE-HARN-2",
+    "MENGE": 5.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010006",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "FCB-100",
+    "MENGE": 4.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010006",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "SENSOR-ARR-4",
+    "MENGE": 1.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010006",
+    "STLAL": "01",
+    "STLKN": "00000003",
+    "POSNR": "0030",
+    "IDNRK": "SENS-ACC-3",
+    "MENGE": 8.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010006",
+    "STLAL": "01",
+    "STLKN": "00000004",
+    "POSNR": "0040",
+    "IDNRK": "CONN-D38",
+    "MENGE": 4.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010007",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "PSU-220",
+    "MENGE": 1.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010007",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "CAP-TANT-22",
+    "MENGE": 16.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010008",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "MCU-32",
+    "MENGE": 9.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010008",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "PWR-IC-7",
+    "MENGE": 6.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010008",
+    "STLAL": "01",
+    "STLKN": "00000003",
+    "POSNR": "0030",
+    "IDNRK": "CONN-D38",
+    "MENGE": 2.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010009",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "PWR-IC-7",
+    "MENGE": 14.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010010",
+    "STLAL": "01",
+    "STLKN": "00000001",
+    "POSNR": "0010",
+    "IDNRK": "SENS-ACC-3",
+    "MENGE": 2.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  },
+  {
+    "STLNR": "00010010",
+    "STLAL": "01",
+    "STLKN": "00000002",
+    "POSNR": "0020",
+    "IDNRK": "CONN-D38",
+    "MENGE": 1.0,
+    "MEINS": "EA",
+    "POSTP": "L"
+  }
+]

@@ -115,6 +115,27 @@ def attribute_exposure(
     return dict(attrib)
 
 
+def _committed_outputs(backend, traversal) -> set[str]:
+    """Materials a customer is waiting on, followed down through the BOM.
+
+    A sub-assembly carries no sales order of its own, so on the sales tables
+    alone it looks free to defer. It is not: deferring the order that builds it
+    starves the finished good above it. Walking MAST/STPO downwards from the
+    committed finished goods is what makes that visible.
+    """
+    committed = {so.matnr for so in traversal.sales_orders}
+    frontier = set(committed)
+    while frontier:
+        nxt: set[str] = set()
+        for matnr in frontier:
+            for comp in backend.bom_for_material(matnr):
+                if comp["IDNRK"] not in committed:
+                    committed.add(comp["IDNRK"])
+                    nxt.add(comp["IDNRK"])
+        frontier = nxt
+    return committed
+
+
 def _candidates(backend, traversal, m, committed_outputs):
     """Every feasible way to cover a shortfall on one material at one plant.
 
@@ -262,7 +283,7 @@ def find_actions(
     shortfalls = [m for m in traversal.materials if m.shortfall_qty > 0]
     shortfalls.sort(key=lambda m: -attrib.get((m.matnr, m.werks), 0.0))
 
-    committed_outputs = {so.matnr for so in traversal.sales_orders}
+    committed_outputs = _committed_outputs(backend, traversal)
     # An order deferred to free material A must not be "deferred" again for
     # material B as if it were a second, independent action.
     deferred_orders: set[str] = set()

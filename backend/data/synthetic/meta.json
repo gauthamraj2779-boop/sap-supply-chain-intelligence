@@ -11,6 +11,9 @@
     "po_header": "EKKO",
     "po_item": "EKPO",
     "po_schedule": "EKET",
+    "bom_link": "MAST",
+    "bom_header": "STKO",
+    "bom_item": "STPO",
     "prod_order_header": "AFKO",
     "prod_order_item": "AFPO",
     "reservations": "RESB",
@@ -30,9 +33,12 @@
     "po_header": 15,
     "po_item": 19,
     "po_schedule": 19,
-    "prod_order_header": 8,
-    "prod_order_item": 8,
-    "reservations": 16,
+    "bom_link": 10,
+    "bom_header": 10,
+    "bom_item": 25,
+    "prod_order_header": 9,
+    "prod_order_item": 9,
+    "reservations": 23,
     "so_header": 12,
     "so_item": 12,
     "delivery_header": 10,
@@ -48,6 +54,12 @@
     "alternate_supplier": "0000001001",
     "transferable_stock_plant": "1020",
     "slack_production_order": "000009003",
-    "contrast_supplier": "0000001002"
+    "contrast_supplier": "0000001002",
+    "multi_level_bom": {
+      "sub_assembly": "FCB-100",
+      "built_by": "000009002",
+      "assembles_into": "FMS-850",
+      "consumed_by": "000009008"
+    }
   }
 }

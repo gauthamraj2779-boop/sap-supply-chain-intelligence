@@ -3,6 +3,16 @@
     "RSNUM": "1001",
     "RSPOS": "0001",
     "AUFNR": "000009001",
+    "MATNR": "SENSOR-ARR-4",
+    "WERKS": "1010",
+    "BDMNG": 120.0,
+    "BDTER": "2026-09-17",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1001",
+    "RSPOS": "0002",
+    "AUFNR": "000009001",
     "MATNR": "MCU-32",
     "WERKS": "1010",
     "BDMNG": 2000.0,
@@ -11,7 +21,7 @@
   },
   {
     "RSNUM": "1001",
-    "RSPOS": "0002",
+    "RSPOS": "0003",
     "AUFNR": "000009001",
     "MATNR": "CAP-TANT-22",
     "WERKS": "1010",
@@ -21,7 +31,7 @@
   },
   {
     "RSNUM": "1001",
-    "RSPOS": "0003",
+    "RSPOS": "0004",
     "AUFNR": "000009001",
     "MATNR": "CONN-D38",
     "WERKS": "1010",
@@ -50,8 +60,28 @@
     "ENMNG": 0.0
   },
   {
+    "RSNUM": "1002",
+    "RSPOS": "0003",
+    "AUFNR": "000009002",
+    "MATNR": "CONN-D38",
+    "WERKS": "1010",
+    "BDMNG": 200.0,
+    "BDTER": "2026-09-18",
+    "ENMNG": 0.0
+  },
+  {
     "RSNUM": "1003",
     "RSPOS": "0001",
+    "AUFNR": "000009003",
+    "MATNR": "SENSOR-ARR-4",
+    "WERKS": "1010",
+    "BDMNG": 80.0,
+    "BDTER": "2026-09-19",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1003",
+    "RSPOS": "0002",
     "AUFNR": "000009003",
     "MATNR": "MCU-32",
     "WERKS": "1010",
@@ -61,7 +91,7 @@
   },
   {
     "RSNUM": "1003",
-    "RSPOS": "0002",
+    "RSPOS": "0003",
     "AUFNR": "000009003",
     "MATNR": "SEAL-PLY-4",
     "WERKS": "1010",
@@ -143,6 +173,26 @@
     "RSNUM": "1008",
     "RSPOS": "0001",
     "AUFNR": "000009008",
+    "MATNR": "FCB-100",
+    "WERKS": "1010",
+    "BDMNG": 180.0,
+    "BDTER": "2026-09-29",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1008",
+    "RSPOS": "0002",
+    "AUFNR": "000009008",
+    "MATNR": "SENSOR-ARR-4",
+    "WERKS": "1010",
+    "BDMNG": 45.0,
+    "BDTER": "2026-09-29",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1008",
+    "RSPOS": "0003",
+    "AUFNR": "000009008",
     "MATNR": "SENS-ACC-3",
     "WERKS": "1010",
     "BDMNG": 360.0,
@@ -151,12 +201,32 @@
   },
   {
     "RSNUM": "1008",
-    "RSPOS": "0002",
+    "RSPOS": "0004",
     "AUFNR": "000009008",
     "MATNR": "CONN-D38",
     "WERKS": "1010",
     "BDMNG": 180.0,
     "BDTER": "2026-09-29",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1009",
+    "RSPOS": "0001",
+    "AUFNR": "000009009",
+    "MATNR": "SENS-ACC-3",
+    "WERKS": "1010",
+    "BDMNG": 440.0,
+    "BDTER": "2026-09-12",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1009",
+    "RSPOS": "0002",
+    "AUFNR": "000009009",
+    "MATNR": "CONN-D38",
+    "WERKS": "1010",
+    "BDMNG": 220.0,
+    "BDTER": "2026-09-12",
     "ENMNG": 0.0
   }
 ]

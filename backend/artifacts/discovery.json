@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T12:23:35+00:00",
+  "generated_at": "2026-09-09T12:34:18+00:00",
   "method": "llm",
   "llm": {
     "provider": "azure",
@@ -9,18 +9,18 @@
   },
   "sources": {
     "ddic_catalog": {
-      "fields": 105,
-      "tables": 17,
-      "declared_check_tables": 42
+      "fields": 125,
+      "tables": 20,
+      "declared_check_tables": 47
     },
     "profile": {
-      "columns": 105,
-      "containment_pairs": 228,
+      "columns": 125,
+      "containment_pairs": 289,
       "foreign_key_threshold": 0.95
     },
     "odata": {
       "available": false,
-      "reason": "no $metadata cached for 5 service(s) in /Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/.claude/worktrees/agent-ae18a848b3482b5fe/backend/data/metadata/odata; see data/metadata/odata/README.md",
+      "reason": "no $metadata cached for 5 service(s) in /Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/backend/data/metadata/odata; see data/metadata/odata/README.md",
       "entity_types": 0,
       "services": [
         {
@@ -58,6 +58,24 @@
   },
   "entities": [
     {
+      "name": "BillOfMaterial",
+      "source_table": "STKO",
+      "key_fields": [
+        "STLNR",
+        "STLAL",
+        "STLTY"
+      ],
+      "business_definition": "A structured list of components and their quantities required to assemble a material.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'BOM Header'",
+        "10 rows profiled",
+        "DD03L key flag on STLNR, STLAL, STLTY",
+        "declared key is unique across all 10 rows",
+        "also spans STPO (BOM Item), key STLNR, STLAL, STLKN"
+      ]
+    },
+    {
       "name": "Customer",
       "source_table": "KNA1",
       "key_fields": [
@@ -70,6 +88,39 @@
         "6 rows profiled",
         "DD03L key flag on KUNNR",
         "declared key is unique across all 6 rows"
+      ]
+    },
+    {
+      "name": "MARC",
+      "source_table": "MARC",
+      "key_fields": [
+        "MATNR",
+        "WERKS"
+      ],
+      "business_definition": "Plant Data for Material",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Plant Data for Material'",
+        "23 rows profiled",
+        "DD03L key flag on MATNR, WERKS",
+        "declared key is unique across all 23 rows"
+      ]
+    },
+    {
+      "name": "MARD",
+      "source_table": "MARD",
+      "key_fields": [
+        "MATNR",
+        "WERKS",
+        "LGORT"
+      ],
+      "business_definition": "Storage Location Data for Material",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Storage Location Data for Material'",
+        "23 rows profiled",
+        "DD03L key flag on MATNR, WERKS, LGORT",
+        "declared key is unique across all 23 rows"
       ]
     },
     {
@@ -88,36 +139,20 @@
       ]
     },
     {
-      "name": "MaterialPlant",
-      "source_table": "MARC",
-      "key_fields": [
-        "MATNR",
-        "WERKS"
-      ],
-      "business_definition": "Plant-specific data for a material, including planning and procurement parameters.",
-      "confidence": 0.9,
-      "evidence": [
-        "DD02T table text 'Plant Data for Material'",
-        "23 rows profiled",
-        "DD03L key flag on MATNR, WERKS",
-        "declared key is unique across all 23 rows"
-      ]
-    },
-    {
-      "name": "MaterialStorageLocation",
-      "source_table": "MARD",
+      "name": "MaterialBOMLink",
+      "source_table": "MAST",
       "key_fields": [
         "MATNR",
         "WERKS",
-        "LGORT"
+        "STLAN"
       ],
-      "business_definition": "Storage-location-specific stock data for a material within a plant.",
+      "business_definition": "An associative entity linking a material to a specific bill of material for a given plant and usage.",
       "confidence": 0.9,
       "evidence": [
-        "DD02T table text 'Storage Location Data for Material'",
-        "23 rows profiled",
-        "DD03L key flag on MATNR, WERKS, LGORT",
-        "declared key is unique across all 23 rows"
+        "DD02T table text 'Material to BOM Link'",
+        "10 rows profiled",
+        "DD03L key flag on MATNR, WERKS, STLAN",
+        "declared key is unique across all 10 rows"
       ]
     },
     {
@@ -126,7 +161,7 @@
       "key_fields": [
         "VBELN"
       ],
-      "business_definition": "A document that controls the shipment of goods to a customer.",
+      "business_definition": "A document that records the shipment of goods to a customer, including header and item details.",
       "confidence": 0.9,
       "evidence": [
         "DD02T table text 'SD Document: Delivery Header Data'",
@@ -157,13 +192,13 @@
       "key_fields": [
         "AUFNR"
       ],
-      "business_definition": "An order that specifies the material to be produced, the quantity, and the production timeline.",
+      "business_definition": "A manufacturing order that specifies the material to be produced, the quantity, and the production timeline.",
       "confidence": 0.9,
       "evidence": [
         "DD02T table text 'Order Header Data PP Orders'",
-        "8 rows profiled",
+        "9 rows profiled",
         "DD03L key flag on AUFNR",
-        "declared key is unique across all 8 rows",
+        "declared key is unique across all 9 rows",
         "also spans AFPO (Order Item), key AUFNR, POSNR"
       ]
     },
@@ -173,7 +208,7 @@
       "key_fields": [
         "EBELN"
       ],
-      "business_definition": "A formal request to a supplier for the delivery of materials or services under agreed terms.",
+      "business_definition": "A formal request to a supplier for the delivery of materials or services, including header, item, and schedule line details.",
       "confidence": 0.9,
       "evidence": [
         "DD02T table text 'Purchasing Document Header'",
@@ -191,7 +226,7 @@
         "MATNR",
         "LIFNR"
       ],
-      "business_definition": "A record linking a material and a supplier, containing procurement-specific data such as net price and planned delivery time.",
+      "business_definition": "A record linking a material and a supplier, containing procurement-specific data like prices and lead times.",
       "confidence": 0.9,
       "evidence": [
         "DD02T table text 'Purchasing Info Record: General Data (joined with EINE org data)'",
@@ -207,13 +242,13 @@
         "RSNUM",
         "RSPOS"
       ],
-      "business_definition": "A request for materials to be set aside for a specific purpose, such as a production order.",
+      "business_definition": "A request for materials to be reserved for a specific purpose, such as a production order.",
       "confidence": 0.9,
       "evidence": [
         "DD02T table text 'Reservation/Dependent Requirements'",
-        "16 rows profiled",
+        "23 rows profiled",
         "DD03L key flag on RSNUM, RSPOS",
-        "declared key is unique across all 16 rows"
+        "declared key is unique across all 23 rows"
       ]
     },
     {
@@ -222,7 +257,7 @@
       "key_fields": [
         "VBELN"
       ],
-      "business_definition": "A customer's request to purchase goods or services under specific terms.",
+      "business_definition": "A customer's request to purchase goods or services, including header and item details.",
       "confidence": 0.9,
       "evidence": [
         "DD02T table text 'Sales Document: Header Data'",
@@ -267,7 +302,7 @@
         "MARA.MATNR is unique across its rows",
         "cardinality 1:1 observed: AFKO.PLNBEZ is unique in this extract"
       ],
-      "business_meaning": "A production order produces a specific material."
+      "business_meaning": "A production order manufactures a specific material."
     },
     {
       "name": "producedAt",
@@ -488,7 +523,7 @@
       "business_meaning": "A purchase order item requests a specific material."
     },
     {
-      "name": "deliversTo",
+      "name": "deliveredTo",
       "from": "PurchaseOrder",
       "to": "Plant",
       "cardinality": "n:1",
@@ -604,7 +639,7 @@
         "VBAK.VBELN is unique across its rows",
         "cardinality 1:1 observed: LIPS.VGBEL is unique in this extract"
       ],
-      "business_meaning": "An outbound delivery fulfils a sales order."
+      "business_meaning": "An outbound delivery item fulfills a specific sales order."
     },
     {
       "name": "shippedFrom",
@@ -627,8 +662,8 @@
       "business_meaning": "An outbound delivery item is shipped from a specific plant."
     },
     {
-      "name": "definedFor",
-      "from": "MaterialPlant",
+      "name": "marcHasMaterial",
+      "from": "MARC",
       "to": "Material",
       "cardinality": "n:1",
       "join": {
@@ -643,12 +678,11 @@
         "DD03L key flag on MARA.MATNR",
         "MARA.MATNR is unique across its rows",
         "cardinality n:1 observed: MARC.MATNR is repeated in this extract"
-      ],
-      "business_meaning": "Plant-specific data is defined for a material."
+      ]
     },
     {
-      "name": "definedAt",
-      "from": "MaterialPlant",
+      "name": "stockedAt",
+      "from": "MARC",
       "to": "Plant",
       "cardinality": "n:1",
       "join": {
@@ -664,11 +698,11 @@
         "T001W.WERKS is unique across its rows",
         "cardinality n:1 observed: MARC.WERKS is repeated in this extract"
       ],
-      "business_meaning": "Plant-specific data is defined for a plant."
+      "business_meaning": "A material's plant-specific data, such as MRP parameters, is maintained for a plant."
     },
     {
-      "name": "stockedAs",
-      "from": "MaterialStorageLocation",
+      "name": "mardHasMaterial",
+      "from": "MARD",
       "to": "Material",
       "cardinality": "n:1",
       "join": {
@@ -683,12 +717,11 @@
         "DD03L key flag on MARA.MATNR",
         "MARA.MATNR is unique across its rows",
         "cardinality n:1 observed: MARD.MATNR is repeated in this extract"
-      ],
-      "business_meaning": "Storage location data is maintained for a material."
+      ]
     },
     {
-      "name": "stockedAt",
-      "from": "MaterialStorageLocation",
+      "name": "storedAt",
+      "from": "MARD",
       "to": "Plant",
       "cardinality": "n:1",
       "join": {
@@ -704,10 +737,69 @@
         "T001W.WERKS is unique across its rows",
         "cardinality n:1 observed: MARD.WERKS is repeated in this extract"
       ],
-      "business_meaning": "Storage location data is maintained for a plant."
+      "business_meaning": "A material's storage location data, including stock levels, is maintained for a plant."
     },
     {
-      "name": "reservesFor",
+      "name": "materialBOMLinkHasMaterial",
+      "from": "MaterialBOMLink",
+      "to": "Material",
+      "cardinality": "1:1",
+      "join": {
+        "from_field": "MAST.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on MAST.MATNR",
+        "containment 1.00 of MAST.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality 1:1 observed: MAST.MATNR is unique in this extract"
+      ]
+    },
+    {
+      "name": "hasBOM",
+      "from": "MaterialBOMLink",
+      "to": "BillOfMaterial",
+      "cardinality": "1:1",
+      "join": {
+        "from_field": "MAST.STLNR",
+        "to_field": "STKO.STLNR"
+      },
+      "confidence": 0.65,
+      "inferred": true,
+      "evidence": [
+        "no check table declares MAST.STLNR; inferred from data overlap alone",
+        "containment 1.00 of MAST.STLNR into STKO.STLNR",
+        "DD03L key flag on STKO.STLNR",
+        "STKO.STLNR is unique across its rows",
+        "STKO.STLNR is one field of a composite key; join on the full key",
+        "cardinality 1:1 observed: MAST.STLNR is unique in this extract"
+      ],
+      "business_meaning": "A material is linked to a bill of material for a specific plant and usage."
+    },
+    {
+      "name": "materialBOMLinkHasPlant",
+      "from": "MaterialBOMLink",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "MAST.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on MAST.WERKS",
+        "containment 1.00 of MAST.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: MAST.WERKS is repeated in this extract"
+      ]
+    },
+    {
+      "name": "reservedFor",
       "from": "Reservation",
       "to": "ProductionOrder",
       "cardinality": "n:1",
@@ -724,10 +816,10 @@
         "AFKO.AUFNR is unique across its rows",
         "cardinality n:1 observed: RESB.AUFNR is repeated in this extract"
       ],
-      "business_meaning": "A reservation reserves materials for a production order."
+      "business_meaning": "A reservation is created to supply components for a specific production order."
     },
     {
-      "name": "reservesMaterial",
+      "name": "requiresComponent",
       "from": "Reservation",
       "to": "Material",
       "cardinality": "n:1",
@@ -744,7 +836,7 @@
         "MARA.MATNR is unique across its rows",
         "cardinality n:1 observed: RESB.MATNR is repeated in this extract"
       ],
-      "business_meaning": "A reservation reserves a specific material."
+      "business_meaning": "A reservation requests a specific material component."
     },
     {
       "name": "reservedAt",
@@ -764,7 +856,48 @@
         "T001W.WERKS is unique across its rows",
         "cardinality n:1 observed: RESB.WERKS is repeated in this extract"
       ],
-      "business_meaning": "A reservation is made for a specific plant."
+      "business_meaning": "A reservation is made for a component at a specific plant."
+    },
+    {
+      "name": "containsComponent",
+      "from": "BillOfMaterial",
+      "to": "Material",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "STPO.IDNRK",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on STPO.IDNRK",
+        "containment 1.00 of STPO.IDNRK into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality n:1 observed: STPO.IDNRK is repeated in this extract"
+      ],
+      "business_meaning": "A bill of material item specifies a component material."
+    },
+    {
+      "name": "partOfBillOfMaterial",
+      "from": "BillOfMaterial",
+      "to": "BillOfMaterial",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "STPO.STLNR",
+        "to_field": "STKO.STLNR"
+      },
+      "confidence": 0.65,
+      "inferred": true,
+      "evidence": [
+        "no check table declares STPO.STLNR; inferred from data overlap alone",
+        "containment 1.00 of STPO.STLNR into STKO.STLNR",
+        "DD03L key flag on STKO.STLNR",
+        "STKO.STLNR is unique across its rows",
+        "STKO.STLNR is one field of a composite key; join on the full key",
+        "cardinality n:1 observed: STPO.STLNR is repeated in this extract",
+        "STPO and STKO were folded into one BillOfMaterial entity, so this is its internal header/item join"
+      ]
     },
     {
       "name": "soldTo",
@@ -787,7 +920,7 @@
       "business_meaning": "A sales order is sold to a specific customer."
     },
     {
-      "name": "sellsMaterial",
+      "name": "ordersMaterial",
       "from": "SalesOrder",
       "to": "Material",
       "cardinality": "n:1",
@@ -804,7 +937,7 @@
         "MARA.MATNR is unique across its rows",
         "cardinality n:1 observed: VBAP.MATNR is repeated in this extract"
       ],
-      "business_meaning": "A sales order item sells a specific material."
+      "business_meaning": "A sales order item orders a specific material."
     },
     {
       "name": "partOfSalesOrder",
@@ -848,7 +981,7 @@
     }
   ],
   "notes": [
-    "3 of 30 relationships carry inferred=true: no check table declares them, so they were recovered from data containment alone and scored lower accordingly.",
-    "OData $metadata unavailable (no $metadata cached for 5 service(s) in /Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/.claude/worktrees/agent-ae18a848b3482b5fe/backend/data/metadata/odata; see data/metadata/odata/README.md). No NavigationProperty corroboration was applied, so every confidence below is the 0.10 OData term short of its ceiling."
+    "5 of 35 relationships carry inferred=true: no check table declares them, so they were recovered from data containment alone and scored lower accordingly.",
+    "OData $metadata unavailable (no $metadata cached for 5 service(s) in /Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/backend/data/metadata/odata; see data/metadata/odata/README.md). No NavigationProperty corroboration was applied, so every confidence below is the 0.10 OData term short of its ceiling."
   ]
 }

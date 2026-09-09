@@ -70,7 +70,8 @@ def validate(backend, sample_limit: int = 400) -> ValidationReport:
     # typed literals. Untyped strings would fail sh:datatype and report as data
     # quality problems that are really projection bugs.
     numeric = {"required_qty", "net_value", "menge", "order_qty", "on_hand",
-               "safety_stock", "net_price", "delivery_qty", "unit_cost"}
+               "safety_stock", "net_price", "delivery_qty", "unit_cost",
+               "base_qty"}
     dates = {"required_date", "scheduled_finish", "planned_goods_issue",
              "delivery_date", "scheduled_start", "order_date"}
 
@@ -109,6 +110,11 @@ def validate(backend, sample_limit: int = 400) -> ValidationReport:
                 emit("Reservation", f"{r['RSNUM']}-{r['RSPOS']}", {
                     "aufnr": r["AUFNR"], "matnr": r["MATNR"],
                     "required_qty": float(r["BDMNG"]), "required_date": r["BDTER"],
+                })
+            for b in raw["bom_item"][:sample_limit]:
+                emit("BOMItem", f"{b['STLNR']}-{b['POSNR']}", {
+                    "stlnr": b["STLNR"], "posnr": b["POSNR"],
+                    "idnrk": b["IDNRK"], "menge": float(b["MENGE"]),
                 })
             for a in raw["prod_order_header"][:sample_limit]:
                 emit("ProductionOrder", a["AUFNR"], {

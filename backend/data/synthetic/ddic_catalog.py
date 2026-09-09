@@ -57,6 +57,9 @@ TABLE_DESCRIPTIONS: dict[str, str] = {
     "VBAP": "Sales Document: Item Data",
     "LIKP": "SD Document: Delivery Header Data",
     "LIPS": "SD Document: Delivery: Item Data",
+    "MAST": "Material to BOM Link",
+    "STKO": "BOM Header",
+    "STPO": "BOM Item",
 }
 
 # table -> [(field, key_flag, data_element, domain, short text, check_table)]
@@ -171,6 +174,38 @@ FIELDS: dict[str, list[tuple[str, bool, str | None, str | None, str, str | None]
         ("BDTER", False, "BDTER", "DATUM", "Requirement Date", None),
         ("ENMNG", False, "ENMNG", "MENG13", "Quantity Withdrawn", None),
     ],
+    # --- Bill of materials -------------------------------------------------
+    # MAST links a material at a plant to a BOM; STKO carries the base quantity
+    # the item quantities are stated against; STPO holds the components. STLNR
+    # has no check table in either child: the BOM number is the key of STKO
+    # itself, and SAP declares no foreign key back from these tables, so
+    # discovery has to recover the link from the data.
+    "MAST": [
+        ("MATNR", True,  "MATNR", "MATNR", "Material Number", "MARA"),
+        ("WERKS", True,  "WERKS_D", "WERKS", "Plant", "T001W"),
+        ("STLAN", True,  "STLAN", "STLAN", "BOM Usage", None),
+        ("STLNR", False, "STNUM", "STNUM", "Bill of Material", None),
+        ("STLAL", False, "STLAL", "ALTNR", "Alternative BOM", None),
+        ("STLTY", False, "STLTY", "STLTY", "BOM Category", None),
+    ],
+    "STKO": [
+        ("STLNR", True,  "STNUM", "STNUM", "Bill of Material", None),
+        ("STLAL", True,  "STLAL", "ALTNR", "Alternative BOM", None),
+        ("STLTY", True,  "STLTY", "STLTY", "BOM Category", None),
+        ("BMENG", False, "BASMN", "MENG13", "Base Quantity", None),
+        ("BMEIN", False, "BASME", "MEINS", "Base Unit of Measure", "T006"),
+        ("STLST", False, "STLST", "STLST", "BOM Status", None),
+    ],
+    "STPO": [
+        ("STLNR", True,  "STNUM", "STNUM", "Bill of Material", None),
+        ("STLAL", True,  "STLAL", "ALTNR", "Alternative BOM", None),
+        ("STLKN", True,  "STLKN", "STLKN", "BOM Item Node Number", None),
+        ("POSNR", False, "SPOSN", "POSNR", "BOM Item Number", None),
+        ("IDNRK", False, "IDNRK", "MATNR", "BOM Component", "MARA"),
+        ("MENGE", False, "KMPMG", "MENG13", "Component Quantity", None),
+        ("MEINS", False, "MEINS", "MEINS", "Component Unit of Measure", "T006"),
+        ("POSTP", False, "POSTP", "POSTP", "Item Category (BOM)", None),
+    ],
     "VBAK": [
         ("VBELN", True, "VBELN_VA", "VBELN", "Sales Document", None),
         ("KUNNR", False, "KUNAG", "KUNNR", "Sold-to Party", "KNA1"),
@@ -220,6 +255,12 @@ WITHHELD_CHECK_TABLES: tuple[tuple[str, str, str, str], ...] = (
     ("LIPS", "VGBEL", "VBAK", "VBELN"),
     ("RESB", "AUFNR", "AFKO", "AUFNR"),
     ("LIKP", "VSTEL", "T001W", "WERKS"),
+    # SAP declares no check table on STLNR in either BOM child: STKO's key is
+    # STLNR+STLAL+STLTY, and the link back is left to the application. So these
+    # are undeclared for the same reason as the three above, not to pad the
+    # count -- discovery has to recover them from containment.
+    ("MAST", "STLNR", "STKO", "STLNR"),
+    ("STPO", "STLNR", "STKO", "STLNR"),
 )
 
 

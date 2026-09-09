@@ -12,7 +12,7 @@ The design doc described more than what exists. Checked against the code:
 | Design doc said | Reality |
 |---|---|
 | Neo4j Cypher traversal | **Not running.** The driver, loader, constraints and Cypher are all written and tested, but no Aura instance is configured, so every query runs on the in-process backend. `/api/health` reports `backend: memory` |
-| `MAST`/`STPO` BOM tables, `:BOMItem`, `COMPONENT_OF`, `ASSEMBLES_INTO` | **Not implemented.** Component requirements come from `RESB` only. There is no bill of materials, so multi-level explosion (sub-assembly inside a finished good) is not modelled |
+| `MAST`/`STPO` BOM tables, `:BOMItem`, `COMPONENT_OF`, `ASSEMBLES_INTO` | **Done.** `MAST`/`STKO`/`STPO` (`STKO` carries the base quantity `STPO.MENGE` is stated against; `MAST` has no such field). `RESB` is now exploded from the BOM rather than hand-authored, and the traversal propagates a halted sub-assembly's slip to the finished goods that consume it |
 | LLM "Query → Cypher translation" | **Not implemented.** Natural language maps to `{supplier_id, delay_days}`, not to Cypher. Deliberate — a generated query cannot be verified before it runs — but it is not what the doc claimed |
 | LLM "Action Plan Writer" | **Not implemented.** Action titles and descriptions are Python f-strings built from real values |
 | Fault case: missing `NETWR` falls back to historical averages | **Not implemented.** A missing value lowers `data_completeness` and therefore confidence; nothing is estimated |
@@ -24,8 +24,9 @@ The design doc described more than what exists. Checked against the code:
 | Frontend components | **Done**, all reading live API data |
 
 The headline figures in the design doc ($53.6M, 47 deliveries, 23 production
-orders) were illustrative. Real data produces $95,552,000 across 6 deliveries,
-5 production orders and 2 plants.
+orders) were illustrative. Real data produces $111,174,000 across 7 deliveries,
+6 production orders and 2 plants — of which the seventh delivery and the sixth
+production order arrive only through the bill of material (see below).
 
 **Fixed during this audit:** three commercial constants in `avoidance.py`
 (2,500 rush fee, 2% handling, 3,500 freight) were used in the action costs but

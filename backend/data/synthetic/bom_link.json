@@ -1,0 +1,82 @@
+[
+  {
+    "MATNR": "ACU-500",
+    "WERKS": "1010",
+    "STLAN": "1",
+    "STLNR": "00010001",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "CSM-300",
+    "WERKS": "1010",
+    "STLAN": "1",
+    "STLNR": "00010002",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "NAV-700",
+    "WERKS": "1020",
+    "STLAN": "1",
+    "STLNR": "00010003",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "LDG-900",
+    "WERKS": "1030",
+    "STLAN": "1",
+    "STLNR": "00010004",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "ECS-400",
+    "WERKS": "1030",
+    "STLAN": "1",
+    "STLNR": "00010005",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "FMS-850",
+    "WERKS": "1010",
+    "STLAN": "1",
+    "STLNR": "00010006",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "APU-600",
+    "WERKS": "1020",
+    "STLAN": "1",
+    "STLNR": "00010007",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "FCB-100",
+    "WERKS": "1010",
+    "STLAN": "1",
+    "STLNR": "00010008",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "PSU-220",
+    "WERKS": "1020",
+    "STLAN": "1",
+    "STLNR": "00010009",
+    "STLAL": "01",
+    "STLTY": "M"
+  },
+  {
+    "MATNR": "SENSOR-ARR-4",
+    "WERKS": "1010",
+    "STLAN": "1",
+    "STLNR": "00010010",
+    "STLAL": "01",
+    "STLTY": "M"
+  }
+]

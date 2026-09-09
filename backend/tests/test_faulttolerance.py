@@ -73,8 +73,8 @@ def test_faithful_figures_pass_cross_check(exposure, traversal, plan):
 
 
 def test_rounded_figures_are_accepted(exposure, traversal, plan):
-    """'$95.6M' is a legitimate way to write 95,552,000, not a hallucination."""
-    result = verify_narrative("Exposure is about $95.6M.", exposure, traversal, plan)
+    """'$111.2M' is a legitimate way to write 111,174,000, not a hallucination."""
+    result = verify_narrative("Exposure is about $111.2M.", exposure, traversal, plan)
     assert result.clean
 
 
