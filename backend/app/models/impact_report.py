@@ -12,6 +12,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, computed_field
 
+from app.models.estimated_value import EstimatedValue
+
 Severity = Literal["none", "low", "medium", "high", "critical"]
 
 
@@ -282,6 +284,14 @@ class ImpactReport(BaseModel):
 
     blast_radius_nodes: list[GraphNode] = Field(default_factory=list)
     blast_radius_edges: list[GraphEdge] = Field(default_factory=list)
+
+    estimates: list[EstimatedValue] = Field(
+        default_factory=list,
+        description=(
+            "Line items whose value was absent from the source record and was derived "
+            "from comparable records instead. Empty when every input was populated."
+        ),
+    )
 
     warnings: list[str] = Field(default_factory=list)
 
