@@ -63,6 +63,22 @@ body {
   cursor: default;
 }
 .topbar-chip.mode { color: var(--teal); border-color: #0d627040; }
+.topbar-new-query-btn {
+  font-size: 11px;
+  font-family: var(--sans);
+  font-weight: 500;
+  color: #f2f0eb;
+  background: #2a2724;
+  border: 1px solid #3d3a36;
+  border-radius: 2px;
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.topbar-new-query-btn:hover {
+  background: #383531;
+  border-color: #55514b;
+}
 
 /* ── Narrative banner ── */
 .narrative-banner {
@@ -288,28 +304,149 @@ body {
 }
 .graph-zoom-btn:hover { border-color: var(--ink-3); color: var(--ink); }
 
-/* Lineage inspector (below graph) */
-.lineage-inspector {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
-  border: 1px solid var(--rule); border-radius: 2px; overflow: hidden;
-  background: var(--rule);
+/* Blast Radius Bottom Inspection Cards (matching reference mockup) */
+.blast-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 16px;
+  align-items: flex-start;
+  margin-top: 16px;
 }
-.li-left, .li-right { background: var(--paper); padding: 16px; }
-.li-title { font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; }
-.li-node-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
 
-.li-trail { display: flex; flex-direction: column; gap: 8px; }
-.li-trail-row {
-  display: grid; grid-template-columns: 48px 60px 1fr;
-  gap: 8px; align-items: baseline;
-  font-size: 12px;
+.blast-lineage-card {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 16px 18px;
 }
-.ltr-table { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--ink-4); text-transform: uppercase; }
-.ltr-field { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
-.ltr-value { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); }
-.ltr-desc  { font-size: 11px; color: var(--ink-4); grid-column: 2 / -1; margin-top: -4px; }
 
-.li-empty { font-size: 13px; color: var(--ink-4); font-style: italic; line-height: 1.5; }
+.blast-lineage-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.blast-lineage-header span.prefix {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+.blast-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.blast-row {
+  display: flex;
+  flex-direction: column;
+  padding: 9px 0;
+  border-top: 1px solid var(--rule-light);
+  gap: 3px;
+}
+.blast-row:first-child {
+  border-top: none;
+  padding-top: 2px;
+}
+
+.blast-row-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.blast-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-3);
+  background: var(--paper-2);
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.02em;
+}
+
+.blast-val {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.blast-desc {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  padding-left: 2px;
+}
+
+/* Callout info card on the right */
+.blast-callout-card {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 18px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.blast-callout-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b8440a;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.blast-callout-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.blast-callout-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.blast-callout-text {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.55;
+}
+
+/* Residual progress bar */
+.residual-bar-track {
+  width: 100%;
+  height: 5px;
+  background: var(--paper-3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.residual-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+.residual-bar-fill.risk {
+  background: var(--risk);
+}
+.residual-bar-fill.mitigate {
+  background: var(--teal);
+}
+
+/* Just executed row flash animation */
+@keyframes just-executed-flash {
+  0%   { background-color: rgba(13, 98, 112, 0.22); }
+  100% { background-color: rgba(13, 98, 112, 0.03); }
+}
+.action-item.just-executed {
+  animation: just-executed-flash 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 /* ═══════════════════════════════════════════
    FINANCIAL EXPOSURE SECTION
@@ -571,7 +708,6 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--rule); }
 
 /* Animation helpers */
-.fade-in { animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 /* ═══════════════════════════════════════════
@@ -745,4 +881,85 @@ body {
 .loading-elapsed {
   margin-left: 10px; font-family: var(--mono); font-size: 13px;
   color: var(--ink-4); font-weight: 400;
+}
+.fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Two requestAnimationFrame pattern CSS transition */
+.panel-reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.panel-reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Executed action styles */
+.action-item.executed {
+  border-left: 3px solid var(--teal) !important;
+}
+.execute-btn.done {
+  background: var(--teal-light);
+  color: var(--teal);
+  border: 1px solid rgba(13, 98, 112, 0.25);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.execute-btn.done:hover {
+  background: #d2eaee;
+  border-color: rgba(13, 98, 112, 0.4);
+}
+
+/* ═══════════════════════════════════════════
+   PREFERS-REDUCED-MOTION
+═══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .panel-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* Lineage inspector — record key line and the source-record card contents.
+   Extends the blast-* card design with the fields the live API returns. */
+.blast-key {
+  display: block; font-family: var(--mono); font-size: 10px;
+  color: var(--ink-4); margin-top: 3px;
+}
+.blast-record-line { font-size: 12px; color: var(--ink-3); line-height: 1.6; }
+.blast-mono { font-family: var(--mono); color: var(--ink); }
+.blast-field-row {
+  display: flex; gap: 10px; font-family: var(--mono);
+  font-size: 11px; line-height: 1.8;
+}
+.blast-field-key { color: var(--ink-4); min-width: 84px; flex-shrink: 0; }
+.blast-field-val { color: var(--ink); word-break: break-word; }
+
+/* Empty state inside the lineage card, when nothing is selected yet. */
+.li-empty {
+  font-size: 12.5px; color: var(--ink-4); font-style: italic;
+  line-height: 1.7; padding: 8px 0;
 }

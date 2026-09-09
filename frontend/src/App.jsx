@@ -9,6 +9,7 @@ import ImpactTimeline from './components/ImpactTimeline';
 import LineageTrail from './components/LineageTrail';
 import { analyseQuestion, checkHealth, ApiError } from './utils/api';
 import { formatMoney, formatQty } from './utils/format';
+import { useCountUp } from './utils/useAnimatedNumber';
 
 const SECTIONS = [
   { id: 'overview',  label: 'Overview' },
@@ -32,8 +33,45 @@ const LOADING_STEPS = [
 ];
 const NARRATIVE_STEP = { label: 'Writing the executive summary…', ms: null };
 
+/** Counts a stat up when its section becomes active. Non-numeric values (an
+ *  em dash, "8 days") pass through unchanged. */
+function AnimatedStat({ value, isActive = true }) {
+  const numeric = typeof value === 'number' ? value : parseFloat(String(value));
+  const suffix = typeof value === 'string' ? String(value).replace(/^[\d.,\s]+/, '') : '';
+  const display = useCountUp(Number.isNaN(numeric) ? 0 : numeric, {
+    active: isActive, duration: 750,
+  });
+  if (Number.isNaN(numeric)) return <>{value}</>;
+  return <>{display}{suffix ? ` ${suffix}` : ''}</>;
+}
+
+function MetricRow({ label, value, delay = 0, isActive = true }) {
+  const display = useCountUp(value, {
+    active: isActive, duration: 800, formatFn: (v) => `${Math.round(v)}%`,
+  });
+  return (
+    <div className="trust-metric">
+      <div className="tm-head">
+        <span className="tm-name">{label}</span>
+        <span className="tm-val">{display}</span>
+      </div>
+      <div className="tm-bar-bg">
+        <motion.div
+          className="tm-bar"
+          initial={{ width: 0 }}
+          animate={{ width: `${value}%` }}
+          transition={{ delay, duration: 0.6 }}
+        />
+      </div>
+    </div>
+  );
+}
+
 // ── Lineage & trust ────────────────────────────────────────────────────────
-function TrustSection({ confidence, lineage, subject, derivation, assumptions }) {
+function TrustSection({ confidence, lineage, subject, derivation, assumptions, isActive = true }) {
+  const scoreDisplay = useCountUp(confidence?.score ?? 0, {
+    active: isActive, duration: 900, formatFn: (v) => `${Math.round(v)}%`,
+  });
   if (!confidence) return null;
   const metrics = [
     { label: 'Data completeness',  value: confidence.data_completeness },
@@ -52,7 +90,7 @@ function TrustSection({ confidence, lineage, subject, derivation, assumptions })
       </div>
 
       <div className="trust-score-row">
-        <span className="trust-pct">{confidence.score}%</span>
+        <span className="trust-pct">{scoreDisplay}</span>
         <span className="trust-label">
           confidence score · {confidence.hops_complete}/{confidence.hops_total} hops traversed
         </span>
@@ -60,20 +98,13 @@ function TrustSection({ confidence, lineage, subject, derivation, assumptions })
 
       <div className="trust-breakdown">
         {metrics.map((m, i) => (
-          <div key={m.label} className="trust-metric">
-            <div className="tm-head">
-              <span className="tm-name">{m.label}</span>
-              <span className="tm-val">{m.value}%</span>
-            </div>
-            <div className="tm-bar-bg">
-              <motion.div
-                className="tm-bar"
-                initial={{ width: 0 }}
-                animate={{ width: `${m.value}%` }}
-                transition={{ delay: i * 0.1 + 0.2, duration: 0.6 }}
-              />
-            </div>
-          </div>
+          <MetricRow
+            key={m.label}
+            label={m.label}
+            value={m.value}
+            delay={i * 0.1 + 0.2}
+            isActive={isActive}
+          />
         ))}
       </div>
 
@@ -142,8 +173,11 @@ function TrustSection({ confidence, lineage, subject, derivation, assumptions })
 }
 
 // ── Overview ───────────────────────────────────────────────────────────────
-function OverviewSection({ data, onNavigate }) {
+function OverviewSection({ data, onNavigate, isActive = true }) {
   const { financial_summary: fs, affected_counts: ac, time_to_impact_days } = data;
+  const exposureDisplay = useCountUp(fs.total_exposure, {
+    active: isActive, duration: 900, formatFn: formatMoney,
+  });
 
   const stats = [
     { num: ac.purchase_orders,   label: 'Purchase orders' },
@@ -230,14 +264,16 @@ function OverviewSection({ data, onNavigate }) {
   return (
     <div className="fade-in">
       <div className="overview-exposure">
-        <span className="exposure-num">{formatMoney(fs.total_exposure)}</span>
+        <span className="exposure-num">{exposureDisplay}</span>
         <span className="exposure-label">projected financial exposure</span>
       </div>
 
       <div className="overview-stats">
         {stats.map((s) => (
           <div key={s.label} className="stat-cell">
-            <span className="stat-num">{s.num}</span>
+            <span className="stat-num">
+              <AnimatedStat value={s.num} isActive={isActive} />
+            </span>
             <span className="stat-label">{s.label}</span>
           </div>
         ))}
@@ -259,7 +295,7 @@ function OverviewSection({ data, onNavigate }) {
 }
 
 // ── Blast radius ───────────────────────────────────────────────────────────
-function BlastSection({ data, selectedNode, onNodeSelect }) {
+function BlastSection({ data, selectedNode, onNodeSelect, isActive = true }) {
   return (
     <div className="fade-in">
       <div className="section-head">
@@ -272,6 +308,7 @@ function BlastSection({ data, selectedNode, onNodeSelect }) {
         data={data}
         onNodeSelect={onNodeSelect}
         selectedNodeId={selectedNode?.id}
+        isActive={isActive}
       />
       <div style={{ marginTop: 16 }}>
         <LineageTrail
@@ -504,6 +541,14 @@ export default function App() {
     }
   }, []);
 
+  // The query bar is hidden once a report is on screen; this is the way back.
+  const resetToLanding = useCallback(() => {
+    setReport(null);
+    setSelectedNode(null);
+    setError(null);
+    setActiveSection('overview');
+  }, []);
+
   const hasReport = !!report;
   const backendOnline = !!health;
   const llmOnline = !!health?.llm?.available;
@@ -512,11 +557,19 @@ export default function App() {
     <div className="app">
       {hasReport && (
         <div className="top-bar">
-          <div className="topbar-brand">
+          <div
+            className="topbar-brand"
+            onClick={resetToLanding}
+            style={{ cursor: 'pointer' }}
+            title="Return to the query console"
+          >
             <span className="topbar-brand-name">SAP Knowledge Graph</span>
             <span className="topbar-brand-sub">Supplier exposure console</span>
           </div>
           <div className="topbar-right">
+            <button className="topbar-new-query-btn" onClick={resetToLanding}>
+              ← New analysis
+            </button>
             {/* Each chip states one narrow fact. "Live API" was ambiguous —
                 an SAP audience reads it as a live SAP connection, which this is
                 not: the graph is SAP-structured but synthetic. */}
@@ -598,8 +651,6 @@ export default function App() {
         <>
           <NarrativeBanner data={report} onNavigate={setActiveSection} />
 
-          <QueryInput onSubmit={handleQuery} loading={loading} health={health} />
-
           {error && <ErrorPanel error={error} onDismiss={() => setError(null)} />}
 
           {report.warnings?.length > 0 && (
@@ -640,7 +691,7 @@ export default function App() {
                 transition={{ duration: 0.18 }}
               >
                 {activeSection === 'overview' && (
-                  <OverviewSection data={report} onNavigate={setActiveSection} />
+                  <OverviewSection data={report} onNavigate={setActiveSection} isActive={activeSection === 'overview'} />
                 )}
                 {activeSection === 'blast' && (
                   <BlastSection
@@ -650,7 +701,11 @@ export default function App() {
                   />
                 )}
                 {activeSection === 'finance' && (
-                  <FinancialDashboard data={report} avoidanceApplied={avoidanceApplied} />
+                  <FinancialDashboard
+                      data={report}
+                      avoidanceApplied={avoidanceApplied}
+                      isActive={activeSection === 'finance'}
+                    />
                 )}
                 {activeSection === 'avoidance' && (
                   <AvoidancePanel
