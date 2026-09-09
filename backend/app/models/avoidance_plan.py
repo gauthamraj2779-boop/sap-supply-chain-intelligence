@@ -35,6 +35,18 @@ class AvoidanceAction(BaseModel):
         default="", description="SAP table(s) this action's feasibility was proven against"
     )
 
+    # Deliberately a separate field rather than an overwrite of title/description:
+    # the deterministic text is the record, and it has to survive an LLM that is
+    # absent, unreachable, or caught rephrasing a figure.
+    narrative: str | None = Field(
+        default=None,
+        description=(
+            "LLM prose for this action. None when no LLM is configured, or when the "
+            "generated text failed the figure cross-check. The computed title, "
+            "description and figures above are authoritative either way."
+        ),
+    )
+
     @computed_field
     @property
     def roi(self) -> float | None:
@@ -70,6 +82,15 @@ class AvoidancePlan(BaseModel):
     assumptions: list[str] = Field(
         default_factory=list,
         description="Commercial inputs behind the action costs that are not SAP fields",
+    )
+
+    narrative_source: str = Field(
+        default="unavailable",
+        description="Which model wrote the action narratives, if any",
+    )
+    narrative_notes: list[str] = Field(
+        default_factory=list,
+        description="What the figure cross-check did to each generated action narrative",
     )
 
     exposure_before: float

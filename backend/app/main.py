@@ -135,7 +135,8 @@ def root() -> dict:
         "docs": "/docs",
         "endpoints": [
             "GET  /api/health", "GET  /api/suppliers", "POST /api/impact",
-            "POST /api/query", "GET  /api/query/examples", "POST /api/cypher",
+            "POST /api/query", "GET  /api/query/examples",
+            "POST /api/query/cypher", "POST /api/cypher",
             "GET  /api/graph", "GET  /api/schema", "GET  /api/ontology",
             "GET  /api/validation", "GET  /api/lineage/{node_type}/{node_id}",
         ],

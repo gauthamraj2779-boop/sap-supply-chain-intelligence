@@ -18,6 +18,8 @@ from app.models.impact_report import (
     TraversalResult,
 )
 from app.models.avoidance_plan import AvoidanceAction, AvoidancePlan, RejectedOption
+from app.models.cypher_query import CypherTranslation
+from app.models.estimated_value import EstimatedValue
 
 __all__ = [
     "AffectedCounts",
@@ -31,6 +33,8 @@ __all__ = [
     "RejectedOption",
     "ConfidenceScore",
     "CustomerExposure",
+    "CypherTranslation",
+    "EstimatedValue",
     "FinancialExposure",
     "GraphEdge",
     "GraphNode",

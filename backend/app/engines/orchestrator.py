@@ -12,7 +12,7 @@ from __future__ import annotations
 import logging
 from datetime import date
 
-from app.engines import avoidance, deterministic, financial, generative
+from app.engines import avoidance, deterministic, estimation, financial, generative
 from app.engines.llm import get_llm
 from app.graph.adapter import GraphBackend
 from app.models import (
@@ -70,6 +70,13 @@ def analyse(
         plan = None
         warnings.append(f"Avoidance engine unavailable: {exc}")
 
+    # 3b - estimated inputs. The shipped dataset is complete, so this is
+    # normally empty; a real extract with holes fills it and pays for it in
+    # data_completeness below.
+    estimates = estimation.from_traversal(traversal, backend)
+    if estimates.estimates or estimates.unresolved:
+        exposure.assumptions.extend(estimates.assumptions)
+
     # 4 - narrative (optional; never blocks)
     llm = get_llm()
     narrative, source = None, "unavailable"
@@ -80,6 +87,8 @@ def analyse(
             warnings.append(
                 "LLM narrative could not be generated; all figures below are unaffected."
             )
+        if plan is not None:
+            generative.write_action_plan(plan, traversal, exposure)
     elif include_narrative:
         source = f"unavailable ({llm.status().reason})"
 
@@ -96,6 +105,7 @@ def analyse(
     confidence = compute_confidence(
         traversal, shacl, cross,
         graph_backend_name=backend.name, llm_available=llm.available,
+        estimation=estimates,
     )
 
     supplier = _supplier_info(backend, traversal)
@@ -124,6 +134,7 @@ def analyse(
         narrative_source=source,
         blast_radius_nodes=nodes,
         blast_radius_edges=edges,
+        estimates=estimates.estimates,
         warnings=warnings,
     )
 

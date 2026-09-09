@@ -11,10 +11,10 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from app.engines.deterministic import SupplierNotFound
-from app.engines.generative import translate_query
+from app.engines.generative import execute_cypher, translate_query, translate_to_cypher
 from app.engines.orchestrator import analyse
 from app.graph.adapter import GraphUnavailable
-from app.models import ImpactReport
+from app.models import CypherTranslation, ImpactReport
 
 router = APIRouter(tags=["query"])
 
@@ -40,6 +40,11 @@ class QueryResponse(BaseModel):
 
 class CypherRequest(BaseModel):
     query: str = Field(min_length=6)
+
+
+class CypherQuestionRequest(BaseModel):
+    question: str = Field(min_length=3)
+    execute: bool = True
 
 
 @router.get("/query/examples")
@@ -73,6 +78,24 @@ def query(req: QueryRequest, request: Request) -> QueryResponse:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
     return QueryResponse(question=req.question, interpreted=parsed, report=report)
+
+
+@router.post("/query/cypher", response_model=CypherTranslation)
+def query_cypher(req: CypherQuestionRequest, request: Request) -> CypherTranslation:
+    """Question -> generated Cypher -> validated -> executed where possible.
+
+    Always 200: a rejected query and the reason it was rejected is a result, not
+    an error. Execution needs the Neo4j backend; on the in-process graph the
+    validated query is returned with an explanation instead of invented rows.
+    """
+    backend = request.app.state.backend
+    translation = translate_to_cypher(req.question)
+    if not translation.valid:
+        return translation
+    if not req.execute:
+        translation.execution_note = "Execution was not requested."
+        return translation
+    return execute_cypher(backend, translation)
 
 
 @router.post("/cypher")

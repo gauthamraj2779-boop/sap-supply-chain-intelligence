@@ -25,6 +25,7 @@ def compute_confidence(
     cross: CrossCheckResult | None,
     graph_backend_name: str = "memory",
     llm_available: bool = False,
+    estimation=None,
 ) -> ConfidenceScore:
     notes: list[str] = []
     degraded: list[str] = []
@@ -69,6 +70,22 @@ def compute_confidence(
                 f"absent or non-positive in the source records."
             )
         data = min(data, (data + field_completeness) / 2)
+
+    # An estimated value is a known unknown: usable, but not read from the
+    # record. Completeness is scaled down by the share of examined line items
+    # that had to be derived, so an estimate always costs confidence rather
+    # than being averaged away against the fields that were present.
+    if estimation is not None and estimation.estimates:
+        n = len(estimation.estimates)
+        examined = max(n, estimation.line_items_examined)
+        share = n / examined
+        data *= 1.0 - share
+        notes.append(
+            f"{n} of {examined} line items on the analysis path carry an estimated "
+            f"value rather than one read from the source record; data completeness is "
+            f"scaled to the remaining {1 - share:.0%}."
+        )
+        degraded.append("estimated_values")
 
     # ---- traversal coverage -------------------------------------------
     coverage = traversal.hop_coverage
