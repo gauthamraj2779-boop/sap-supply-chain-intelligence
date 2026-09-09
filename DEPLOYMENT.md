@@ -11,32 +11,54 @@ optional upgrades you can add later without touching code.
 
 ## What ships where
 
+**One service, one URL.** The Docker image builds the console and the API
+serves it from the same process, so there is no CORS to configure, no second
+host, and no ordering dependency between deploying the API and building a
+console that needs to know the API's address.
+
 | Piece | Where | Cost |
 |---|---|---|
-| Backend (FastAPI) | Render, from `backend/Dockerfile` | Free tier |
-| Frontend (static Vite build) | GitHub Pages, via Actions | Free |
+| API + console (one image) | Render, from `backend/Dockerfile` | Free tier |
 | Graph database | Neo4j Aura Free — optional | Free |
 | LLM | Any of five providers — optional | Varies |
 
-Everything needed is in the repo: `backend/Dockerfile`, `render.yaml`,
-`.github/workflows/ci.yml`, `.github/workflows/deploy-frontend.yml`.
+### Why not GitHub Pages
+
+The first attempt published the console to Pages and failed:
+
+```
+Error: Failed to create deployment (status: 404)
+Ensure GitHub Pages has been enabled
+```
+
+The build succeeded; only the deploy step failed. Enabling Pages requires
+**repository admin**, which a collaborator does not have — only the repo owner
+can turn it on. Rather than block on that, the console is now served by the API
+itself, which is a better arrangement anyway: one URL, no CORS, and nothing to
+enable.
+
+If you later want Pages as well, the owner enables it at
+Settings → Pages → Source: GitHub Actions, and a workflow can be restored.
 
 ---
 
-## 1. Backend → Render
+## 1. Deploy
 
 1. render.com → **New** → **Blueprint** → point it at this repository.
-   It reads `render.yaml` and builds `backend/Dockerfile`.
-2. Set `CORS_ORIGINS` to the frontend origin once you have it (step 2), e.g.
-   `https://gauthamraj2779-boop.github.io`.
-3. Deploy. Health check is `/api/health`; the container reports healthy only
+   It reads `render.yaml` and builds `backend/Dockerfile` from the repo root,
+   so the image can compile the frontend and copy it into `app/static`.
+2. Deploy. Health check is `/api/health`; the container reports healthy only
    once the graph has loaded.
+3. Open the service URL. The console is at `/`, the API docs at `/docs`.
+
+No credentials are required for this step. The in-process graph and the
+deterministic engines produce the complete financial report on their own.
 
 **Free tier sleeps after ~15 minutes idle** and takes 30–60 seconds to wake.
-Before a live demo, open the API once to warm it.
+Open the URL once before a live demo.
 
-Optional environment variables, all settable in the Render dashboard with no
-redeploy of code:
+Optional environment variables, settable in the Render dashboard with no code
+change:
 
 ```
 LLM_PROVIDER=azure
@@ -48,20 +70,14 @@ NEO4J_URI=...  NEO4J_USER=neo4j  NEO4J_PASSWORD=...
 
 ---
 
-## 2. Frontend → GitHub Pages
+## 2. Run the same image locally
 
-1. Repository **Settings → Pages → Source: GitHub Actions**.
-2. Repository **Settings → Secrets and variables → Actions → Variables**, add:
-   `VITE_API_URL` = the Render backend URL (e.g. `https://sap-kg-api.onrender.com`).
-3. Push to `main`. `deploy-frontend.yml` builds and publishes.
+```bash
+docker build -f backend/Dockerfile -t sap-kg .
+docker run -p 8000:8000 sap-kg
+```
 
-The site lands at `https://<owner>.github.io/sap-supply-chain-intelligence/`.
-`vite.config.js` reads `VITE_BASE_PATH` so assets resolve under the repo
-subpath; local development is unaffected.
-
-**Order matters:** deploy the backend first, set `VITE_API_URL`, then let the
-frontend build. A frontend built without it will try `localhost:8000` and show
-its "backend unreachable" state — correct behaviour, but not a demo.
+Then open http://localhost:8000.
 
 ---
 
@@ -103,9 +119,9 @@ key to pass, the degradation guarantee has been broken.
 
 ## Demo-day checklist
 
-1. Wake the Render backend (open `/api/health`) — free tier sleeps
+1. Wake the service (open the URL) — the free tier sleeps after ~15 min idle
 2. If using Aura, confirm the instance is resumed, not paused
-3. Load the frontend and run one query end to end
+3. Run one query end to end
 4. Check the top bar reads **Computed live**, not **Backend unreachable**
 
 ---
@@ -115,5 +131,4 @@ key to pass, the degradation guarantee has been broken.
 | Instead of | Use | Note |
 |---|---|---|
 | Render | Fly.io, Railway, Azure App Service | Any Docker host; the image is standard |
-| GitHub Pages | Vercel, Netlify, Cloudflare Pages | Any static host; set `VITE_API_URL` at build time |
-| Both split | One container serving the built frontend from FastAPI | Simplest single-URL demo; needs a small static-mount change in `main.py` |
+| One image | Split: static host for the console + API elsewhere | Then set `VITE_API_URL` at build time and `CORS_ORIGINS` on the API |

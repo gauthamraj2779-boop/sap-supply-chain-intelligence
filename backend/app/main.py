@@ -11,6 +11,8 @@ from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -128,8 +130,41 @@ app.include_router(query.router, prefix="/api")
 app.include_router(graph_router.router, prefix="/api")
 
 
-@app.get("/")
-def root() -> dict:
+# ---------------------------------------------------------------------------
+# Optional single-origin mode.
+#
+# When a built frontend is present (the Docker image builds it into
+# app/static), serve it from this same process. One URL, no CORS, and no
+# ordering dependency between deploying the API and building a console that
+# needs to know the API's address. Absent the directory this is a no-op and the
+# API behaves exactly as before.
+# ---------------------------------------------------------------------------
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+
+if STATIC_DIR.is_dir():
+    from fastapi.responses import FileResponse
+    from fastapi.staticfiles import StaticFiles
+
+    app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    def serve_console(full_path: str):
+        """Serve the console, falling through to index.html for client routes.
+
+        Registered last so every /api route still wins. A request for a real
+        file returns that file; anything else returns index.html so the
+        single-page app can resolve the route itself.
+        """
+        candidate = (STATIC_DIR / full_path).resolve()
+        if full_path and candidate.is_file() and STATIC_DIR in candidate.parents:
+            return FileResponse(candidate)
+        return FileResponse(STATIC_DIR / "index.html")
+
+    logger.info("Serving the console from %s", STATIC_DIR)
+
+
+@app.get("/api", include_in_schema=False)
+def api_root() -> dict:
     return {
         "service": "sap-knowledge-graph",
         "docs": "/docs",

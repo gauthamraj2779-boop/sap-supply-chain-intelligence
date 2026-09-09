@@ -13,6 +13,7 @@ __pycache__/
 node_modules/
 frontend/node_modules/
 frontend/dist/
+backend/app/static/   # built console, produced by the Docker image
 dist/
 
 # Environment variables

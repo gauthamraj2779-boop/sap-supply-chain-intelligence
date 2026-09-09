@@ -1,22 +1,21 @@
 # One-click deploy: https://render.com/deploy
 #
-# The backend runs with no credentials by default — the in-process graph and the
-# deterministic engines produce the full financial report on their own. Neo4j and
-# an LLM key are optional upgrades, set in the Render dashboard.
+# A single service serves both the API and the console — one URL, no CORS, and
+# no ordering dependency between the two. It runs with no credentials: the
+# in-process graph and the deterministic engines produce the full financial
+# report on their own. Neo4j and an LLM key are optional upgrades set here.
 services:
   - type: web
-    name: sap-kg-api
+    name: sap-supply-chain-intelligence
     runtime: docker
     plan: free
     region: oregon
     dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
+    dockerContext: .          # repo root, so the image can build the frontend too
     healthCheckPath: /api/health
     envVars:
       - key: GRAPH_BACKEND
         value: memory
-      - key: CORS_ORIGINS
-        sync: false          # set to the deployed frontend origin
-      # Optional — leave unset to run deterministic-only:
+      # Optional, all settable in the dashboard without a code change:
       # LLM_PROVIDER, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_API_KEY,
       # AZURE_OPENAI_DEPLOYMENT, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
