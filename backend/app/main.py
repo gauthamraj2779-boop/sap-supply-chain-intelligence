@@ -23,10 +23,39 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(messag
 logger = logging.getLogger("sapkg")
 
 
+def _ensure_data_is_current() -> None:
+    """Regenerate the dataset if it was built for an earlier day.
+
+    Every date in the data is relative to the day it was generated, so a
+    deployed instance would otherwise show a supplier delay whose schedule
+    lines are already in the past. Regeneration is deterministic, so this
+    changes dates only.
+    """
+    from datetime import date
+
+    from app.config import DATA_DIR
+
+    meta_path = DATA_DIR / "meta.json"
+    today = date.today().isoformat()
+    try:
+        if meta_path.exists():
+            import json
+
+            if json.loads(meta_path.read_text()).get("as_of") == today:
+                return
+        from data.synthetic.generate_sap_data import write as regenerate
+
+        regenerate()
+        logger.info("Dataset regenerated for %s", today)
+    except Exception as exc:
+        logger.warning("Could not refresh the dataset (%s); using what is on disk", exc)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings = get_settings()
 
+    _ensure_data_is_current()
     app.state.backend = build_backend(settings)
     logger.info(
         "Graph backend '%s' ready (%d records)",
