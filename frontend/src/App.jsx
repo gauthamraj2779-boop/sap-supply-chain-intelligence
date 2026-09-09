@@ -480,11 +480,24 @@ export default function App() {
             <span className="topbar-brand-sub">Supplier exposure console</span>
           </div>
           <div className="topbar-right">
-            <span className="topbar-chip">
-              {health?.graph?.records ?? 0} SAP records · {health?.graph?.backend ?? '—'} graph
+            {/* Each chip states one narrow fact. "Live API" was ambiguous —
+                an SAP audience reads it as a live SAP connection, which this is
+                not: the graph is SAP-structured but synthetic. */}
+            <span
+              className="topbar-chip"
+              title="Records loaded into the graph. Synthetic data using real SAP table and field names — not a connection to an SAP system."
+            >
+              {health?.graph?.records ?? 0} synthetic SAP records · {health?.graph?.backend ?? '—'} graph
             </span>
-            <span className={`topbar-chip mode ${backendOnline ? 'online' : 'offline'}`}>
-              {backendOnline ? 'Live API' : 'Backend offline'}
+            <span
+              className={`topbar-chip mode ${backendOnline ? 'online' : 'offline'}`}
+              title={
+                backendOnline
+                  ? 'The console reached the analysis backend. Every figure on screen was computed for this query.'
+                  : 'The analysis backend is unreachable. No figures are shown — nothing is served from cache or sample data.'
+              }
+            >
+              {backendOnline ? 'Computed live' : 'Backend unreachable'}
             </span>
             <span className={`topbar-chip ${llmOnline ? 'online' : ''}`}>
               {llmOnline
