@@ -29,7 +29,7 @@ def test_impact_endpoint_returns_a_complete_report(client):
     d = r.json()
 
     fe = d["financial_exposure"]
-    assert fe["total_financial_exposure"] == 95_552_000.0
+    assert fe["total_financial_exposure"] == 111_174_000.0
     assert fe["assumptions"]
 
     t = d["traversal"]

@@ -40,6 +40,7 @@ REQUIRED = {
     "Customer": ["kunnr", "name"],
     "PurchaseOrder": ["ebeln", "matnr", "net_value"],
     "ScheduleLine": ["delivery_date", "menge"],
+    "BOMItem": ["stlnr", "idnrk", "menge"],
     "ProductionOrder": ["aufnr", "output_matnr", "scheduled_finish"],
     "Reservation": ["aufnr", "matnr", "required_qty", "required_date"],
     "SalesOrder": ["vbeln", "matnr", "net_value"],
@@ -48,7 +49,7 @@ REQUIRED = {
 }
 
 NUMERIC = {"net_value", "menge", "required_qty", "order_qty", "on_hand",
-           "safety_stock", "net_price", "delivery_qty", "unit_cost"}
+           "safety_stock", "net_price", "delivery_qty", "unit_cost", "base_qty"}
 DATE_LIKE = {"delivery_date", "required_date", "scheduled_finish",
              "planned_goods_issue", "scheduled_start", "order_date"}
 

@@ -129,8 +129,8 @@ and the console's top bar reflects it.
 │   │   │   ├── loader.py         JSON → Neo4j, idempotent, lineage on every edge
 │   │   │   └── ontology.ttl      OWL + SHACL, generated from schema.py
 │   │   └── routers/              health · impact · query · graph
-│   ├── data/synthetic/           generator + 17 SAP-shaped tables
-│   └── tests/                    63 tests, no credentials needed
+│   ├── data/synthetic/           generator + 20 SAP-shaped tables
+│   └── tests/                    85 tests, no credentials needed
 └── frontend/                     React + Vite + Cytoscape.js
     └── src/
         ├── components/
@@ -173,10 +173,10 @@ and every engine unit-testable without a database.
 ## Data
 
 Synthetic, SAP-structured: real DDIC table and field names, authored values.
-17 tables, 221 records.
+20 tables, 275 records.
 
 `LFA1` · `KNA1` · `MARA` · `MARC` · `MARD` · `T001W` · `EINA`/`EINE` · `EKKO` · `EKPO` ·
-`EKET` · `AFKO` · `AFPO` · `RESB` · `VBAK` · `VBAP` · `LIKP` · `LIPS`
+`EKET` · `MAST`/`STKO`/`STPO` · `AFKO` · `AFPO` · `RESB` · `VBAK` · `VBAP` · `LIKP` · `LIPS`
 
 **On the record:** the data is synthetic; the *structure* is not. Table names, field names,
 key relationships and cardinalities are genuine SAP. Swapping the generator for an SAP
@@ -199,7 +199,7 @@ Three conditions are deliberately planted and asserted in `tests/test_generate.p
 
 ```bash
 cd backend
-make test    # 63 tests, no credentials required
+make test    # 85 tests, no credentials required
 make check   # end-to-end smoke test against a live server
 ```
 

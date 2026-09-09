@@ -80,6 +80,11 @@ class AffectedProductionOrder(BaseModel):
     projected_finish: date
     halt_days: float
     blocking_materials: list[str]
+    blocking_subassemblies: list[str] = Field(
+        default_factory=list,
+        description="Sub-assemblies (STPO.IDNRK) standing between this order and "
+                    "the short materials, when the halt arrives through the BOM",
+    )
     severity: Severity
     lineage: LineageTrail
 

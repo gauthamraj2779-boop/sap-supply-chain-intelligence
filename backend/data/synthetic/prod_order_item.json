@@ -54,5 +54,12 @@
     "MATNR": "FMS-850",
     "PSMNG": 45.0,
     "WERKS": "1010"
+  },
+  {
+    "AUFNR": "000009009",
+    "POSNR": "0001",
+    "MATNR": "SENSOR-ARR-4",
+    "PSMNG": 220.0,
+    "WERKS": "1010"
   }
 ]

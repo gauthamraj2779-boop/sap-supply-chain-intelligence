@@ -23,6 +23,7 @@ CONSTRAINTS = [
     "CREATE CONSTRAINT customer_key IF NOT EXISTS FOR (n:Customer) REQUIRE n.kunnr IS UNIQUE",
     "CREATE CONSTRAINT po_key IF NOT EXISTS FOR (n:PurchaseOrder) REQUIRE n.po_key IS UNIQUE",
     "CREATE CONSTRAINT sched_key IF NOT EXISTS FOR (n:ScheduleLine) REQUIRE n.sched_key IS UNIQUE",
+    "CREATE CONSTRAINT bom_item_key IF NOT EXISTS FOR (n:BOMItem) REQUIRE n.bom_item_key IS UNIQUE",
     "CREATE CONSTRAINT prod_key IF NOT EXISTS FOR (n:ProductionOrder) REQUIRE n.aufnr IS UNIQUE",
     "CREATE CONSTRAINT resb_key IF NOT EXISTS FOR (n:Reservation) REQUIRE n.resb_key IS UNIQUE",
     "CREATE CONSTRAINT so_key IF NOT EXISTS FOR (n:SalesOrder) REQUIRE n.so_key IS UNIQUE",
@@ -39,6 +40,7 @@ def load(driver, data_dir: Path | None = None, wipe: bool = False) -> dict[str, 
     t = {n: _read(n, data_dir) for n in (
         "plants", "suppliers", "customers", "materials", "material_plant",
         "material_stock", "source_list", "po_header", "po_item", "po_schedule",
+        "bom_link", "bom_header", "bom_item",
         "prod_order_header", "prod_order_item", "reservations",
         "so_header", "so_item", "delivery_header", "delivery_item",
     )}
@@ -162,6 +164,53 @@ def load(driver, data_dir: Path | None = None, wipe: bool = False) -> dict[str, 
             MERGE (po)-[sa:SCHEDULED_AT]->(n)
             SET sa._derived_from = 'EKET.EBELN+EBELP -> EKPO.EBELN+EBELP'
         """, rows=sched_rows)
+
+        # ---- bills of material -------------------------------------------
+        # MAST names the BOM for a material at a plant, STKO carries the base
+        # quantity the component quantities are stated against, STPO holds the
+        # components. The three are joined here so one :BOMItem node answers
+        # "what goes into this assembly, and how much" in a single read.
+        stko = {(r["STLNR"], r["STLAL"]): r for r in t["bom_header"]}
+        mast = {(r["STLNR"], r["STLAL"]): r for r in t["bom_link"]}
+        bom_rows = []
+        for item in t["bom_item"]:
+            key = (item["STLNR"], item["STLAL"])
+            link = mast.get(key)
+            if not link:
+                logger.warning("STPO row %s has no MAST link; skipped", key)
+                continue
+            bom_rows.append({
+                "bom_item_key": f"{item['STLNR']}/{item['STLAL']}/{item['POSNR']}",
+                "STLNR": item["STLNR"], "STLAL": item["STLAL"],
+                "STLKN": item["STLKN"], "POSNR": item["POSNR"],
+                "IDNRK": item["IDNRK"], "MENGE": item["MENGE"],
+                "MEINS": item["MEINS"], "POSTP": item["POSTP"],
+                "MATNR": link["MATNR"], "WERKS": link["WERKS"],
+                "STLAN": link["STLAN"],
+                "BMENG": stko.get(key, {}).get("BMENG", 1.0),
+            })
+        s.run("""
+            UNWIND $rows AS r
+            MERGE (n:BOMItem {bom_item_key: r.bom_item_key})
+            SET n.stlnr = r.STLNR, n.stlal = r.STLAL, n.stlkn = r.STLKN,
+                n.posnr = r.POSNR, n.idnrk = r.IDNRK, n.menge = r.MENGE,
+                n.uom = r.MEINS, n.item_category = r.POSTP,
+                n.parent_matnr = r.MATNR, n.werks = r.WERKS, n.stlan = r.STLAN,
+                n.base_qty = r.BMENG,
+                n._source_table = 'MAST/STKO/STPO',
+                n._source_key = 'STLNR=' + r.STLNR + '/STLAL=' + r.STLAL
+                                + '/POSNR=' + r.POSNR
+            WITH n, r
+            MATCH (c:Material {matnr: r.IDNRK})
+            MERGE (c)-[co:COMPONENT_OF]->(n)
+            SET co._derived_from = 'STPO.IDNRK -> MARA.MATNR',
+                co._source_table = 'STPO'
+            WITH n, r
+            MATCH (p:Material {matnr: r.MATNR})
+            MERGE (n)-[ai:ASSEMBLES_INTO]->(p)
+            SET ai._derived_from = 'MAST.MATNR -> MARA.MATNR',
+                ai._source_table = 'MAST'
+        """, rows=bom_rows)
 
         # ---- production orders -------------------------------------------
         s.run("""

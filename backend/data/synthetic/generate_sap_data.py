@@ -17,6 +17,9 @@ on three planted conditions:
   3. Toshiro Metals (0000001002) supplies well-stocked materials with long
      coverage. -> the CONTRAST case: the system must report low impact and
      not simply alarm on every supplier.
+  4. Manufacturing is multi-level: FCB-100 (a sub-assembly built at 1010) is a
+     component of FMS-850, so a raw-material shortfall reaches the finished
+     good through the BOM rather than stopping at the sub-assembly's order.
 
 Run:  python -m data.synthetic.generate_sap_data
 """
@@ -203,27 +206,77 @@ _PURCHASE_ORDERS = [
 ]
 
 # ==========================================================================
+# MAST / STKO / STPO -- bills of material
+# ==========================================================================
+# MAST links a material at a plant to a BOM number; STKO is the BOM header and
+# carries BMENG, the base quantity the component quantities are stated against;
+# STPO holds the components. The base quantity lives on STKO because that is
+# where SAP keeps it -- inventing a BMENG field on MAST would be a lie about the
+# DDIC, and without it a component such as "16.67 MCU-32 per ACU-500" could only
+# be written as a repeating fraction.
+#
+# The finished goods (FERT) draw on the sub-assemblies (HALB) as well as on raw
+# stock; the sub-assemblies draw only on raw (ROH) components. FCB-100 feeding
+# FMS-850 is the edge the whole multi-level cascade runs through.
+#
+# (parent MATNR, WERKS, STLNR bom number, BMENG base quantity,
+#  [(component IDNRK, MENGE per base quantity)])
+_BOMS = [
+    # --- finished goods (FERT) ---
+    ("ACU-500",      "1010", "00010001", 6,
+     [("SENSOR-ARR-4", 6), ("MCU-32", 100), ("CAP-TANT-22", 240), ("CONN-D38", 24)]),
+    ("CSM-300",      "1010", "00010002", 1,
+     [("SENSOR-ARR-4", 1), ("MCU-32", 10), ("SEAL-PLY-4", 8)]),
+    ("NAV-700",      "1020", "00010003", 3,
+     [("PWR-IC-7", 25), ("DISP-LCD-8", 6)]),
+    ("LDG-900",      "1030", "00010004", 1,
+     [("TI-ALLOY-6", 16), ("FAST-M8", 40)]),
+    ("ECS-400",      "1030", "00010005", 1,
+     [("SEAL-PLY-4", 16), ("WIRE-HARN-2", 5)]),
+    ("FMS-850",      "1010", "00010006", 1,
+     [("FCB-100", 4), ("SENSOR-ARR-4", 1), ("SENS-ACC-3", 8), ("CONN-D38", 4)]),
+    ("APU-600",      "1020", "00010007", 1,
+     [("PSU-220", 1), ("CAP-TANT-22", 16)]),
+    # --- sub-assemblies (HALB): raw components only ---
+    ("FCB-100",      "1010", "00010008", 2,
+     [("MCU-32", 9), ("PWR-IC-7", 6), ("CONN-D38", 2)]),
+    ("PSU-220",      "1020", "00010009", 3,
+     [("PWR-IC-7", 14)]),
+    ("SENSOR-ARR-4", "1010", "00010010", 1,
+     [("SENS-ACC-3", 2), ("CONN-D38", 1)]),
+]
+
+# ==========================================================================
 # AFKO / AFPO / RESB -- production orders and their component requirements
 # ==========================================================================
+# Component *quantities* are not listed here: RESB is exploded from the BOM
+# above the way SAP derives it when an order is created, so the reservations
+# cannot drift away from the bill of material. What an order does carry is
+# scheduling -- when each component is needed -- which is not BOM data.
+#
 # (AUFNR, output MATNR, WERKS, GAMNG qty, GSTRP start off, GLTRP finish off,
-#  [(component MATNR, BDMNG qty, BDTER need-date off)])
+#  {component MATNR: BDTER need-date off})
 _PRODUCTION_ORDERS = [
     ("000009001", "ACU-500", "1010", 120.0,  4, 18,
-     [("MCU-32", 2000.0, 8), ("CAP-TANT-22", 4800.0, 8), ("CONN-D38", 480.0, 9)]),
+     {"SENSOR-ARR-4": 8, "MCU-32": 8, "CAP-TANT-22": 8, "CONN-D38": 9}),
     ("000009002", "FCB-100", "1010", 200.0,  5, 15,
-     [("MCU-32", 900.0, 9), ("PWR-IC-7", 600.0, 9)]),
+     {"MCU-32": 9, "PWR-IC-7": 9, "CONN-D38": 9}),
     ("000009003", "CSM-300", "1010",  80.0,  6, 22,
-     [("MCU-32", 800.0, 10), ("SEAL-PLY-4", 640.0, 10)]),
+     {"SENSOR-ARR-4": 10, "MCU-32": 10, "SEAL-PLY-4": 10}),
     ("000009004", "NAV-700", "1020",  60.0,  8, 25,
-     [("PWR-IC-7", 500.0, 12), ("DISP-LCD-8", 120.0, 12)]),
+     {"PWR-IC-7": 12, "DISP-LCD-8": 12}),
     ("000009005", "PSU-220", "1020", 150.0,  7, 20,
-     [("PWR-IC-7", 700.0, 11)]),
+     {"PWR-IC-7": 11}),
     ("000009006", "LDG-900", "1030",  40.0, 10, 28,
-     [("TI-ALLOY-6", 640.0, 14), ("FAST-M8", 1600.0, 14)]),
+     {"TI-ALLOY-6": 14, "FAST-M8": 14}),
     ("000009007", "ECS-400", "1030",  55.0, 12, 30,
-     [("SEAL-PLY-4", 880.0, 16), ("WIRE-HARN-2", 275.0, 16)]),
+     {"SEAL-PLY-4": 16, "WIRE-HARN-2": 16}),
     ("000009008", "FMS-850", "1010",  45.0, 14, 35,
-     [("SENS-ACC-3", 360.0, 20), ("CONN-D38", 180.0, 20)]),
+     {"FCB-100": 20, "SENSOR-ARR-4": 20, "SENS-ACC-3": 20, "CONN-D38": 20}),
+    # Feeds the sensor arrays the three 1010 finished goods consume: without it
+    # SENSOR-ARR-4 demand (245) would exceed the 25 units on the shelf.
+    ("000009009", "SENSOR-ARR-4", "1010", 220.0,  1,  7,
+     {"SENS-ACC-3": 3, "CONN-D38": 3}),
 ]
 
 # ==========================================================================
@@ -263,6 +316,7 @@ _DELIVERIES = [
 def build() -> dict[str, list[dict]]:
     cost = {m["MATNR"]: m["unit_cost"] for m in MATERIALS}
     name = {m["MATNR"]: m["MAKTX"] for m in MATERIALS}
+    uom = {m["MATNR"]: m["MEINS"] for m in MATERIALS}
 
     marc, mard = [], []
     for matnr, werks, labst, eisbe, plifz in _STOCK:
@@ -297,19 +351,44 @@ def build() -> dict[str, list[dict]]:
                 "EINDT": d(eindt_off), "MENGE": menge, "WEMNG": 0.0,
             })
 
+    mast, stko, stpo = [], [], []
+    bom_of: dict[str, tuple[float, list[tuple[str, float]]]] = {}
+    for parent, werks, stlnr, bmeng, comps in _BOMS:
+        mast.append({"MATNR": parent, "WERKS": werks, "STLAN": "1",
+                     "STLNR": stlnr, "STLAL": "01", "STLTY": "M"})
+        stko.append({"STLNR": stlnr, "STLAL": "01", "STLTY": "M",
+                     "BMENG": float(bmeng), "BMEIN": uom[parent], "STLST": "01"})
+        for i, (idnrk, menge) in enumerate(comps, start=1):
+            stpo.append({
+                "STLNR": stlnr, "STLAL": "01", "STLKN": f"{i:08d}",
+                "POSNR": f"{i * 10:04d}", "IDNRK": idnrk, "MENGE": float(menge),
+                "MEINS": uom[idnrk], "POSTP": "L",
+            })
+        bom_of[parent] = (float(bmeng), [(c, float(q)) for c, q in comps])
+
     afko, afpo, resb = [], [], []
     rsnum = 1000
-    for aufnr, out_matnr, werks, gamng, gstrp, gltrp, comps in _PRODUCTION_ORDERS:
+    for aufnr, out_matnr, werks, gamng, gstrp, gltrp, need_by in _PRODUCTION_ORDERS:
         afko.append({"AUFNR": aufnr, "PLNBEZ": out_matnr, "GAMNG": gamng,
                      "GSTRP": d(gstrp), "GLTRP": d(gltrp), "WERKS": werks})
         afpo.append({"AUFNR": aufnr, "POSNR": "0001", "MATNR": out_matnr,
                      "PSMNG": gamng, "WERKS": werks})
+        bmeng, comps = bom_of[out_matnr]
+        # An order that schedules a component the BOM does not contain (or omits
+        # one it does) is an authoring slip, not a data condition worth shipping.
+        if {c for c, _ in comps} != set(need_by):
+            raise ValueError(
+                f"Order {aufnr} schedules {sorted(need_by)} but the {out_matnr} "
+                f"BOM lists {sorted(c for c, _ in comps)}"
+            )
         rsnum += 1
-        for i, (c_matnr, bdmng, bdter_off) in enumerate(comps, start=1):
+        factor = gamng / bmeng
+        for i, (c_matnr, per_base) in enumerate(comps, start=1):
             resb.append({
                 "RSNUM": str(rsnum), "RSPOS": f"{i:04d}", "AUFNR": aufnr,
-                "MATNR": c_matnr, "WERKS": werks, "BDMNG": bdmng,
-                "BDTER": d(bdter_off), "ENMNG": 0.0,
+                "MATNR": c_matnr, "WERKS": werks,
+                "BDMNG": round(per_base * factor, 3),
+                "BDTER": d(need_by[c_matnr]), "ENMNG": 0.0,
             })
 
     vbak, vbap = [], []
@@ -351,6 +430,9 @@ def build() -> dict[str, list[dict]]:
         "po_header": ekko,
         "po_item": ekpo,
         "po_schedule": eket,
+        "bom_link": mast,
+        "bom_header": stko,
+        "bom_item": stpo,
         "prod_order_header": afko,
         "prod_order_item": afpo,
         "reservations": resb,
@@ -365,7 +447,8 @@ TABLE_MAP = {
     "plants": "T001W", "suppliers": "LFA1", "customers": "KNA1",
     "materials": "MARA", "material_plant": "MARC", "material_stock": "MARD",
     "source_list": "EINA/EINE", "po_header": "EKKO", "po_item": "EKPO",
-    "po_schedule": "EKET", "prod_order_header": "AFKO",
+    "po_schedule": "EKET", "bom_link": "MAST", "bom_header": "STKO",
+    "bom_item": "STPO", "prod_order_header": "AFKO",
     "prod_order_item": "AFPO", "reservations": "RESB",
     "so_header": "VBAK", "so_item": "VBAP",
     "delivery_header": "LIKP", "delivery_item": "LIPS",
@@ -394,6 +477,12 @@ def write(out_dir: Path = OUT_DIR) -> dict[str, int]:
             "transferable_stock_plant": "1020",
             "slack_production_order": "000009003",
             "contrast_supplier": "0000001002",
+            "multi_level_bom": {
+                "sub_assembly": "FCB-100",
+                "built_by": "000009002",
+                "assembles_into": "FMS-850",
+                "consumed_by": "000009008",
+            },
         },
     }, indent=2))
     return counts

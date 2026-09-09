@@ -25,6 +25,15 @@ Supplier ─▶ PurchaseOrder ─▶ ScheduleLine ─▶ Material@Plant
                                             AFKO/AFPO/RESB   VBAK/VBAP  LIKP/LIPS  KNA1
 ```
 
+Manufacturing is multi-level, so the production hop is too. `RESB` stops at the
+order that reserves the short part; the bill of material (`MAST`/`STKO`/`STPO`)
+carries the halt on up to the finished goods that consume the sub-assembly:
+
+```
+Material@Plant ─▶ ProductionOrder(sub-assembly) ─▶ BOMItem ─▶ ProductionOrder(finished good)
+                        AFKO/RESB                MAST/STKO/STPO           AFKO
+```
+
 Why the obvious approaches fall short:
 
 | Approach | Why it fails here |
@@ -45,9 +54,9 @@ Every hop is priced, and the total is decomposable:
 |---|---|---|
 | PO stranded value | `EKPO.NETWR` on lines whose material actually goes short | $504,000 |
 | Production halt cost | longest halt per plant × idle cost/day | $3,900,000 |
-| Revenue at risk | `VBAP.NETWR` of affected sales order items | $84,900,000 |
-| Penalty exposure | order value × contractual late-delivery rate | $6,248,000 |
-| **Total** | | **$95,552,000** |
+| Revenue at risk | `VBAP.NETWR` of affected sales order items | $99,500,000 |
+| Penalty exposure | order value × contractual late-delivery rate | $7,270,000 |
+| **Total** | | **$111,174,000** |
 
 Every figure that is **not** an SAP field — idle plant cost, penalty rates — is
 returned in an `assumptions` array rather than buried in a constant. The plant
@@ -65,8 +74,8 @@ per unit covered**:
 | Cross-plant transfer | `MARD`/`MARC` | Is there spare stock elsewhere, above safety stock and not locally needed? |
 | Production re-sequencing | `AFKO`/`RESB` | Can we defer an order no customer is waiting on, and reallocate its components? |
 
-On the reference scenario: **$95.6M exposure reduced to $5.7M for $7,414** —
-94% mitigated. Options that were evaluated and *rejected* are returned too, with
+On the reference scenario: **$111.2M exposure reduced to $13.5M for $9,682** —
+88% mitigated. Options that were evaluated and *rejected* are returned too, with
 the per-unit cost that lost, so the decision is inspectable rather than asserted.
 
 ### 3. No dollar figure ever originates in a language model
@@ -89,7 +98,7 @@ Degradation is tested, not asserted — see `tests/test_faulttolerance.py`.
 cd backend
 make setup      # venv (Python 3.12) + dependencies
 make data       # generate the SAP-faithful dataset
-make test       # 63 tests
+make test       # 85 tests
 make run        # http://localhost:8000/docs
 ```
 
@@ -171,10 +180,10 @@ engine unit-testable without a database.
 ## Data
 
 Synthetic, SAP-structured: real DDIC table and field names, authored values.
-17 tables, 221 records.
+20 tables, 275 records.
 
 `LFA1` · `KNA1` · `MARA` · `MARC` · `MARD` · `T001W` · `EINA`/`EINE` · `EKKO` ·
-`EKPO` · `EKET` · `AFKO` · `AFPO` · `RESB` · `VBAK` · `VBAP` · `LIKP` · `LIPS`
+`EKPO` · `EKET` · `MAST`/`STKO`/`STPO` · `AFKO` · `AFPO` · `RESB` · `VBAK` · `VBAP` · `LIKP` · `LIPS`
 
 **On the record:** the data is synthetic. The *structure* is not — table names,
 field names, key relationships and cardinalities are genuine SAP. Swapping the
@@ -197,7 +206,7 @@ Three conditions are deliberately planted, and asserted in `tests/test_generate.
 ## Verification
 
 ```bash
-make test    # 63 tests
+make test    # 85 tests
 make check   # end-to-end against a live server
 ```
 
@@ -211,6 +220,10 @@ consistency:
   **Halt = 12 days.**
 - Plant 1010: 12 disrupted days × $180,000 = $2,160,000. Plant 1020: 12 × $145,000
   = $1,740,000. **Halt cost = $3,900,000.**
+- `FMS-850` consumes `FCB-100` (`STPO`), which order `000009002` builds. That
+  order slips to D+27 against a need date of D+20, so order `000009008`
+  **halts 7 days** and its $14,600,000 sales order joins the exposure — through
+  the bill of material, not through any reservation of Apex's material.
 
 Also asserted: concurrent halts at one plant are **not** double-billed; a
 covered material never halts production; a longer delay never *reduces* impact;
@@ -245,7 +258,7 @@ backend/
 │   │   └── ontology.ttl       generated
 │   ├── routers/               health, impact, query, graph
 │   └── models/                pydantic response contracts
-├── data/synthetic/            generator + 17 generated tables
+├── data/synthetic/            generator + 20 generated tables
 ├── scripts/smoke_test.py      end-to-end demo-path check
-└── tests/                     63 tests, no credentials needed
+└── tests/                     85 tests, no credentials needed
 ```

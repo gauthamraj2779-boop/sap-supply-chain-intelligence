@@ -1,0 +1,82 @@
+[
+  {
+    "STLNR": "00010001",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 6.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010002",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 1.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010003",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 3.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010004",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 1.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010005",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 1.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010006",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 1.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010007",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 1.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010008",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 2.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010009",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 3.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  },
+  {
+    "STLNR": "00010010",
+    "STLAL": "01",
+    "STLTY": "M",
+    "BMENG": 1.0,
+    "BMEIN": "EA",
+    "STLST": "01"
+  }
+]
