@@ -180,6 +180,7 @@ export function adaptReport(report) {
             evidence: a.evidence ?? [],
           })),
           rejected: plan.considered_but_rejected ?? [],
+          assumptions: plan.assumptions ?? [],
           total_avoidance_cost: plan.total_avoidance_cost,
           total_risk_mitigated: plan.total_risk_mitigated,
           residual_exposure: plan.exposure_after,

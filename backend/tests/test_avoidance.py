@@ -93,3 +93,22 @@ def test_no_actions_proposed_when_there_is_no_problem(backend):
     p = find_actions(backend, t, e)
     assert p.actions == []
     assert p.total_avoidance_cost == 0.0
+
+
+def test_every_non_sap_cost_input_is_declared(plan):
+    """A cost the user cannot audit is a cost they cannot defend.
+
+    The financial engine already declares idle plant cost and penalty rates.
+    The avoidance engine's rush fees and freight rates are the same kind of
+    figure and must be surfaced the same way.
+    """
+    blob = " ".join(plan.assumptions).lower()
+    kinds = {a.kind for a in plan.actions}
+    if "alternate_supplier" in kinds:
+        assert "rush-order" in blob and "2,500" in blob
+    if "cross_plant_transfer" in kinds:
+        assert "freight" in blob and "3,500" in blob
+    if "production_resequence" in kinds:
+        assert "costed at zero" in blob
+    assert any("not an sap field" in a.lower() or "commercial input" in a.lower()
+               for a in plan.assumptions)

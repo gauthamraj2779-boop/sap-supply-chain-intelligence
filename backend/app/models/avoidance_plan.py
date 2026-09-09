@@ -67,6 +67,10 @@ class RejectedOption(BaseModel):
 class AvoidancePlan(BaseModel):
     actions: list[AvoidanceAction] = Field(default_factory=list)
     considered_but_rejected: list[RejectedOption] = Field(default_factory=list)
+    assumptions: list[str] = Field(
+        default_factory=list,
+        description="Commercial inputs behind the action costs that are not SAP fields",
+    )
 
     exposure_before: float
     exposure_after: float

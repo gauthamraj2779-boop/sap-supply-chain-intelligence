@@ -32,10 +32,31 @@ from app.models import (
     TraversalResult,
 )
 
-# Non-SAP commercial inputs, declared rather than hidden.
+# Commercial inputs with no SAP field behind them. Every one is surfaced on the
+# plan as an assumption, for the same reason the financial engine surfaces idle
+# plant cost: a figure the user cannot audit is a figure they cannot defend.
 EXPEDITE_FEE_PER_ORDER = 2_500.0     # rush-order administration + freight
 TRANSFER_HANDLING_RATE = 0.02        # 2% of goods value to pick, pack, ship
 TRANSFER_FREIGHT_FLAT = 3_500.0      # inter-plant air freight, flat
+
+ASSUMPTION_TEXT = {
+    "alternate_supplier": (
+        f"Re-sourcing cost = quantity x price premium over the SAP info-record "
+        f"price (EINE.NETPR vs MARA unit cost), plus a "
+        f"{EXPEDITE_FEE_PER_ORDER:,.0f} rush-order fee per purchase order. The "
+        f"rush fee is a commercial input, not an SAP field."
+    ),
+    "cross_plant_transfer": (
+        f"Transfer cost = {TRANSFER_HANDLING_RATE:.0%} of goods value to pick, "
+        f"pack and ship, plus {TRANSFER_FREIGHT_FLAT:,.0f} flat inter-plant "
+        f"freight. Both are commercial inputs, not SAP fields."
+    ),
+    "production_resequence": (
+        "Deferring an order with no customer commitment in the horizon is "
+        "costed at zero: it consumes no purchase and incurs no penalty. It does "
+        "assume the deferred output is not needed beyond the horizon."
+    ),
+}
 
 
 def attribute_exposure(
@@ -329,9 +350,22 @@ def find_actions(
     before = exposure.total_financial_exposure
     after = max(0.0, before - total_mitigated)
 
+    # Declare only the inputs the chosen actions actually used.
+    assumptions = [
+        ASSUMPTION_TEXT[kind]
+        for kind in ("alternate_supplier", "cross_plant_transfer", "production_resequence")
+        if any(a.kind == kind for a in actions)
+    ]
+    if actions:
+        assumptions.append(
+            "Risk mitigated per action is that material's share of total exposure, "
+            "scaled by the fraction of its shortfall the action covers."
+        )
+
     return AvoidancePlan(
         actions=actions,
         considered_but_rejected=rejected,
+        assumptions=assumptions,
         exposure_before=round(before, 2),
         exposure_after=round(after, 2),
         total_avoidance_cost=round(total_cost, 2),

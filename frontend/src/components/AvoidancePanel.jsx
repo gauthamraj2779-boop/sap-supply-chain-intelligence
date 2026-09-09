@@ -243,6 +243,15 @@ export default function AvoidancePanel({ plan, onExecute, executed = new Set(), 
         </span>
       </div>
 
+      {plan.assumptions?.length > 0 && (
+        <div style={{ marginTop: 24 }}>
+          <h3 className="subsection-title">What these costs assume</h3>
+          <ul className="assumption-list">
+            {plan.assumptions.map((a, i) => <li key={i}>{a}</li>)}
+          </ul>
+        </div>
+      )}
+
       {plan.rejected?.length > 0 && (
         <div className="rejected-block">
           <h3 className="subsection-title">Considered and rejected</h3>
