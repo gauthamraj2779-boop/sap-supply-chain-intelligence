@@ -10,13 +10,6 @@ function fmt(val) {
 export default function ImpactTimeline({ timeline }) {
   if (!timeline || timeline.length === 0) return null;
 
-  // Split into above (even index) and below (odd index)
-  const above = timeline.filter((_, i) => i % 2 === 0);
-  const below  = timeline.filter((_, i) => i % 2 !== 0);
-
-  // Column positions — each event gets an equal slot
-  const cols = timeline.length;
-
   return (
     <div className="tl-section fade-in">
       <div className="section-head">
@@ -27,16 +20,17 @@ export default function ImpactTimeline({ timeline }) {
       </div>
 
       <div className="tl-track-wrap">
-        {/* ── ABOVE cards ── */}
+        {/* ── ABOVE cards (even index: 0, 2, 4...) ── */}
         <div className="tl-row tl-above">
           {timeline.map((event, i) => (
-            <div key={i} className="tl-col">
+            <div key={`above-${i}`} className="tl-col">
               {i % 2 === 0 ? (
                 <motion.div
                   className="tl-card"
-                  initial={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.12, duration: 0.3 }}
+                  transition={{ delay: i * 0.1 + 0.1, duration: 0.35, ease: 'easeOut' }}
+                  whileHover={{ y: -3, transition: { duration: 0.15 } }}
                 >
                   <span className="tl-card-day">Day {event.day}</span>
                   <span className="tl-card-title">{event.event}</span>
@@ -49,31 +43,38 @@ export default function ImpactTimeline({ timeline }) {
           ))}
         </div>
 
-        {/* ── Track line with dots ── */}
+        {/* ── Track line with dots (draws left-to-right) ── */}
         <div className="tl-track-row">
-          <div className="tl-line" />
+          <motion.div
+            className="tl-line"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            style={{ transformOrigin: 'left center' }}
+          />
           {timeline.map((_, i) => (
-            <div key={i} className="tl-col tl-dot-col">
+            <div key={`dot-${i}`} className="tl-col tl-dot-col">
               <motion.div
                 className="tl-dot"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: i * 0.12 + 0.1, type: 'spring', stiffness: 400 }}
+                transition={{ delay: i * 0.1 + 0.18, type: 'spring', stiffness: 500, damping: 25 }}
               />
             </div>
           ))}
         </div>
 
-        {/* ── BELOW cards ── */}
+        {/* ── BELOW cards (odd index: 1, 3, 5...) ── */}
         <div className="tl-row tl-below">
           {timeline.map((event, i) => (
-            <div key={i} className="tl-col">
+            <div key={`below-${i}`} className="tl-col">
               {i % 2 !== 0 ? (
                 <motion.div
                   className="tl-card"
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.12, duration: 0.3 }}
+                  transition={{ delay: i * 0.1 + 0.1, duration: 0.35, ease: 'easeOut' }}
+                  whileHover={{ y: 3, transition: { duration: 0.15 } }}
                 >
                   <span className="tl-card-day">Day {event.day}</span>
                   <span className="tl-card-title">{event.event}</span>

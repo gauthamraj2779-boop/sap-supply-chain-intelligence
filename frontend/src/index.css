@@ -570,5 +570,63 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--rule); }
 
 /* Animation helpers */
-.fade-in { animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Two requestAnimationFrame pattern CSS transition */
+.panel-reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.panel-reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Executed action styles */
+.action-item.executed {
+  border-left: 3px solid var(--teal) !important;
+}
+.execute-btn.done {
+  background: var(--teal-light);
+  color: var(--teal);
+  border: 1px solid rgba(13, 98, 112, 0.25);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.execute-btn.done:hover {
+  background: #d2eaee;
+  border-color: rgba(13, 98, 112, 0.4);
+}
+
+/* ═══════════════════════════════════════════
+   PREFERS-REDUCED-MOTION
+═══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .panel-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+

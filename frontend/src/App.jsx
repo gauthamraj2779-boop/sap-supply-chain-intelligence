@@ -7,7 +7,8 @@ import FinancialDashboard from './components/FinancialDashboard';
 import AvoidancePanel from './components/AvoidancePanel';
 import ImpactTimeline from './components/ImpactTimeline';
 import LineageTrail from './components/LineageTrail';
-import { getMockImpactReport, MOCK_IMPACT_REPORT } from './utils/api';
+import { getMockImpactReport } from './utils/api';
+import { useCountUp } from './utils/useAnimatedNumber';
 
 // ── Nav sections
 const SECTIONS = [
@@ -29,20 +30,52 @@ const LOADING_STEPS = [
 
 function formatMoney(val) {
   if (!val && val !== 0) return '—';
+  if (val === 0) return '$0';
   if (val >= 1_000_000) return `$${(val / 1_000_000).toFixed(1)}M`;
   if (val >= 1_000) return `$${(val / 1_000).toFixed(1)}K`;
   return `$${val}`;
+}
+
+// Reusable count up component for stat cells
+function AnimatedStat({ value, suffix = '' }) {
+  const num = typeof value === 'number' ? value : parseInt(value, 10);
+  const { formatted } = useCountUp(isNaN(num) ? 0 : num, { duration: 800 });
+  return <span>{formatted}{suffix}</span>;
+}
+
+// Reusable metric row with animated bar and count-up percentage
+function MetricRow({ label, value, delay = 0 }) {
+  const { formatted } = useCountUp(value, { duration: 800, delay: delay * 1000, formatFn: v => `${v}%` });
+  return (
+    <div className="trust-metric">
+      <div className="tm-head">
+        <span className="tm-name">{label}</span>
+        <span className="tm-val">{formatted}</span>
+      </div>
+      <div className="tm-bar-bg">
+        <motion.div
+          className="tm-bar"
+          initial={{ width: 0 }}
+          animate={{ width: `${value}%` }}
+          transition={{ delay, duration: 0.6, ease: 'easeOut' }}
+        />
+      </div>
+    </div>
+  );
 }
 
 // ── Lineage & Trust section (full confidence breakdown)
 function TrustSection({ confidence, lineage }) {
   if (!confidence) return null;
   const { score, data_completeness, traversal_coverage, engine_agreement, hops_complete, hops_total } = confidence;
+  const { formatted: animScore } = useCountUp(score, { duration: 900, formatFn: v => `${v}%` });
+
   const metrics = [
     { label: 'Data completeness',  value: data_completeness },
     { label: 'Traversal coverage', value: traversal_coverage },
     { label: 'Engine agreement',   value: engine_agreement },
   ];
+
   return (
     <div className="trust-section fade-in">
       <div className="section-head">
@@ -53,26 +86,13 @@ function TrustSection({ confidence, lineage }) {
       </div>
 
       <div className="trust-score-row">
-        <span className="trust-pct">{score}%</span>
+        <span className="trust-pct">{animScore}</span>
         <span className="trust-label">confidence score · {hops_complete}/{hops_total} hops traversed</span>
       </div>
 
       <div className="trust-breakdown">
         {metrics.map((m, i) => (
-          <div key={m.label} className="trust-metric">
-            <div className="tm-head">
-              <span className="tm-name">{m.label}</span>
-              <span className="tm-val">{m.value}%</span>
-            </div>
-            <div className="tm-bar-bg">
-              <motion.div
-                className="tm-bar"
-                initial={{ width: 0 }}
-                animate={{ width: `${m.value}%` }}
-                transition={{ delay: i * 0.1 + 0.2, duration: 0.6 }}
-              />
-            </div>
-          </div>
+          <MetricRow key={m.label} label={m.label} value={m.value} delay={i * 0.1 + 0.2} />
         ))}
       </div>
 
@@ -90,7 +110,7 @@ function TrustSection({ confidence, lineage }) {
                 className="fl-row"
                 initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.07 }}
+                transition={{ delay: i * 0.06 }}
               >
                 <span className="fl-table">{step.table}</span>
                 <span className="fl-field">{step.field}</span>
@@ -116,24 +136,29 @@ function TrustSection({ confidence, lineage }) {
 // ── Overview section
 function OverviewSection({ data, onNavigate }) {
   const { financial_summary: fs, affected_counts: ac, time_to_impact_days } = data;
+  const { formatted: exposureFormatted } = useCountUp(fs.total_exposure, { duration: 1100, formatFn: formatMoney });
+
   const stats = [
-    { num: ac.purchase_orders,   label: 'Purchase orders' },
-    { num: ac.materials,          label: 'Materials' },
-    { num: ac.plants,             label: 'Plants' },
-    { num: ac.production_orders,  label: 'Production orders' },
-    { num: ac.customer_deliveries,label: 'Deliveries' },
-    { num: `${time_to_impact_days} days`, label: 'Time to first impact' },
+    { num: ac.purchase_orders,   label: 'Purchase orders', suffix: '' },
+    { num: ac.materials,          label: 'Materials', suffix: '' },
+    { num: ac.plants,             label: 'Plants', suffix: '' },
+    { num: ac.production_orders,  label: 'Production orders', suffix: '' },
+    { num: ac.customer_deliveries,label: 'Deliveries', suffix: '' },
+    { num: time_to_impact_days,   label: 'Time to first impact', suffix: ' days' },
   ];
+
   return (
     <div className="fade-in">
       <div className="overview-exposure">
-        <span className="exposure-num">{formatMoney(fs.total_exposure)}</span>
+        <span className="exposure-num">{exposureFormatted}</span>
         <span className="exposure-label">projected financial exposure</span>
       </div>
       <div className="overview-stats">
         {stats.map(s => (
           <div key={s.label} className="stat-cell">
-            <span className="stat-num">{s.num}</span>
+            <span className="stat-num">
+              <AnimatedStat value={s.num} suffix={s.suffix} />
+            </span>
             <span className="stat-label">{s.label}</span>
           </div>
         ))}
@@ -197,7 +222,7 @@ function LoadingScreen({ step }) {
               className={`ls-row ${state === 'active' ? 'active-step' : state === 'done' ? 'done-step' : ''}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: i * 0.3 }}
+              transition={{ delay: i * 0.25 }}
             >
               <div className={`ls-dot ${state}`} />
               {s}
@@ -319,9 +344,14 @@ export default function App() {
         </div>
       )}
 
-      {/* ── Report view ── */}
+      {/* ── Report view with smooth enter transition ── */}
       {hasReport && !loading && (
-        <>
+        <motion.div
+          className="report-wrapper"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        >
           {/* Narrative banner */}
           <div className="narrative-banner">
             <p className="narrative-text">
@@ -390,39 +420,75 @@ export default function App() {
             <main className="main-content">
               <AnimatePresence mode="wait">
                 {activeSection === 'overview' && (
-                  <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <motion.div
+                    key="overview"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                  >
                     <OverviewSection data={report} onNavigate={setActiveSection} />
                   </motion.div>
                 )}
                 {activeSection === 'blast' && (
-                  <motion.div key="blast" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <motion.div
+                    key="blast"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                  >
                     <BlastSection data={report} selectedNode={selectedNode} onNodeSelect={setSelectedNode} />
                   </motion.div>
                 )}
                 {activeSection === 'finance' && (
-                  <motion.div key="finance" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <motion.div
+                    key="finance"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                  >
                     <FinancialDashboard data={report} avoidanceApplied={avoidanceApplied} />
                   </motion.div>
                 )}
                 {activeSection === 'avoidance' && (
-                  <motion.div key="avoidance" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <motion.div
+                    key="avoidance"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                  >
                     <AvoidancePanel plan={report.avoidance_plan} onExecute={handleExecute} />
                   </motion.div>
                 )}
                 {activeSection === 'timeline' && (
-                  <motion.div key="timeline" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <motion.div
+                    key="timeline"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                  >
                     <ImpactTimeline timeline={report.impact_timeline} />
                   </motion.div>
                 )}
                 {activeSection === 'trust' && (
-                  <motion.div key="trust" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <motion.div
+                    key="trust"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                  >
                     <TrustSection confidence={report.confidence} lineage={report.lineage} />
                   </motion.div>
                 )}
               </AnimatePresence>
             </main>
           </div>
-        </>
+        </motion.div>
       )}
     </div>
   );

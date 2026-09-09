@@ -1,11 +1,42 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import cytoscape from 'cytoscape';
 import coseBilkent from 'cytoscape-cose-bilkent';
-import { enrichNodes, enrichEdges } from '../utils/graphLayout';
+import { usePrefersReducedMotion } from '../utils/useAnimatedNumber';
 
 cytoscape.use(coseBilkent);
 
-// Cytoscape stylesheet tuned for the light editorial theme
+// Node colors for the light editorial theme
+const TYPE_COLORS = {
+  Supplier:        '#b8440a',
+  PurchaseOrder:   '#8b7355',
+  Material:        '#6b6560',
+  Plant:           '#1a5276',
+  ProductionOrder: '#2e7d5e',
+  SalesOrder:      '#0d6270',
+  Delivery:        '#6d4c8e',
+  Customer:        '#2c5f2e',
+};
+
+// Logical hop levels across the 8-hop supply chain
+const TYPE_HOPS = {
+  Supplier:        0,
+  PurchaseOrder:   1,
+  Material:        2,
+  Plant:           3,
+  ProductionOrder: 4,
+  SalesOrder:      5,
+  Delivery:        6,
+  Customer:        7,
+};
+
+const LEGEND_ITEMS = [
+  { label: 'Supplier',  color: '#b8440a' },
+  { label: 'Material',  color: '#6b6560' },
+  { label: 'Plant',     color: '#1a5276' },
+  { label: 'Order',     color: '#0d6270' },
+  { label: 'Customer',  color: '#2c5f2e' },
+];
+
 function buildStylesheet() {
   return [
     {
@@ -26,20 +57,22 @@ function buildStylesheet() {
         'border-width': 1.5,
         'border-color': '#ccc9c1',
         'text-margin-y': 4,
-        'transition-property': 'opacity, border-width, border-color',
+        'opacity': 0, // Starts at 0 for real Cytoscape .animate() cascade
+        'transition-property': 'border-width, border-color',
         'transition-duration': '200ms',
       },
     },
     {
       selector: 'node:selected, node.selected',
       style: {
-        'border-width': 3,
+        'border-width': 3.5,
         'border-color': '#0d6270',
+        'opacity': 1,
       },
     },
     {
       selector: 'node.dimmed',
-      style: { 'opacity': 0.25 },
+      style: { 'opacity': 0.2 },
     },
     {
       selector: 'edge',
@@ -57,8 +90,8 @@ function buildStylesheet() {
         'text-background-color': '#f2f0eb',
         'text-background-opacity': 0.9,
         'text-background-padding': '2px',
-        'opacity': 0.8,
-        'transition-property': 'opacity, line-color, width',
+        'opacity': 0, // Starts at 0 for real Cytoscape .animate() cascade
+        'transition-property': 'line-color, width',
         'transition-duration': '200ms',
       },
     },
@@ -73,26 +106,6 @@ function buildStylesheet() {
   ];
 }
 
-// Node colors for the light theme
-const TYPE_COLORS = {
-  Supplier:        '#b8440a',
-  PurchaseOrder:   '#8b7355',
-  Material:        '#6b6560',
-  Plant:           '#1a5276',
-  ProductionOrder: '#2e7d5e',
-  SalesOrder:      '#0d6270',
-  Delivery:        '#6d4c8e',
-  Customer:        '#2c5f2e',
-};
-
-const LEGEND_ITEMS = [
-  { label: 'Supplier',  color: '#b8440a' },
-  { label: 'Material',  color: '#6b6560' },
-  { label: 'Plant',     color: '#1a5276' },
-  { label: 'Order',     color: '#0d6270' },
-  { label: 'Customer',  color: '#2c5f2e' },
-];
-
 function enrichForLightTheme(nodes) {
   return nodes.map(n => {
     const type = n.data.type || 'Material';
@@ -101,13 +114,15 @@ function enrichForLightTheme(nodes) {
     const size = Math.max(22, Math.min(54, 22 + (exposure / 53600000) * 32));
     const raw = n.data.label || '';
     const shortLabel = raw.split('\n')[0].split('(')[0].trim().substring(0, 16);
-    return { ...n, data: { ...n.data, color, size, shortLabel } };
+    const hop = TYPE_HOPS[type] ?? 0;
+    return { ...n, data: { ...n.data, color, size, shortLabel, hop } };
   });
 }
 
 export default function BlastRadiusGraph({ data, onNodeSelect, selectedNodeId }) {
   const containerRef = useRef(null);
   const cyRef = useRef(null);
+  const prefersReduced = usePrefersReducedMotion();
   const [nodeCount, setNodeCount] = useState(0);
   const [edgeCount, setEdgeCount] = useState(0);
 
@@ -134,7 +149,7 @@ export default function BlastRadiusGraph({ data, onNodeSelect, selectedNodeId })
         nodeRepulsion: 6000,
         idealEdgeLength: 110,
         animate: 'end',
-        animationDuration: 600,
+        animationDuration: 500,
       },
       userZoomingEnabled: true,
       userPanningEnabled: true,
@@ -147,6 +162,57 @@ export default function BlastRadiusGraph({ data, onNodeSelect, selectedNodeId })
     setNodeCount(cy.nodes().length);
     setEdgeCount(cy.edges().length);
 
+    const timeouts = [];
+
+    // Hop-by-hop draw-in cascade using real Cytoscape .animate()
+    const runCascadeAnimation = () => {
+      if (prefersReduced) {
+        // Immediate reveal for reduced motion
+        cy.nodes().style('opacity', 1);
+        cy.edges().style('opacity', 0.8);
+        return;
+      }
+
+      // Group nodes by hop level
+      const maxHop = 7;
+      for (let hop = 0; hop <= maxHop; hop++) {
+        const hopNodes = cy.nodes().filter(n => n.data('hop') === hop);
+        const hopEdges = cy.edges().filter(e => {
+          const targetNode = e.target();
+          return targetNode.data('hop') === hop;
+        });
+
+        const delay = hop * 140;
+
+        const tid = setTimeout(() => {
+          if (!cyRef.current || cy.destroyed()) return;
+
+          hopNodes.animate(
+            { style: { opacity: 1 } },
+            { duration: 320, easing: 'ease-out-quad' }
+          );
+
+          hopEdges.animate(
+            { style: { opacity: 0.8 } },
+            { duration: 320, easing: 'ease-out-quad' }
+          );
+        }, delay);
+        timeouts.push(tid);
+      }
+    };
+
+    // Trigger cascade once layout stops
+    cy.one('layoutstop', runCascadeAnimation);
+
+    // Fallback trigger if layout completed synchronously
+    const fallbackTimer = setTimeout(() => {
+      if (!cy.destroyed() && cy.nodes().some(n => n.style('opacity') === '0')) {
+        runCascadeAnimation();
+      }
+    }, 600);
+    timeouts.push(fallbackTimer);
+
+    // Node click handler: highlight neighborhood and dim rest
     cy.on('tap', 'node', (evt) => {
       const node = evt.target;
       cy.elements().removeClass('selected dimmed highlighted');
@@ -157,6 +223,7 @@ export default function BlastRadiusGraph({ data, onNodeSelect, selectedNodeId })
       onNodeSelect && onNodeSelect(node.data());
     });
 
+    // Background click handler: clear selection
     cy.on('tap', (evt) => {
       if (evt.target === cy) {
         cy.elements().removeClass('selected dimmed highlighted');
@@ -164,9 +231,14 @@ export default function BlastRadiusGraph({ data, onNodeSelect, selectedNodeId })
       }
     });
 
-    return () => { cy.destroy(); cyRef.current = null; };
-  }, [data]);
+    return () => {
+      timeouts.forEach(clearTimeout);
+      cy.destroy();
+      cyRef.current = null;
+    };
+  }, [data, prefersReduced]);
 
+  // Sync external selectedNodeId (from inspector or table)
   useEffect(() => {
     if (!cyRef.current || !selectedNodeId) return;
     const node = cyRef.current.getElementById(selectedNodeId);
@@ -187,7 +259,7 @@ export default function BlastRadiusGraph({ data, onNodeSelect, selectedNodeId })
       <div className="graph-card">
         <div className="graph-card-head">
           <span className="graph-card-label">
-            {nodeCount} nodes · {edgeCount} edges — powered by Cytoscape.js
+            {nodeCount} nodes · {edgeCount} edges — Cytoscape.js hop-by-hop traversal
           </span>
           <div className="graph-legend">
             {LEGEND_ITEMS.map(l => (

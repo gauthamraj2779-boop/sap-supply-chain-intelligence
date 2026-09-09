@@ -1,10 +1,18 @@
 import { motion } from 'framer-motion';
+import { useCountUp } from '../utils/useAnimatedNumber';
 
 function formatMoney(val) {
   if (!val && val !== 0) return '—';
+  if (val === 0) return '$0';
   if (val >= 1_000_000) return `$${(val / 1_000_000).toFixed(1)}M`;
   if (val >= 1_000) return `$${(val / 1_000).toFixed(1)}K`;
   return `$${val}`;
+}
+
+// Reusable count-up span component for monetary figures
+function AnimatedAmount({ value, delay = 0 }) {
+  const { formatted } = useCountUp(value, { duration: 900, delay, formatFn: formatMoney });
+  return <span>{formatted}</span>;
 }
 
 const CATEGORIES = [
@@ -32,8 +40,12 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
       <div className="section-head">
         <h2 className="section-title">Financial exposure</h2>
         <p className="section-sub">
-          {formatMoney(total)} across four categories, computed from PO, production, sales, and penalty data.
-          {avoidanceApplied && <span style={{ color: 'var(--teal)', fontWeight: 500 }}> Avoidance actions reduce residual to {formatMoney(fs.residual_exposure)}.</span>}
+          <AnimatedAmount value={total} delay={100} /> across four categories, computed from PO, production, sales, and penalty data.
+          {avoidanceApplied && (
+            <span style={{ color: 'var(--teal)', fontWeight: 500 }}>
+              {' '}Avoidance actions reduce residual to <AnimatedAmount value={fs.residual_exposure} />.
+            </span>
+          )}
         </p>
       </div>
 
@@ -46,20 +58,22 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
         </div>
         {CATEGORIES.map((cat, i) => {
           const val = fs[cat.key] || 0;
-          const pct = Math.round((val / total) * 100);
+          const pct = total > 0 ? Math.round((val / total) * 100) : 0;
           return (
             <motion.div
               key={cat.key}
               className="ledger-row cat-grid"
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.07, duration: 0.3 }}
+              transition={{ delay: i * 0.08, duration: 0.3 }}
             >
               <div className="lr-cat">
                 <span className="lr-cat-name">{cat.label}</span>
                 <span className="lr-cat-src">{cat.src}</span>
               </div>
-              <span className="lr-amount">{formatMoney(val)}</span>
+              <span className="lr-amount">
+                <AnimatedAmount value={val} delay={i * 80 + 150} />
+              </span>
               <div className="lr-share-cell">
                 <span className="lr-share-num">{pct}%</span>
                 <div className="lr-share-bar-bg">
@@ -67,7 +81,7 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
                     className="lr-share-bar"
                     initial={{ width: 0 }}
                     animate={{ width: `${pct}%` }}
-                    transition={{ delay: i * 0.07 + 0.2, duration: 0.5 }}
+                    transition={{ delay: i * 0.08 + 0.25, duration: 0.6, ease: 'easeOut' }}
                   />
                 </div>
               </div>
@@ -91,7 +105,7 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
             <span className="lh-right">Share</span>
           </div>
           {CUSTOMERS.map((cust, i) => {
-            const pct = Math.round((cust.exposure / total) * 100);
+            const pct = total > 0 ? Math.round((cust.exposure / total) * 100) : 0;
             const barPct = Math.round((cust.exposure / maxCust) * 100);
             return (
               <motion.div
@@ -99,11 +113,13 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
                 className="ledger-row cust-grid"
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.07, duration: 0.3 }}
+                transition={{ delay: i * 0.08, duration: 0.3 }}
               >
                 <span className="lr-cust-name">{cust.name}</span>
                 <span className="lr-orders">{cust.orders}</span>
-                <span className="lr-amount">{formatMoney(cust.exposure)}</span>
+                <span className="lr-amount">
+                  <AnimatedAmount value={cust.exposure} delay={i * 80 + 200} />
+                </span>
                 <div className="lr-share-cell">
                   <span className="lr-share-num">{pct}%</span>
                   <div className="lr-share-bar-bg">
@@ -111,7 +127,7 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
                       className="lr-share-bar"
                       initial={{ width: 0 }}
                       animate={{ width: `${barPct}%` }}
-                      transition={{ delay: i * 0.07 + 0.2, duration: 0.5 }}
+                      transition={{ delay: i * 0.08 + 0.25, duration: 0.6, ease: 'easeOut' }}
                     />
                   </div>
                 </div>
