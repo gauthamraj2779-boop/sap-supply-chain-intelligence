@@ -1,0 +1,3904 @@
+{
+  "generated_at": "2026-09-09T12:14:36+00:00",
+  "data_dir": "/Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/.claude/worktrees/agent-ae18a848b3482b5fe/backend/data/synthetic",
+  "method": "deterministic",
+  "thresholds": {
+    "foreign_key": 0.95,
+    "reported": 0.5,
+    "min_distinct": 2
+  },
+  "tables": [
+    {
+      "table": "AFKO",
+      "rows": 8,
+      "columns": 6
+    },
+    {
+      "table": "AFPO",
+      "rows": 8,
+      "columns": 5
+    },
+    {
+      "table": "EINA",
+      "rows": 12,
+      "columns": 6
+    },
+    {
+      "table": "EKET",
+      "rows": 19,
+      "columns": 6
+    },
+    {
+      "table": "EKKO",
+      "rows": 15,
+      "columns": 6
+    },
+    {
+      "table": "EKPO",
+      "rows": 19,
+      "columns": 10
+    },
+    {
+      "table": "KNA1",
+      "rows": 6,
+      "columns": 4
+    },
+    {
+      "table": "LFA1",
+      "rows": 5,
+      "columns": 5
+    },
+    {
+      "table": "LIKP",
+      "rows": 10,
+      "columns": 7
+    },
+    {
+      "table": "LIPS",
+      "rows": 10,
+      "columns": 8
+    },
+    {
+      "table": "MARA",
+      "rows": 20,
+      "columns": 6
+    },
+    {
+      "table": "MARC",
+      "rows": 23,
+      "columns": 6
+    },
+    {
+      "table": "MARD",
+      "rows": 23,
+      "columns": 4
+    },
+    {
+      "table": "RESB",
+      "rows": 16,
+      "columns": 8
+    },
+    {
+      "table": "T001W",
+      "rows": 3,
+      "columns": 5
+    },
+    {
+      "table": "VBAK",
+      "rows": 12,
+      "columns": 6
+    },
+    {
+      "table": "VBAP",
+      "rows": 12,
+      "columns": 7
+    }
+  ],
+  "columns": [
+    {
+      "table": "T001W",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 3,
+      "non_null": 3,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "T001W",
+      "field": "NAME1",
+      "kind": "text",
+      "rows": 3,
+      "non_null": 3,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "Detroit Avionics Plant",
+      "max": "Singapore Systems Plant",
+      "samples": [
+        "Detroit Avionics Plant",
+        "Hamburg Structures Plant",
+        "Singapore Systems Plant"
+      ]
+    },
+    {
+      "table": "T001W",
+      "field": "LAND1",
+      "kind": "text",
+      "rows": 3,
+      "non_null": 3,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "DE",
+      "max": "US",
+      "samples": [
+        "DE",
+        "SG",
+        "US"
+      ]
+    },
+    {
+      "table": "T001W",
+      "field": "ORT01",
+      "kind": "text",
+      "rows": 3,
+      "non_null": 3,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "Detroit",
+      "max": "Singapore",
+      "samples": [
+        "Detroit",
+        "Hamburg",
+        "Singapore"
+      ]
+    },
+    {
+      "table": "T001W",
+      "field": "idle_plant_cost_per_day",
+      "kind": "numeric",
+      "rows": 3,
+      "non_null": 3,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 145000.0,
+      "max": 210000.0,
+      "samples": [
+        "145000.0",
+        "180000.0",
+        "210000.0"
+      ]
+    },
+    {
+      "table": "LFA1",
+      "field": "LIFNR",
+      "kind": "text",
+      "rows": 5,
+      "non_null": 5,
+      "null_rate": 0.0,
+      "distinct": 5,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "0000001000",
+      "max": "0000001004",
+      "samples": [
+        "0000001000",
+        "0000001001",
+        "0000001002",
+        "0000001003",
+        "0000001004"
+      ]
+    },
+    {
+      "table": "LFA1",
+      "field": "NAME1",
+      "kind": "text",
+      "rows": 5,
+      "non_null": 5,
+      "null_rate": 0.0,
+      "distinct": 5,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "Apex Microelectronics",
+      "max": "Toshiro Metals K.K.",
+      "samples": [
+        "Apex Microelectronics",
+        "Continental Fasteners Inc",
+        "Meridian Polymers LLC",
+        "Nova Components GmbH",
+        "Toshiro Metals K.K."
+      ]
+    },
+    {
+      "table": "LFA1",
+      "field": "LAND1",
+      "kind": "text",
+      "rows": 5,
+      "non_null": 5,
+      "null_rate": 0.0,
+      "distinct": 4,
+      "cardinality": 0.8,
+      "unique": false,
+      "min": "DE",
+      "max": "US",
+      "samples": [
+        "DE",
+        "JP",
+        "TW",
+        "US"
+      ]
+    },
+    {
+      "table": "LFA1",
+      "field": "ORT01",
+      "kind": "text",
+      "rows": 5,
+      "non_null": 5,
+      "null_rate": 0.0,
+      "distinct": 5,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "Akron",
+      "max": "Nagoya",
+      "samples": [
+        "Akron",
+        "Cleveland",
+        "Dresden",
+        "Hsinchu",
+        "Nagoya"
+      ]
+    },
+    {
+      "table": "LFA1",
+      "field": "risk_score",
+      "kind": "numeric",
+      "rows": 5,
+      "non_null": 5,
+      "null_rate": 0.0,
+      "distinct": 5,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 0.18,
+      "max": 0.82,
+      "samples": [
+        "0.18",
+        "0.21",
+        "0.29",
+        "0.34",
+        "0.82"
+      ]
+    },
+    {
+      "table": "KNA1",
+      "field": "KUNNR",
+      "kind": "text",
+      "rows": 6,
+      "non_null": 6,
+      "null_rate": 0.0,
+      "distinct": 6,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "0000002001",
+      "max": "0000002006",
+      "samples": [
+        "0000002001",
+        "0000002002",
+        "0000002003",
+        "0000002004",
+        "0000002005"
+      ]
+    },
+    {
+      "table": "KNA1",
+      "field": "NAME1",
+      "kind": "text",
+      "rows": 6,
+      "non_null": 6,
+      "null_rate": 0.0,
+      "distinct": 6,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "Airbus SAS",
+      "max": "Lockheed Martin Aero",
+      "samples": [
+        "Airbus SAS",
+        "Boeing Commercial",
+        "Bombardier Aviation",
+        "Embraer S.A.",
+        "Gulfstream Aerospace"
+      ]
+    },
+    {
+      "table": "KNA1",
+      "field": "LAND1",
+      "kind": "text",
+      "rows": 6,
+      "non_null": 6,
+      "null_rate": 0.0,
+      "distinct": 4,
+      "cardinality": 0.6667,
+      "unique": false,
+      "min": "BR",
+      "max": "US",
+      "samples": [
+        "BR",
+        "CA",
+        "FR",
+        "US"
+      ]
+    },
+    {
+      "table": "KNA1",
+      "field": "ORT01",
+      "kind": "text",
+      "rows": 6,
+      "non_null": 6,
+      "null_rate": 0.0,
+      "distinct": 6,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "Everett",
+      "max": "Toulouse",
+      "samples": [
+        "Everett",
+        "Fort Worth",
+        "Montreal",
+        "Sao Jose dos Campos",
+        "Savannah"
+      ]
+    },
+    {
+      "table": "MARA",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 20,
+      "non_null": 20,
+      "null_rate": 0.0,
+      "distinct": 20,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "ACU-500",
+      "max": "WIRE-HARN-2",
+      "samples": [
+        "ACU-500",
+        "APU-600",
+        "CAP-TANT-22",
+        "CONN-D38",
+        "CSM-300"
+      ]
+    },
+    {
+      "table": "MARA",
+      "field": "MAKTX",
+      "kind": "text",
+      "rows": 20,
+      "non_null": 20,
+      "null_rate": 0.0,
+      "distinct": 20,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "Accelerometer Sensor 3-Axis",
+      "max": "Wire Harness Assembly",
+      "samples": [
+        "Accelerometer Sensor 3-Axis",
+        "Auxiliary Power Controller",
+        "Avionics Control Unit 500",
+        "Cabin Systems Module 300",
+        "Connector D38999 Circular"
+      ]
+    },
+    {
+      "table": "MARA",
+      "field": "MTART",
+      "kind": "text",
+      "rows": 20,
+      "non_null": 20,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.15,
+      "unique": false,
+      "min": "FERT",
+      "max": "ROH",
+      "samples": [
+        "FERT",
+        "HALB",
+        "ROH"
+      ]
+    },
+    {
+      "table": "MARA",
+      "field": "MATKL",
+      "kind": "text",
+      "rows": 20,
+      "non_null": 20,
+      "null_rate": 0.0,
+      "distinct": 6,
+      "cardinality": 0.3,
+      "unique": false,
+      "min": "ASSY",
+      "max": "POLY",
+      "samples": [
+        "ASSY",
+        "AVIO",
+        "ELEC",
+        "MECH",
+        "METL"
+      ]
+    },
+    {
+      "table": "MARA",
+      "field": "MEINS",
+      "kind": "text",
+      "rows": 20,
+      "non_null": 20,
+      "null_rate": 0.0,
+      "distinct": 2,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "EA",
+      "max": "KG",
+      "samples": [
+        "EA",
+        "KG"
+      ]
+    },
+    {
+      "table": "MARA",
+      "field": "unit_cost",
+      "kind": "numeric",
+      "rows": 20,
+      "non_null": 20,
+      "null_rate": 0.0,
+      "distinct": 20,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 9.0,
+      "max": 268000.0,
+      "samples": [
+        "118000.0",
+        "120.0",
+        "142000.0",
+        "145.0",
+        "174000.0"
+      ]
+    },
+    {
+      "table": "MARC",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 20,
+      "cardinality": 0.8696,
+      "unique": false,
+      "min": "ACU-500",
+      "max": "WIRE-HARN-2",
+      "samples": [
+        "ACU-500",
+        "APU-600",
+        "CAP-TANT-22",
+        "CONN-D38",
+        "CSM-300"
+      ]
+    },
+    {
+      "table": "MARC",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.1304,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "MARC",
+      "field": "DISPO",
+      "kind": "text",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.1304,
+      "unique": false,
+      "min": "101",
+      "max": "103",
+      "samples": [
+        "101",
+        "102",
+        "103"
+      ]
+    },
+    {
+      "table": "MARC",
+      "field": "PLIFZ",
+      "kind": "numeric",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 0.4348,
+      "unique": false,
+      "min": 0.0,
+      "max": 30.0,
+      "samples": [
+        "0.0",
+        "10.0",
+        "12.0",
+        "14.0",
+        "18.0"
+      ]
+    },
+    {
+      "table": "MARC",
+      "field": "EISBE",
+      "kind": "numeric",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 15,
+      "cardinality": 0.6522,
+      "unique": false,
+      "min": 1.0,
+      "max": 2000.0,
+      "samples": [
+        "1.0",
+        "10.0",
+        "1000.0",
+        "1200.0",
+        "150.0"
+      ]
+    },
+    {
+      "table": "MARC",
+      "field": "BESKZ",
+      "kind": "text",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 2,
+      "cardinality": 0.087,
+      "unique": false,
+      "min": "E",
+      "max": "F",
+      "samples": [
+        "E",
+        "F"
+      ]
+    },
+    {
+      "table": "MARD",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 20,
+      "cardinality": 0.8696,
+      "unique": false,
+      "min": "ACU-500",
+      "max": "WIRE-HARN-2",
+      "samples": [
+        "ACU-500",
+        "APU-600",
+        "CAP-TANT-22",
+        "CONN-D38",
+        "CSM-300"
+      ]
+    },
+    {
+      "table": "MARD",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.1304,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "MARD",
+      "field": "LGORT",
+      "kind": "text",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0435,
+      "unique": false,
+      "min": "0001",
+      "max": "0001",
+      "samples": [
+        "0001"
+      ]
+    },
+    {
+      "table": "MARD",
+      "field": "LABST",
+      "kind": "numeric",
+      "rows": 23,
+      "non_null": 23,
+      "null_rate": 0.0,
+      "distinct": 23,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 3.0,
+      "max": 12000.0,
+      "samples": [
+        "12000.0",
+        "1800.0",
+        "2200.0",
+        "25.0",
+        "3.0"
+      ]
+    },
+    {
+      "table": "EINA",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 0.8333,
+      "unique": false,
+      "min": "CAP-TANT-22",
+      "max": "WIRE-HARN-2",
+      "samples": [
+        "CAP-TANT-22",
+        "CONN-D38",
+        "DISP-LCD-8",
+        "FAST-M8",
+        "MCU-32"
+      ]
+    },
+    {
+      "table": "EINA",
+      "field": "LIFNR",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 5,
+      "cardinality": 0.4167,
+      "unique": false,
+      "min": "0000001000",
+      "max": "0000001004",
+      "samples": [
+        "0000001000",
+        "0000001001",
+        "0000001002",
+        "0000001003",
+        "0000001004"
+      ]
+    },
+    {
+      "table": "EINA",
+      "field": "NETPR",
+      "kind": "numeric",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 12,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 9.0,
+      "max": 2400.0,
+      "samples": [
+        "120.0",
+        "122.52",
+        "145.0",
+        "18.0",
+        "2400.0"
+      ]
+    },
+    {
+      "table": "EINA",
+      "field": "APLFZ",
+      "kind": "numeric",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 11,
+      "cardinality": 0.9167,
+      "unique": false,
+      "min": 4.0,
+      "max": 30.0,
+      "samples": [
+        "10.0",
+        "12.0",
+        "14.0",
+        "18.0",
+        "20.0"
+      ]
+    },
+    {
+      "table": "EINA",
+      "field": "is_primary",
+      "kind": "boolean",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 2,
+      "cardinality": 0.1667,
+      "unique": false,
+      "min": "False",
+      "max": "True",
+      "samples": [
+        "False",
+        "True"
+      ]
+    },
+    {
+      "table": "EINA",
+      "field": "unit_cost",
+      "kind": "numeric",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 0.8333,
+      "unique": false,
+      "min": 9.0,
+      "max": 2400.0,
+      "samples": [
+        "120.0",
+        "145.0",
+        "18.0",
+        "2400.0",
+        "32.0"
+      ]
+    },
+    {
+      "table": "EKKO",
+      "field": "EBELN",
+      "kind": "text",
+      "rows": 15,
+      "non_null": 15,
+      "null_rate": 0.0,
+      "distinct": 15,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "4500012",
+      "max": "4500054",
+      "samples": [
+        "4500012",
+        "4500015",
+        "4500018",
+        "4500021",
+        "4500024"
+      ]
+    },
+    {
+      "table": "EKKO",
+      "field": "LIFNR",
+      "kind": "text",
+      "rows": 15,
+      "non_null": 15,
+      "null_rate": 0.0,
+      "distinct": 5,
+      "cardinality": 0.3333,
+      "unique": false,
+      "min": "0000001000",
+      "max": "0000001004",
+      "samples": [
+        "0000001000",
+        "0000001001",
+        "0000001002",
+        "0000001003",
+        "0000001004"
+      ]
+    },
+    {
+      "table": "EKKO",
+      "field": "BUKRS",
+      "kind": "text",
+      "rows": 15,
+      "non_null": 15,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0667,
+      "unique": false,
+      "min": "1000",
+      "max": "1000",
+      "samples": [
+        "1000"
+      ]
+    },
+    {
+      "table": "EKKO",
+      "field": "BEDAT",
+      "kind": "date",
+      "rows": 15,
+      "non_null": 15,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0667,
+      "unique": false,
+      "min": "2026-08-05",
+      "max": "2026-08-05",
+      "samples": [
+        "2026-08-05"
+      ]
+    },
+    {
+      "table": "EKKO",
+      "field": "BSART",
+      "kind": "text",
+      "rows": 15,
+      "non_null": 15,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0667,
+      "unique": false,
+      "min": "NB",
+      "max": "NB",
+      "samples": [
+        "NB"
+      ]
+    },
+    {
+      "table": "EKKO",
+      "field": "WAERS",
+      "kind": "text",
+      "rows": 15,
+      "non_null": 15,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0667,
+      "unique": false,
+      "min": "USD",
+      "max": "USD",
+      "samples": [
+        "USD"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "EBELN",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 15,
+      "cardinality": 0.7895,
+      "unique": false,
+      "min": "4500012",
+      "max": "4500054",
+      "samples": [
+        "4500012",
+        "4500015",
+        "4500018",
+        "4500021",
+        "4500024"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "EBELP",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 2,
+      "cardinality": 0.1053,
+      "unique": false,
+      "min": "10",
+      "max": "20",
+      "samples": [
+        "10",
+        "20"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 0.5263,
+      "unique": false,
+      "min": "CAP-TANT-22",
+      "max": "WIRE-HARN-2",
+      "samples": [
+        "CAP-TANT-22",
+        "CONN-D38",
+        "DISP-LCD-8",
+        "FAST-M8",
+        "MCU-32"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "TXZ01",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 0.5263,
+      "unique": false,
+      "min": "Accelerometer Sensor 3-Axis",
+      "max": "Wire Harness Assembly",
+      "samples": [
+        "Accelerometer Sensor 3-Axis",
+        "Connector D38999 Circular",
+        "Fastener Set M8 Aerospace",
+        "LCD Display Module 8in",
+        "Microcontroller Unit 32-bit"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.1579,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "MENGE",
+      "kind": "numeric",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 14,
+      "cardinality": 0.7368,
+      "unique": false,
+      "min": 200.0,
+      "max": 8000.0,
+      "samples": [
+        "1200.0",
+        "1500.0",
+        "200.0",
+        "2500.0",
+        "300.0"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "MEINS",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0526,
+      "unique": false,
+      "min": "EA",
+      "max": "EA",
+      "samples": [
+        "EA"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "NETPR",
+      "kind": "numeric",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 0.5263,
+      "unique": false,
+      "min": 9.0,
+      "max": 2400.0,
+      "samples": [
+        "120.0",
+        "145.0",
+        "18.0",
+        "2400.0",
+        "32.0"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "NETWR",
+      "kind": "numeric",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 18,
+      "cardinality": 0.9474,
+      "unique": false,
+      "min": 27000.0,
+      "max": 2880000.0,
+      "samples": [
+        "104000.0",
+        "127500.0",
+        "130500.0",
+        "136000.0",
+        "1440000.0"
+      ]
+    },
+    {
+      "table": "EKPO",
+      "field": "ELIKZ",
+      "kind": "empty",
+      "rows": 19,
+      "non_null": 0,
+      "null_rate": 1.0,
+      "distinct": 0,
+      "cardinality": 0.0,
+      "unique": false,
+      "min": null,
+      "max": null,
+      "samples": []
+    },
+    {
+      "table": "EKET",
+      "field": "EBELN",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 15,
+      "cardinality": 0.7895,
+      "unique": false,
+      "min": "4500012",
+      "max": "4500054",
+      "samples": [
+        "4500012",
+        "4500015",
+        "4500018",
+        "4500021",
+        "4500024"
+      ]
+    },
+    {
+      "table": "EKET",
+      "field": "EBELP",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 2,
+      "cardinality": 0.1053,
+      "unique": false,
+      "min": "10",
+      "max": "20",
+      "samples": [
+        "10",
+        "20"
+      ]
+    },
+    {
+      "table": "EKET",
+      "field": "ETENR",
+      "kind": "text",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0526,
+      "unique": false,
+      "min": "0001",
+      "max": "0001",
+      "samples": [
+        "0001"
+      ]
+    },
+    {
+      "table": "EKET",
+      "field": "EINDT",
+      "kind": "date",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 16,
+      "cardinality": 0.8421,
+      "unique": false,
+      "min": "2026-09-13",
+      "max": "2026-10-09",
+      "samples": [
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17"
+      ]
+    },
+    {
+      "table": "EKET",
+      "field": "MENGE",
+      "kind": "numeric",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 14,
+      "cardinality": 0.7368,
+      "unique": false,
+      "min": 200.0,
+      "max": 8000.0,
+      "samples": [
+        "1200.0",
+        "1500.0",
+        "200.0",
+        "2500.0",
+        "300.0"
+      ]
+    },
+    {
+      "table": "EKET",
+      "field": "WEMNG",
+      "kind": "numeric",
+      "rows": 19,
+      "non_null": 19,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0526,
+      "unique": false,
+      "min": 0.0,
+      "max": 0.0,
+      "samples": [
+        "0.0"
+      ]
+    },
+    {
+      "table": "AFKO",
+      "field": "AUFNR",
+      "kind": "text",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "000009001",
+      "max": "000009008",
+      "samples": [
+        "000009001",
+        "000009002",
+        "000009003",
+        "000009004",
+        "000009005"
+      ]
+    },
+    {
+      "table": "AFKO",
+      "field": "PLNBEZ",
+      "kind": "text",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "ACU-500",
+      "max": "PSU-220",
+      "samples": [
+        "ACU-500",
+        "CSM-300",
+        "ECS-400",
+        "FCB-100",
+        "FMS-850"
+      ]
+    },
+    {
+      "table": "AFKO",
+      "field": "GAMNG",
+      "kind": "numeric",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 40.0,
+      "max": 200.0,
+      "samples": [
+        "120.0",
+        "150.0",
+        "200.0",
+        "40.0",
+        "45.0"
+      ]
+    },
+    {
+      "table": "AFKO",
+      "field": "GSTRP",
+      "kind": "date",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "2026-09-13",
+      "max": "2026-09-23",
+      "samples": [
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15",
+        "2026-09-16",
+        "2026-09-17"
+      ]
+    },
+    {
+      "table": "AFKO",
+      "field": "GLTRP",
+      "kind": "date",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "2026-09-24",
+      "max": "2026-10-14",
+      "samples": [
+        "2026-09-24",
+        "2026-09-27",
+        "2026-09-29",
+        "2026-10-01",
+        "2026-10-04"
+      ]
+    },
+    {
+      "table": "AFKO",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.375,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "AFPO",
+      "field": "AUFNR",
+      "kind": "text",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "000009001",
+      "max": "000009008",
+      "samples": [
+        "000009001",
+        "000009002",
+        "000009003",
+        "000009004",
+        "000009005"
+      ]
+    },
+    {
+      "table": "AFPO",
+      "field": "POSNR",
+      "kind": "text",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.125,
+      "unique": false,
+      "min": "0001",
+      "max": "0001",
+      "samples": [
+        "0001"
+      ]
+    },
+    {
+      "table": "AFPO",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "ACU-500",
+      "max": "PSU-220",
+      "samples": [
+        "ACU-500",
+        "CSM-300",
+        "ECS-400",
+        "FCB-100",
+        "FMS-850"
+      ]
+    },
+    {
+      "table": "AFPO",
+      "field": "PSMNG",
+      "kind": "numeric",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 40.0,
+      "max": 200.0,
+      "samples": [
+        "120.0",
+        "150.0",
+        "200.0",
+        "40.0",
+        "45.0"
+      ]
+    },
+    {
+      "table": "AFPO",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 8,
+      "non_null": 8,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.375,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "RESB",
+      "field": "RSNUM",
+      "kind": "text",
+      "rows": 16,
+      "non_null": 16,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 0.5,
+      "unique": false,
+      "min": "1001",
+      "max": "1008",
+      "samples": [
+        "1001",
+        "1002",
+        "1003",
+        "1004",
+        "1005"
+      ]
+    },
+    {
+      "table": "RESB",
+      "field": "RSPOS",
+      "kind": "text",
+      "rows": 16,
+      "non_null": 16,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.1875,
+      "unique": false,
+      "min": "0001",
+      "max": "0003",
+      "samples": [
+        "0001",
+        "0002",
+        "0003"
+      ]
+    },
+    {
+      "table": "RESB",
+      "field": "AUFNR",
+      "kind": "text",
+      "rows": 16,
+      "non_null": 16,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 0.5,
+      "unique": false,
+      "min": "000009001",
+      "max": "000009008",
+      "samples": [
+        "000009001",
+        "000009002",
+        "000009003",
+        "000009004",
+        "000009005"
+      ]
+    },
+    {
+      "table": "RESB",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 16,
+      "non_null": 16,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 0.625,
+      "unique": false,
+      "min": "CAP-TANT-22",
+      "max": "WIRE-HARN-2",
+      "samples": [
+        "CAP-TANT-22",
+        "CONN-D38",
+        "DISP-LCD-8",
+        "FAST-M8",
+        "MCU-32"
+      ]
+    },
+    {
+      "table": "RESB",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 16,
+      "non_null": 16,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.1875,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "RESB",
+      "field": "BDMNG",
+      "kind": "numeric",
+      "rows": 16,
+      "non_null": 16,
+      "null_rate": 0.0,
+      "distinct": 15,
+      "cardinality": 0.9375,
+      "unique": false,
+      "min": 120.0,
+      "max": 4800.0,
+      "samples": [
+        "120.0",
+        "1600.0",
+        "180.0",
+        "2000.0",
+        "275.0"
+      ]
+    },
+    {
+      "table": "RESB",
+      "field": "BDTER",
+      "kind": "date",
+      "rows": 16,
+      "non_null": 16,
+      "null_rate": 0.0,
+      "distinct": 8,
+      "cardinality": 0.5,
+      "unique": false,
+      "min": "2026-09-17",
+      "max": "2026-09-29",
+      "samples": [
+        "2026-09-17",
+        "2026-09-18",
+        "2026-09-19",
+        "2026-09-20",
+        "2026-09-21"
+      ]
+    },
+    {
+      "table": "RESB",
+      "field": "ENMNG",
+      "kind": "numeric",
+      "rows": 16,
+      "non_null": 16,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0625,
+      "unique": false,
+      "min": 0.0,
+      "max": 0.0,
+      "samples": [
+        "0.0"
+      ]
+    },
+    {
+      "table": "VBAK",
+      "field": "VBELN",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 12,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "0004502",
+      "max": "0004538",
+      "samples": [
+        "0004502",
+        "0004508",
+        "0004511",
+        "0004514",
+        "0004517"
+      ]
+    },
+    {
+      "table": "VBAK",
+      "field": "KUNNR",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 6,
+      "cardinality": 0.5,
+      "unique": false,
+      "min": "0000002001",
+      "max": "0000002006",
+      "samples": [
+        "0000002001",
+        "0000002002",
+        "0000002003",
+        "0000002004",
+        "0000002005"
+      ]
+    },
+    {
+      "table": "VBAK",
+      "field": "AUDAT",
+      "kind": "date",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 12,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "2026-08-10",
+      "max": "2026-09-03",
+      "samples": [
+        "2026-08-10",
+        "2026-08-12",
+        "2026-08-15",
+        "2026-08-18",
+        "2026-08-20"
+      ]
+    },
+    {
+      "table": "VBAK",
+      "field": "NETWR",
+      "kind": "numeric",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 12,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 3700000.0,
+      "max": 31200000.0,
+      "samples": [
+        "10400000.0",
+        "11300000.0",
+        "12400000.0",
+        "14600000.0",
+        "18700000.0"
+      ]
+    },
+    {
+      "table": "VBAK",
+      "field": "WAERK",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0833,
+      "unique": false,
+      "min": "USD",
+      "max": "USD",
+      "samples": [
+        "USD"
+      ]
+    },
+    {
+      "table": "VBAK",
+      "field": "VKORG",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0833,
+      "unique": false,
+      "min": "1000",
+      "max": "1000",
+      "samples": [
+        "1000"
+      ]
+    },
+    {
+      "table": "VBAP",
+      "field": "VBELN",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 12,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "0004502",
+      "max": "0004538",
+      "samples": [
+        "0004502",
+        "0004508",
+        "0004511",
+        "0004514",
+        "0004517"
+      ]
+    },
+    {
+      "table": "VBAP",
+      "field": "POSNR",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.0833,
+      "unique": false,
+      "min": "10",
+      "max": "10",
+      "samples": [
+        "10"
+      ]
+    },
+    {
+      "table": "VBAP",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 7,
+      "cardinality": 0.5833,
+      "unique": false,
+      "min": "ACU-500",
+      "max": "NAV-700",
+      "samples": [
+        "ACU-500",
+        "APU-600",
+        "CSM-300",
+        "ECS-400",
+        "FMS-850"
+      ]
+    },
+    {
+      "table": "VBAP",
+      "field": "ARKTX",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 7,
+      "cardinality": 0.5833,
+      "unique": false,
+      "min": "Auxiliary Power Controller",
+      "max": "Navigation Computer 700",
+      "samples": [
+        "Auxiliary Power Controller",
+        "Avionics Control Unit 500",
+        "Cabin Systems Module 300",
+        "Environmental Control System",
+        "Flight Management System 850"
+      ]
+    },
+    {
+      "table": "VBAP",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.25,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "VBAP",
+      "field": "KWMENG",
+      "kind": "numeric",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 11,
+      "cardinality": 0.9167,
+      "unique": false,
+      "min": 18.0,
+      "max": 120.0,
+      "samples": [
+        "120.0",
+        "18.0",
+        "20.0",
+        "25.0",
+        "30.0"
+      ]
+    },
+    {
+      "table": "VBAP",
+      "field": "NETWR",
+      "kind": "numeric",
+      "rows": 12,
+      "non_null": 12,
+      "null_rate": 0.0,
+      "distinct": 12,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 3700000.0,
+      "max": 31200000.0,
+      "samples": [
+        "10400000.0",
+        "11300000.0",
+        "12400000.0",
+        "14600000.0",
+        "18700000.0"
+      ]
+    },
+    {
+      "table": "LIKP",
+      "field": "VBELN",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "0080001",
+      "max": "0080010",
+      "samples": [
+        "0080001",
+        "0080002",
+        "0080003",
+        "0080004",
+        "0080005"
+      ]
+    },
+    {
+      "table": "LIKP",
+      "field": "KUNNR",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 6,
+      "cardinality": 0.6,
+      "unique": false,
+      "min": "0000002001",
+      "max": "0000002006",
+      "samples": [
+        "0000002001",
+        "0000002002",
+        "0000002003",
+        "0000002004",
+        "0000002005"
+      ]
+    },
+    {
+      "table": "LIKP",
+      "field": "LFDAT",
+      "kind": "date",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "2026-09-29",
+      "max": "2026-10-16",
+      "samples": [
+        "2026-09-29",
+        "2026-10-03",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-08"
+      ]
+    },
+    {
+      "table": "LIKP",
+      "field": "WADAT",
+      "kind": "date",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "2026-09-29",
+      "max": "2026-10-16",
+      "samples": [
+        "2026-09-29",
+        "2026-10-03",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-08"
+      ]
+    },
+    {
+      "table": "LIKP",
+      "field": "VSTEL",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.3,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "LIKP",
+      "field": "LFART",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "LF",
+      "max": "LF",
+      "samples": [
+        "LF"
+      ]
+    },
+    {
+      "table": "LIKP",
+      "field": "penalty_rate",
+      "kind": "numeric",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 4,
+      "cardinality": 0.4,
+      "unique": false,
+      "min": 0.05,
+      "max": 0.08,
+      "samples": [
+        "0.05",
+        "0.06",
+        "0.07",
+        "0.08"
+      ]
+    },
+    {
+      "table": "LIPS",
+      "field": "VBELN",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "0080001",
+      "max": "0080010",
+      "samples": [
+        "0080001",
+        "0080002",
+        "0080003",
+        "0080004",
+        "0080005"
+      ]
+    },
+    {
+      "table": "LIPS",
+      "field": "POSNR",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "10",
+      "max": "10",
+      "samples": [
+        "10"
+      ]
+    },
+    {
+      "table": "LIPS",
+      "field": "MATNR",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 7,
+      "cardinality": 0.7,
+      "unique": false,
+      "min": "ACU-500",
+      "max": "NAV-700",
+      "samples": [
+        "ACU-500",
+        "APU-600",
+        "CSM-300",
+        "ECS-400",
+        "FMS-850"
+      ]
+    },
+    {
+      "table": "LIPS",
+      "field": "WERKS",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 3,
+      "cardinality": 0.3,
+      "unique": false,
+      "min": "1010",
+      "max": "1030",
+      "samples": [
+        "1010",
+        "1020",
+        "1030"
+      ]
+    },
+    {
+      "table": "LIPS",
+      "field": "LFIMG",
+      "kind": "numeric",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 9,
+      "cardinality": 0.9,
+      "unique": false,
+      "min": 25.0,
+      "max": 120.0,
+      "samples": [
+        "120.0",
+        "25.0",
+        "30.0",
+        "40.0",
+        "45.0"
+      ]
+    },
+    {
+      "table": "LIPS",
+      "field": "VGBEL",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": "0004502",
+      "max": "0004532",
+      "samples": [
+        "0004502",
+        "0004508",
+        "0004511",
+        "0004514",
+        "0004517"
+      ]
+    },
+    {
+      "table": "LIPS",
+      "field": "VGPOS",
+      "kind": "text",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 1,
+      "cardinality": 0.1,
+      "unique": false,
+      "min": "10",
+      "max": "10",
+      "samples": [
+        "10"
+      ]
+    },
+    {
+      "table": "LIPS",
+      "field": "NETWR",
+      "kind": "numeric",
+      "rows": 10,
+      "non_null": 10,
+      "null_rate": 0.0,
+      "distinct": 10,
+      "cardinality": 1.0,
+      "unique": true,
+      "min": 5200000.0,
+      "max": 31200000.0,
+      "samples": [
+        "10400000.0",
+        "11300000.0",
+        "12400000.0",
+        "14600000.0",
+        "18700000.0"
+      ]
+    }
+  ],
+  "containment": [
+    {
+      "from": "AFKO.AUFNR",
+      "to": "AFPO.AUFNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFKO.AUFNR",
+      "to": "RESB.AUFNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFKO.GAMNG",
+      "to": "AFPO.PSMNG",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFKO.PLNBEZ",
+      "to": "AFPO.MATNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFKO.PLNBEZ",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 20
+    },
+    {
+      "from": "AFKO.PLNBEZ",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 20
+    },
+    {
+      "from": "AFKO.PLNBEZ",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 20
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFKO.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.AUFNR",
+      "to": "AFKO.AUFNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFPO.AUFNR",
+      "to": "RESB.AUFNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFPO.MATNR",
+      "to": "AFKO.PLNBEZ",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFPO.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 20
+    },
+    {
+      "from": "AFPO.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 20
+    },
+    {
+      "from": "AFPO.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 20
+    },
+    {
+      "from": "AFPO.PSMNG",
+      "to": "AFKO.GAMNG",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "AFPO.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EINA.LIFNR",
+      "to": "EKKO.LIFNR",
+      "containment": 1.0,
+      "matched": 5,
+      "from_distinct": 5,
+      "to_distinct": 5
+    },
+    {
+      "from": "EINA.LIFNR",
+      "to": "LFA1.LIFNR",
+      "containment": 1.0,
+      "matched": 5,
+      "from_distinct": 5,
+      "to_distinct": 5
+    },
+    {
+      "from": "EINA.MATNR",
+      "to": "EKPO.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "EINA.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EINA.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EINA.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EINA.MATNR",
+      "to": "RESB.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "EINA.unit_cost",
+      "to": "EKPO.NETPR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "EINA.unit_cost",
+      "to": "MARA.unit_cost",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EKET.EBELN",
+      "to": "EKKO.EBELN",
+      "containment": 1.0,
+      "matched": 15,
+      "from_distinct": 15,
+      "to_distinct": 15
+    },
+    {
+      "from": "EKET.EBELN",
+      "to": "EKPO.EBELN",
+      "containment": 1.0,
+      "matched": 15,
+      "from_distinct": 15,
+      "to_distinct": 15
+    },
+    {
+      "from": "EKET.EBELP",
+      "to": "EKPO.EBELP",
+      "containment": 1.0,
+      "matched": 2,
+      "from_distinct": 2,
+      "to_distinct": 2
+    },
+    {
+      "from": "EKET.MENGE",
+      "to": "EKPO.MENGE",
+      "containment": 1.0,
+      "matched": 14,
+      "from_distinct": 14,
+      "to_distinct": 14
+    },
+    {
+      "from": "EKKO.EBELN",
+      "to": "EKET.EBELN",
+      "containment": 1.0,
+      "matched": 15,
+      "from_distinct": 15,
+      "to_distinct": 15
+    },
+    {
+      "from": "EKKO.EBELN",
+      "to": "EKPO.EBELN",
+      "containment": 1.0,
+      "matched": 15,
+      "from_distinct": 15,
+      "to_distinct": 15
+    },
+    {
+      "from": "EKKO.LIFNR",
+      "to": "EINA.LIFNR",
+      "containment": 1.0,
+      "matched": 5,
+      "from_distinct": 5,
+      "to_distinct": 5
+    },
+    {
+      "from": "EKKO.LIFNR",
+      "to": "LFA1.LIFNR",
+      "containment": 1.0,
+      "matched": 5,
+      "from_distinct": 5,
+      "to_distinct": 5
+    },
+    {
+      "from": "EKPO.EBELN",
+      "to": "EKET.EBELN",
+      "containment": 1.0,
+      "matched": 15,
+      "from_distinct": 15,
+      "to_distinct": 15
+    },
+    {
+      "from": "EKPO.EBELN",
+      "to": "EKKO.EBELN",
+      "containment": 1.0,
+      "matched": 15,
+      "from_distinct": 15,
+      "to_distinct": 15
+    },
+    {
+      "from": "EKPO.EBELP",
+      "to": "EKET.EBELP",
+      "containment": 1.0,
+      "matched": 2,
+      "from_distinct": 2,
+      "to_distinct": 2
+    },
+    {
+      "from": "EKPO.MATNR",
+      "to": "EINA.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "EKPO.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EKPO.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EKPO.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EKPO.MATNR",
+      "to": "RESB.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "EKPO.MENGE",
+      "to": "EKET.MENGE",
+      "containment": 1.0,
+      "matched": 14,
+      "from_distinct": 14,
+      "to_distinct": 14
+    },
+    {
+      "from": "EKPO.NETPR",
+      "to": "EINA.NETPR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 12
+    },
+    {
+      "from": "EKPO.NETPR",
+      "to": "EINA.unit_cost",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "EKPO.NETPR",
+      "to": "MARA.unit_cost",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EKPO.TXZ01",
+      "to": "MARA.MAKTX",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "EKPO.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "KNA1.KUNNR",
+      "to": "LIKP.KUNNR",
+      "containment": 1.0,
+      "matched": 6,
+      "from_distinct": 6,
+      "to_distinct": 6
+    },
+    {
+      "from": "KNA1.KUNNR",
+      "to": "VBAK.KUNNR",
+      "containment": 1.0,
+      "matched": 6,
+      "from_distinct": 6,
+      "to_distinct": 6
+    },
+    {
+      "from": "LFA1.LIFNR",
+      "to": "EINA.LIFNR",
+      "containment": 1.0,
+      "matched": 5,
+      "from_distinct": 5,
+      "to_distinct": 5
+    },
+    {
+      "from": "LFA1.LIFNR",
+      "to": "EKKO.LIFNR",
+      "containment": 1.0,
+      "matched": 5,
+      "from_distinct": 5,
+      "to_distinct": 5
+    },
+    {
+      "from": "LIKP.KUNNR",
+      "to": "KNA1.KUNNR",
+      "containment": 1.0,
+      "matched": 6,
+      "from_distinct": 6,
+      "to_distinct": 6
+    },
+    {
+      "from": "LIKP.KUNNR",
+      "to": "VBAK.KUNNR",
+      "containment": 1.0,
+      "matched": 6,
+      "from_distinct": 6,
+      "to_distinct": 6
+    },
+    {
+      "from": "LIKP.VBELN",
+      "to": "LIPS.VBELN",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIKP.VSTEL",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.LFIMG",
+      "to": "VBAP.KWMENG",
+      "containment": 1.0,
+      "matched": 9,
+      "from_distinct": 9,
+      "to_distinct": 11
+    },
+    {
+      "from": "LIPS.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 20
+    },
+    {
+      "from": "LIPS.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 20
+    },
+    {
+      "from": "LIPS.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 20
+    },
+    {
+      "from": "LIPS.MATNR",
+      "to": "VBAP.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 7
+    },
+    {
+      "from": "LIPS.NETWR",
+      "to": "VBAK.NETWR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 12
+    },
+    {
+      "from": "LIPS.NETWR",
+      "to": "VBAP.NETWR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 12
+    },
+    {
+      "from": "LIPS.VBELN",
+      "to": "LIKP.VBELN",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "LIPS.VGBEL",
+      "to": "VBAK.VBELN",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 12
+    },
+    {
+      "from": "LIPS.VGBEL",
+      "to": "VBAP.VBELN",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 12
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "LIPS.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARA.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 20,
+      "from_distinct": 20,
+      "to_distinct": 20
+    },
+    {
+      "from": "MARA.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 20,
+      "from_distinct": 20,
+      "to_distinct": 20
+    },
+    {
+      "from": "MARC.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 20,
+      "from_distinct": 20,
+      "to_distinct": 20
+    },
+    {
+      "from": "MARC.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 20,
+      "from_distinct": 20,
+      "to_distinct": 20
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 20,
+      "from_distinct": 20,
+      "to_distinct": 20
+    },
+    {
+      "from": "MARD.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 20,
+      "from_distinct": 20,
+      "to_distinct": 20
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARD.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.AUFNR",
+      "to": "AFKO.AUFNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "RESB.AUFNR",
+      "to": "AFPO.AUFNR",
+      "containment": 1.0,
+      "matched": 8,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "RESB.MATNR",
+      "to": "EINA.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "RESB.MATNR",
+      "to": "EKPO.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 10
+    },
+    {
+      "from": "RESB.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "RESB.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "RESB.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 10,
+      "from_distinct": 10,
+      "to_distinct": 20
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "RESB.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "T001W.WERKS",
+      "to": "VBAP.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAK.KUNNR",
+      "to": "KNA1.KUNNR",
+      "containment": 1.0,
+      "matched": 6,
+      "from_distinct": 6,
+      "to_distinct": 6
+    },
+    {
+      "from": "VBAK.KUNNR",
+      "to": "LIKP.KUNNR",
+      "containment": 1.0,
+      "matched": 6,
+      "from_distinct": 6,
+      "to_distinct": 6
+    },
+    {
+      "from": "VBAK.NETWR",
+      "to": "VBAP.NETWR",
+      "containment": 1.0,
+      "matched": 12,
+      "from_distinct": 12,
+      "to_distinct": 12
+    },
+    {
+      "from": "VBAK.VBELN",
+      "to": "VBAP.VBELN",
+      "containment": 1.0,
+      "matched": 12,
+      "from_distinct": 12,
+      "to_distinct": 12
+    },
+    {
+      "from": "VBAP.ARKTX",
+      "to": "MARA.MAKTX",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 20
+    },
+    {
+      "from": "VBAP.MATNR",
+      "to": "LIPS.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 7
+    },
+    {
+      "from": "VBAP.MATNR",
+      "to": "MARA.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 20
+    },
+    {
+      "from": "VBAP.MATNR",
+      "to": "MARC.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 20
+    },
+    {
+      "from": "VBAP.MATNR",
+      "to": "MARD.MATNR",
+      "containment": 1.0,
+      "matched": 7,
+      "from_distinct": 7,
+      "to_distinct": 20
+    },
+    {
+      "from": "VBAP.NETWR",
+      "to": "VBAK.NETWR",
+      "containment": 1.0,
+      "matched": 12,
+      "from_distinct": 12,
+      "to_distinct": 12
+    },
+    {
+      "from": "VBAP.VBELN",
+      "to": "VBAK.VBELN",
+      "containment": 1.0,
+      "matched": 12,
+      "from_distinct": 12,
+      "to_distinct": 12
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "AFKO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "AFPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "EKPO.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "LIKP.VSTEL",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "LIPS.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "MARC.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "MARD.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "RESB.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "VBAP.WERKS",
+      "to": "T001W.WERKS",
+      "containment": 1.0,
+      "matched": 3,
+      "from_distinct": 3,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARC.PLIFZ",
+      "to": "EINA.APLFZ",
+      "containment": 0.9,
+      "matched": 9,
+      "from_distinct": 10,
+      "to_distinct": 11
+    },
+    {
+      "from": "LIPS.MATNR",
+      "to": "AFKO.PLNBEZ",
+      "containment": 0.8571,
+      "matched": 6,
+      "from_distinct": 7,
+      "to_distinct": 8
+    },
+    {
+      "from": "LIPS.MATNR",
+      "to": "AFPO.MATNR",
+      "containment": 0.8571,
+      "matched": 6,
+      "from_distinct": 7,
+      "to_distinct": 8
+    },
+    {
+      "from": "VBAP.MATNR",
+      "to": "AFKO.PLNBEZ",
+      "containment": 0.8571,
+      "matched": 6,
+      "from_distinct": 7,
+      "to_distinct": 8
+    },
+    {
+      "from": "VBAP.MATNR",
+      "to": "AFPO.MATNR",
+      "containment": 0.8571,
+      "matched": 6,
+      "from_distinct": 7,
+      "to_distinct": 8
+    },
+    {
+      "from": "EINA.NETPR",
+      "to": "EKPO.NETPR",
+      "containment": 0.8333,
+      "matched": 10,
+      "from_distinct": 12,
+      "to_distinct": 10
+    },
+    {
+      "from": "EINA.NETPR",
+      "to": "MARA.unit_cost",
+      "containment": 0.8333,
+      "matched": 10,
+      "from_distinct": 12,
+      "to_distinct": 20
+    },
+    {
+      "from": "VBAK.NETWR",
+      "to": "LIPS.NETWR",
+      "containment": 0.8333,
+      "matched": 10,
+      "from_distinct": 12,
+      "to_distinct": 10
+    },
+    {
+      "from": "VBAK.VBELN",
+      "to": "LIPS.VGBEL",
+      "containment": 0.8333,
+      "matched": 10,
+      "from_distinct": 12,
+      "to_distinct": 10
+    },
+    {
+      "from": "VBAP.NETWR",
+      "to": "LIPS.NETWR",
+      "containment": 0.8333,
+      "matched": 10,
+      "from_distinct": 12,
+      "to_distinct": 10
+    },
+    {
+      "from": "VBAP.VBELN",
+      "to": "LIPS.VGBEL",
+      "containment": 0.8333,
+      "matched": 10,
+      "from_distinct": 12,
+      "to_distinct": 10
+    },
+    {
+      "from": "EINA.APLFZ",
+      "to": "MARC.PLIFZ",
+      "containment": 0.8182,
+      "matched": 9,
+      "from_distinct": 11,
+      "to_distinct": 10
+    },
+    {
+      "from": "VBAP.KWMENG",
+      "to": "LIPS.LFIMG",
+      "containment": 0.8182,
+      "matched": 9,
+      "from_distinct": 11,
+      "to_distinct": 9
+    },
+    {
+      "from": "AFKO.GAMNG",
+      "to": "LIPS.LFIMG",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 9
+    },
+    {
+      "from": "AFKO.GAMNG",
+      "to": "VBAP.KWMENG",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 11
+    },
+    {
+      "from": "AFKO.GSTRP",
+      "to": "EKET.EINDT",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 16
+    },
+    {
+      "from": "AFKO.PLNBEZ",
+      "to": "LIPS.MATNR",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 7
+    },
+    {
+      "from": "AFKO.PLNBEZ",
+      "to": "VBAP.MATNR",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 7
+    },
+    {
+      "from": "AFPO.MATNR",
+      "to": "LIPS.MATNR",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 7
+    },
+    {
+      "from": "AFPO.MATNR",
+      "to": "VBAP.MATNR",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 7
+    },
+    {
+      "from": "AFPO.PSMNG",
+      "to": "LIPS.LFIMG",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 9
+    },
+    {
+      "from": "AFPO.PSMNG",
+      "to": "VBAP.KWMENG",
+      "containment": 0.75,
+      "matched": 6,
+      "from_distinct": 8,
+      "to_distinct": 11
+    },
+    {
+      "from": "LIPS.LFIMG",
+      "to": "AFKO.GAMNG",
+      "containment": 0.6667,
+      "matched": 6,
+      "from_distinct": 9,
+      "to_distinct": 8
+    },
+    {
+      "from": "LIPS.LFIMG",
+      "to": "AFPO.PSMNG",
+      "containment": 0.6667,
+      "matched": 6,
+      "from_distinct": 9,
+      "to_distinct": 8
+    },
+    {
+      "from": "T001W.LAND1",
+      "to": "LFA1.LAND1",
+      "containment": 0.6667,
+      "matched": 2,
+      "from_distinct": 3,
+      "to_distinct": 4
+    },
+    {
+      "from": "RESB.BDTER",
+      "to": "EKET.EINDT",
+      "containment": 0.625,
+      "matched": 5,
+      "from_distinct": 8,
+      "to_distinct": 16
+    },
+    {
+      "from": "VBAP.KWMENG",
+      "to": "AFKO.GAMNG",
+      "containment": 0.5455,
+      "matched": 6,
+      "from_distinct": 11,
+      "to_distinct": 8
+    },
+    {
+      "from": "VBAP.KWMENG",
+      "to": "AFPO.PSMNG",
+      "containment": 0.5455,
+      "matched": 6,
+      "from_distinct": 11,
+      "to_distinct": 8
+    },
+    {
+      "from": "AFKO.GSTRP",
+      "to": "RESB.BDTER",
+      "containment": 0.5,
+      "matched": 4,
+      "from_distinct": 8,
+      "to_distinct": 8
+    },
+    {
+      "from": "EKET.EBELP",
+      "to": "LIPS.POSNR",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "EKET.EBELP",
+      "to": "LIPS.VGPOS",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "EKET.EBELP",
+      "to": "VBAP.POSNR",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "EKET.MENGE",
+      "to": "MARC.EISBE",
+      "containment": 0.5,
+      "matched": 7,
+      "from_distinct": 14,
+      "to_distinct": 15
+    },
+    {
+      "from": "EKPO.EBELP",
+      "to": "LIPS.POSNR",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "EKPO.EBELP",
+      "to": "LIPS.VGPOS",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "EKPO.EBELP",
+      "to": "VBAP.POSNR",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "EKPO.MENGE",
+      "to": "MARC.EISBE",
+      "containment": 0.5,
+      "matched": 7,
+      "from_distinct": 14,
+      "to_distinct": 15
+    },
+    {
+      "from": "LFA1.LAND1",
+      "to": "T001W.LAND1",
+      "containment": 0.5,
+      "matched": 2,
+      "from_distinct": 4,
+      "to_distinct": 3
+    },
+    {
+      "from": "MARA.MAKTX",
+      "to": "EKPO.TXZ01",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARA.MATNR",
+      "to": "EINA.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARA.MATNR",
+      "to": "EKPO.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARA.MATNR",
+      "to": "RESB.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARA.MEINS",
+      "to": "EKPO.MEINS",
+      "containment": 0.5,
+      "matched": 1,
+      "from_distinct": 2,
+      "to_distinct": 1
+    },
+    {
+      "from": "MARA.unit_cost",
+      "to": "EINA.NETPR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 12
+    },
+    {
+      "from": "MARA.unit_cost",
+      "to": "EINA.unit_cost",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARA.unit_cost",
+      "to": "EKPO.NETPR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARC.MATNR",
+      "to": "EINA.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARC.MATNR",
+      "to": "EKPO.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARC.MATNR",
+      "to": "RESB.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARD.MATNR",
+      "to": "EINA.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARD.MATNR",
+      "to": "EKPO.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "MARD.MATNR",
+      "to": "RESB.MATNR",
+      "containment": 0.5,
+      "matched": 10,
+      "from_distinct": 20,
+      "to_distinct": 10
+    },
+    {
+      "from": "RESB.BDTER",
+      "to": "AFKO.GSTRP",
+      "containment": 0.5,
+      "matched": 4,
+      "from_distinct": 8,
+      "to_distinct": 8
+    }
+  ],
+  "note": "containment[i] = |distinct(from) & distinct(to)| / |distinct(from)|, computed over the generated tables with no model involvement. Pairs below 0.5 are omitted; the near misses between 0.5 and 0.95 are kept so rejected candidates stay visible."
+}

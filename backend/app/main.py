@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.graph.adapter import build_backend
+from app.routers import discovery as discovery_router
 from app.routers import graph as graph_router
 from app.routers import health, impact, query
 
@@ -97,6 +98,7 @@ app.include_router(health.router, prefix="/api")
 app.include_router(impact.router, prefix="/api")
 app.include_router(query.router, prefix="/api")
 app.include_router(graph_router.router, prefix="/api")
+app.include_router(discovery_router.router, prefix="/api")
 
 
 @app.get("/")
@@ -109,5 +111,6 @@ def root() -> dict:
             "POST /api/query", "GET  /api/query/examples", "POST /api/cypher",
             "GET  /api/graph", "GET  /api/schema", "GET  /api/ontology",
             "GET  /api/validation", "GET  /api/lineage/{node_type}/{node_id}",
+            "GET  /api/discovery", "GET  /api/discovery/profile",
         ],
     }

@@ -16,6 +16,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 BACKEND_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = BACKEND_ROOT / "data" / "synthetic"
 ONTOLOGY_PATH = BACKEND_ROOT / "app" / "graph" / "ontology.ttl"
+# Cached SAP OData $metadata documents. Checked in so the discovery pipeline
+# and the demo never need network access or an API key.
+ODATA_CACHE_DIR = BACKEND_ROOT / "data" / "metadata" / "odata"
+# Outputs of the offline discovery pipeline (profile.json, discovery.json).
+ARTIFACTS_DIR = BACKEND_ROOT / "artifacts"
 
 
 class Settings(BaseSettings):
@@ -69,6 +74,14 @@ class Settings(BaseSettings):
 
     gemini_api_key: str | None = None
     gemini_model: str = "gemini-2.0-flash"
+
+    # ---- SAP API Business Hub (optional, offline pipeline only) --------
+    # Only the discovery stage uses this, and only to refresh the on-disk
+    # $metadata cache. Absent key -> the cache is read as-is; absent cache ->
+    # discovery proceeds on DDIC + data evidence alone. Nothing on the request
+    # path ever calls SAP.
+    sap_api_key: str | None = None
+    sap_sandbox_base_url: str = "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap"
 
     # ---- Business assumptions -----------------------------------------
     # SAP has no "cost of an idle plant" field -- it is a management
