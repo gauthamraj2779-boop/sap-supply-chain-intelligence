@@ -140,20 +140,28 @@ class MemoryBackend(GraphBackend):
         return {k: len(v) for k, v in self.t.items()}
 
     # -- master data ----------------------------------------------------
+    # Generator annotations (_role, _assumption) are notes to a human reading
+    # the dataset, not fields of the record. They must not reach the API, and
+    # they must not make the two backends disagree.
+    @staticmethod
+    def _clean(row: dict | None) -> dict | None:
+        return None if row is None else {k: v for k, v in row.items()
+                                         if not k.startswith("_")}
+
     def supplier(self, lifnr):
-        return self._idx["supplier"].get(lifnr)
+        return self._clean(self._idx["supplier"].get(lifnr))
 
     def suppliers(self):
-        return list(self.t["suppliers"])
+        return [self._clean(r) for r in self.t["suppliers"]]
 
     def material(self, matnr):
-        return self._idx["material"].get(matnr)
+        return self._clean(self._idx["material"].get(matnr))
 
     def plant(self, werks):
-        return self._idx["plant"].get(werks)
+        return self._clean(self._idx["plant"].get(werks))
 
     def customer(self, kunnr):
-        return self._idx["customer"].get(kunnr)
+        return self._clean(self._idx["customer"].get(kunnr))
 
     # -- procurement ----------------------------------------------------
     def open_schedule_lines_for_supplier(self, lifnr):
@@ -237,29 +245,26 @@ class MemoryBackend(GraphBackend):
         return out
 
     # -- bill of materials ----------------------------------------------
+    def _bom_row(self, r: dict) -> dict:
+        """One BOM line, described identically whichever direction reached it."""
+        comp = self.material(r["IDNRK"]) or {}
+        parent = self.material(r["MATNR"]) or {}
+        return {
+            **r,
+            "component_name": comp.get("MAKTX", r["IDNRK"]),
+            "component_type": comp.get("MTART", ""),
+            "parent_name": parent.get("MAKTX", r["MATNR"]),
+            "parent_type": parent.get("MTART", ""),
+            "qty_per_unit": r["MENGE"] / r["BMENG"] if r["BMENG"] else 0.0,
+        }
+
     def bom_for_material(self, matnr):
-        out = []
-        for r in self._idx["bom_by_parent"].get(matnr, []):
-            comp = self.material(r["IDNRK"]) or {}
-            out.append({
-                **r,
-                "component_name": comp.get("MAKTX", r["IDNRK"]),
-                "component_type": comp.get("MTART", ""),
-                "qty_per_unit": r["MENGE"] / r["BMENG"] if r["BMENG"] else 0.0,
-            })
-        return sorted(out, key=lambda r: r["POSNR"])
+        rows = [self._bom_row(r) for r in self._idx["bom_by_parent"].get(matnr, [])]
+        return sorted(rows, key=lambda r: r["POSNR"])
 
     def where_used(self, matnr):
-        out = []
-        for r in self._idx["bom_by_component"].get(matnr, []):
-            parent = self.material(r["MATNR"]) or {}
-            out.append({
-                **r,
-                "parent_name": parent.get("MAKTX", r["MATNR"]),
-                "parent_type": parent.get("MTART", ""),
-                "qty_per_unit": r["MENGE"] / r["BMENG"] if r["BMENG"] else 0.0,
-            })
-        return sorted(out, key=lambda r: (r["MATNR"], r["POSNR"]))
+        rows = [self._bom_row(r) for r in self._idx["bom_by_component"].get(matnr, [])]
+        return sorted(rows, key=lambda r: (r["MATNR"], r["POSNR"]))
 
     # -- production -----------------------------------------------------
     def reservations_for(self, matnr, werks):

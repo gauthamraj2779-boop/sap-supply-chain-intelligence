@@ -148,10 +148,16 @@ def _supplier_via_material(q: str, backend) -> dict | None:
 
 
 def translate_query(question: str, suppliers: list[dict], backend=None) -> dict:
+    # The deterministic parser resolves supplier, delay and horizon for every
+    # question shape this system answers, in microseconds. Consulting a model
+    # first added ~30s to a request whose result it almost never changed, so
+    # the model is now only asked when the rules fail to identify a supplier.
     """LLM parse when available, verified against the deterministic parse."""
     fallback = parse_query_deterministic(question, suppliers, backend)
     llm = get_llm()
     if not llm.available:
+        return fallback
+    if fallback.get("supplier_id") and fallback.get("match_confidence", 0) >= 0.85:
         return fallback
 
     roster = "\n".join(f"- {s['LIFNR']}: {s.get('NAME1','')}" for s in suppliers)

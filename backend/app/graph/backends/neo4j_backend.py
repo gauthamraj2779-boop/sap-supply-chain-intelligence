@@ -69,12 +69,12 @@ class Neo4jBackend(GraphBackend):
             return None
         s = r[0]["s"]
         return {"LIFNR": s["lifnr"], "NAME1": s["name"], "LAND1": s.get("country"),
-                "risk_score": s.get("risk_score", 0.5)}
+                "ORT01": s.get("city"), "risk_score": s.get("risk_score", 0.5)}
 
     def suppliers(self):
         rows = self._q("MATCH (s:Supplier) RETURN s ORDER BY s.lifnr")
         return [{"LIFNR": r["s"]["lifnr"], "NAME1": r["s"]["name"],
-                 "LAND1": r["s"].get("country"),
+                 "LAND1": r["s"].get("country"), "ORT01": r["s"].get("city"),
                  "risk_score": r["s"].get("risk_score", 0.5)} for r in rows]
 
     def material(self, matnr):
@@ -92,7 +92,7 @@ class Neo4jBackend(GraphBackend):
             return None
         p = r[0]["p"]
         return {"WERKS": p["werks"], "NAME1": p.get("name"),
-                "LAND1": p.get("country"),
+                "LAND1": p.get("country"), "ORT01": p.get("city"),
                 "idle_plant_cost_per_day": p.get("idle_plant_cost_per_day", 0.0)}
 
     def customer(self, kunnr):
@@ -100,7 +100,8 @@ class Neo4jBackend(GraphBackend):
         if not r:
             return None
         c = r[0]["c"]
-        return {"KUNNR": c["kunnr"], "NAME1": c.get("name"), "LAND1": c.get("country")}
+        return {"KUNNR": c["kunnr"], "NAME1": c.get("name"),
+                "LAND1": c.get("country"), "ORT01": c.get("city")}
 
     # -- procurement ----------------------------------------------------
     def open_schedule_lines_for_supplier(self, lifnr):
@@ -144,7 +145,8 @@ class Neo4jBackend(GraphBackend):
             """
             MATCH (s:Supplier)-[r:SUPPLIES]->(m:Material {matnr:$m})
             WHERE s.lifnr <> $ex
-            RETURN s, r ORDER BY r.lead_time_days, r.net_price
+            RETURN s, properties(r) AS r
+            ORDER BY r.lead_time_days, r.net_price
             """,
             m=matnr, ex=exclude_lifnr,
         )
@@ -159,11 +161,15 @@ class Neo4jBackend(GraphBackend):
         } for r in rows]
 
     # -- inventory ------------------------------------------------------
+    # NOTE: relationship variables are always returned through properties().
+    # neo4j's Record.data() renders a relationship as the tuple
+    # (start_props, type, end_props), so `rel["field"]` raises TypeError. Nodes
+    # serialise as plain dicts and need no wrapping.
     def stock(self, matnr, werks):
         r = self._q(
             """
             MATCH (m:Material {matnr:$m})-[st:STOCKED_AT]->(p:Plant {werks:$w})
-            RETURN st
+            RETURN properties(st) AS st
             """,
             m=matnr, w=werks,
         )
@@ -179,7 +185,7 @@ class Neo4jBackend(GraphBackend):
         rows = self._q(
             """
             MATCH (m:Material {matnr:$m})-[st:STOCKED_AT]->(p:Plant)
-            RETURN p.werks AS werks, st ORDER BY p.werks
+            RETURN p.werks AS werks, properties(st) AS st ORDER BY p.werks
             """,
             m=matnr,
         )

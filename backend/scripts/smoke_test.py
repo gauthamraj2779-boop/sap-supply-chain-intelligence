@@ -31,7 +31,9 @@ def money(v: float) -> str:
 def main() -> int:
     print(f"\nSmoke test against {BASE}\n" + "=" * 68)
     try:
-        c = httpx.Client(base_url=BASE, timeout=60.0)
+        # /api/query can make two sequential model calls (parse, then
+        # narrate). A reasoning model takes ~30s each, so 60s was not enough.
+        c = httpx.Client(base_url=BASE, timeout=180.0)
         h = c.get("/api/health").json()
     except Exception as exc:
         print(f"  FAIL  cannot reach the API: {exc}\n  Start it with: make run")
