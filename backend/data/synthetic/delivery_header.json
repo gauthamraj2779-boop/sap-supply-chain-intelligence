@@ -1,0 +1,102 @@
+[
+  {
+    "VBELN": "0080001",
+    "KUNNR": "0000002001",
+    "LFDAT": "2026-09-29",
+    "WADAT": "2026-09-29",
+    "VSTEL": "1010",
+    "LFART": "LF",
+    "penalty_rate": 0.08,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080002",
+    "KUNNR": "0000002002",
+    "LFDAT": "2026-10-03",
+    "WADAT": "2026-10-03",
+    "VSTEL": "1010",
+    "LFART": "LF",
+    "penalty_rate": 0.08,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080003",
+    "KUNNR": "0000002003",
+    "LFDAT": "2026-10-06",
+    "WADAT": "2026-10-06",
+    "VSTEL": "1020",
+    "LFART": "LF",
+    "penalty_rate": 0.06,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080004",
+    "KUNNR": "0000002004",
+    "LFDAT": "2026-10-09",
+    "WADAT": "2026-10-09",
+    "VSTEL": "1030",
+    "LFART": "LF",
+    "penalty_rate": 0.05,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080005",
+    "KUNNR": "0000002005",
+    "LFDAT": "2026-10-11",
+    "WADAT": "2026-10-11",
+    "VSTEL": "1030",
+    "LFART": "LF",
+    "penalty_rate": 0.05,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080006",
+    "KUNNR": "0000002006",
+    "LFDAT": "2026-10-16",
+    "WADAT": "2026-10-16",
+    "VSTEL": "1010",
+    "LFART": "LF",
+    "penalty_rate": 0.07,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080007",
+    "KUNNR": "0000002001",
+    "LFDAT": "2026-10-13",
+    "WADAT": "2026-10-13",
+    "VSTEL": "1020",
+    "LFART": "LF",
+    "penalty_rate": 0.06,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080008",
+    "KUNNR": "0000002002",
+    "LFDAT": "2026-10-05",
+    "WADAT": "2026-10-05",
+    "VSTEL": "1010",
+    "LFART": "LF",
+    "penalty_rate": 0.08,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080009",
+    "KUNNR": "0000002003",
+    "LFDAT": "2026-10-08",
+    "WADAT": "2026-10-08",
+    "VSTEL": "1010",
+    "LFART": "LF",
+    "penalty_rate": 0.06,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  },
+  {
+    "VBELN": "0080010",
+    "KUNNR": "0000002004",
+    "LFDAT": "2026-10-10",
+    "WADAT": "2026-10-10",
+    "VSTEL": "1020",
+    "LFART": "LF",
+    "penalty_rate": 0.05,
+    "_assumption": "penalty_rate is a contract term, held outside SAP core tables"
+  }
+]

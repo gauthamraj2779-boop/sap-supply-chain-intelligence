@@ -1,0 +1,739 @@
+@prefix biz:  <http://sapkg.example/ontology#> .
+@prefix sap:  <http://sapkg.example/sap#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://sapkg.example/ontology> a owl:Ontology ;
+    rdfs:label "SAP Supply Chain Business Ontology" ;
+    rdfs:comment "Business-semantic layer over SAP technical structures. Every term is annotated with the SAP table and field it derives from." ;
+    owl:versionInfo "1.0.0" .
+
+sap:sourceTable a owl:AnnotationProperty ; rdfs:label "SAP source table" .
+sap:sourceField a owl:AnnotationProperty ; rdfs:label "SAP source field" .
+sap:derivedFrom a owl:AnnotationProperty ; rdfs:label "SAP join expression" .
+sap:inferred    a owl:AnnotationProperty ; rdfs:label "relationship inferred from data, not declared by a check table" .
+
+
+# ======================================================================
+# Classes
+# ======================================================================
+
+biz:Supplier a owl:Class ;
+    rdfs:label "Supplier" ;
+    skos:definition "An external party from which the enterprise procures materials." ;
+    sap:sourceTable "LFA1" .
+
+biz:Material a owl:Class ;
+    rdfs:label "Material" ;
+    skos:definition "A good that is procured, produced, stocked or sold." ;
+    sap:sourceTable "MARA, MARC, MARD" .
+
+biz:Plant a owl:Class ;
+    rdfs:label "Plant" ;
+    skos:definition "An operational unit that produces or stores materials." ;
+    sap:sourceTable "T001W" .
+
+biz:PurchaseOrder a owl:Class ;
+    rdfs:label "PurchaseOrder" ;
+    skos:definition "A commitment to buy a material from a supplier." ;
+    sap:sourceTable "EKKO, EKPO" .
+
+biz:ScheduleLine a owl:Class ;
+    rdfs:label "ScheduleLine" ;
+    skos:definition "A dated delivery commitment within a purchase order item." ;
+    sap:sourceTable "EKET" .
+
+biz:SourceList a owl:Class ;
+    rdfs:label "SourceList" ;
+    skos:definition "An approved supplier-material relationship with price and lead time." ;
+    sap:sourceTable "EINA, EINE" .
+
+biz:ProductionOrder a owl:Class ;
+    rdfs:label "ProductionOrder" ;
+    skos:definition "An order to manufacture a quantity of a material by a date." ;
+    sap:sourceTable "AFKO, AFPO" .
+
+biz:Reservation a owl:Class ;
+    rdfs:label "Reservation" ;
+    skos:definition "A dated component requirement raised by a production order." ;
+    sap:sourceTable "RESB" .
+
+biz:SalesOrder a owl:Class ;
+    rdfs:label "SalesOrder" ;
+    skos:definition "A customer commitment to buy finished goods." ;
+    sap:sourceTable "VBAK, VBAP" .
+
+biz:Delivery a owl:Class ;
+    rdfs:label "Delivery" ;
+    skos:definition "A planned outbound shipment fulfilling a sales order." ;
+    sap:sourceTable "LIKP, LIPS" .
+
+biz:Customer a owl:Class ;
+    rdfs:label "Customer" ;
+    skos:definition "A party to which finished goods are sold and shipped." ;
+    sap:sourceTable "KNA1" .
+
+
+# ======================================================================
+# Datatype properties (SAP field -> business term)
+# ======================================================================
+
+biz:lifnr a owl:DatatypeProperty ;
+    rdfs:label "Supplier Number" ;
+    rdfs:domain biz:Supplier ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "LFA1" ;
+    sap:sourceField "LIFNR" .
+
+biz:name a owl:DatatypeProperty ;
+    rdfs:label "Supplier Name" ;
+    rdfs:domain biz:Supplier ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "LFA1" ;
+    sap:sourceField "NAME1" .
+
+biz:country a owl:DatatypeProperty ;
+    rdfs:label "Country Key" ;
+    rdfs:domain biz:Supplier ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "LFA1" ;
+    sap:sourceField "LAND1" .
+
+biz:matnr a owl:DatatypeProperty ;
+    rdfs:label "Material Number" ;
+    rdfs:domain biz:Material ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "MARA" ;
+    sap:sourceField "MATNR" .
+
+biz:name a owl:DatatypeProperty ;
+    rdfs:label "Material Description" ;
+    rdfs:domain biz:Material ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "MARA" ;
+    sap:sourceField "MAKTX" .
+
+biz:material_type a owl:DatatypeProperty ;
+    rdfs:label "Material Type" ;
+    rdfs:domain biz:Material ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "MARA" ;
+    sap:sourceField "MTART" .
+
+biz:on_hand a owl:DatatypeProperty ;
+    rdfs:label "Unrestricted-Use Stock" ;
+    rdfs:domain biz:Material ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "MARD" ;
+    sap:sourceField "LABST" .
+
+biz:safety_stock a owl:DatatypeProperty ;
+    rdfs:label "Safety Stock" ;
+    rdfs:domain biz:Material ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "MARC" ;
+    sap:sourceField "EISBE" .
+
+biz:lead_time_days a owl:DatatypeProperty ;
+    rdfs:label "Planned Delivery Time" ;
+    rdfs:domain biz:Material ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "MARC" ;
+    sap:sourceField "PLIFZ" .
+
+biz:werks a owl:DatatypeProperty ;
+    rdfs:label "Plant" ;
+    rdfs:domain biz:Plant ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "T001W" ;
+    sap:sourceField "WERKS" .
+
+biz:name a owl:DatatypeProperty ;
+    rdfs:label "Plant Name" ;
+    rdfs:domain biz:Plant ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "T001W" ;
+    sap:sourceField "NAME1" .
+
+biz:country a owl:DatatypeProperty ;
+    rdfs:label "Country Key" ;
+    rdfs:domain biz:Plant ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "T001W" ;
+    sap:sourceField "LAND1" .
+
+biz:ebeln a owl:DatatypeProperty ;
+    rdfs:label "Purchasing Document Number" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "EKKO" ;
+    sap:sourceField "EBELN" .
+
+biz:lifnr a owl:DatatypeProperty ;
+    rdfs:label "Supplier Number" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "EKKO" ;
+    sap:sourceField "LIFNR" .
+
+biz:ebelp a owl:DatatypeProperty ;
+    rdfs:label "Item Number" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "EKPO" ;
+    sap:sourceField "EBELP" .
+
+biz:matnr a owl:DatatypeProperty ;
+    rdfs:label "Material Number" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "EKPO" ;
+    sap:sourceField "MATNR" .
+
+biz:menge a owl:DatatypeProperty ;
+    rdfs:label "Purchase Order Quantity" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "EKPO" ;
+    sap:sourceField "MENGE" .
+
+biz:net_value a owl:DatatypeProperty ;
+    rdfs:label "Net Order Value" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "EKPO" ;
+    sap:sourceField "NETWR" .
+
+biz:delivery_date a owl:DatatypeProperty ;
+    rdfs:label "Item Delivery Date" ;
+    rdfs:domain biz:ScheduleLine ;
+    rdfs:range xsd:date ;
+    sap:sourceTable "EKET" ;
+    sap:sourceField "EINDT" .
+
+biz:menge a owl:DatatypeProperty ;
+    rdfs:label "Scheduled Quantity" ;
+    rdfs:domain biz:ScheduleLine ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "EKET" ;
+    sap:sourceField "MENGE" .
+
+biz:matnr a owl:DatatypeProperty ;
+    rdfs:label "Material Number" ;
+    rdfs:domain biz:SourceList ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "EINA" ;
+    sap:sourceField "MATNR" .
+
+biz:lifnr a owl:DatatypeProperty ;
+    rdfs:label "Supplier Number" ;
+    rdfs:domain biz:SourceList ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "EINA" ;
+    sap:sourceField "LIFNR" .
+
+biz:net_price a owl:DatatypeProperty ;
+    rdfs:label "Net Price" ;
+    rdfs:domain biz:SourceList ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "EINE" ;
+    sap:sourceField "NETPR" .
+
+biz:lead_time_days a owl:DatatypeProperty ;
+    rdfs:label "Planned Delivery Time" ;
+    rdfs:domain biz:SourceList ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "EINE" ;
+    sap:sourceField "APLFZ" .
+
+biz:aufnr a owl:DatatypeProperty ;
+    rdfs:label "Order Number" ;
+    rdfs:domain biz:ProductionOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "AFKO" ;
+    sap:sourceField "AUFNR" .
+
+biz:output_matnr a owl:DatatypeProperty ;
+    rdfs:label "Planned Material" ;
+    rdfs:domain biz:ProductionOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "AFKO" ;
+    sap:sourceField "PLNBEZ" .
+
+biz:order_qty a owl:DatatypeProperty ;
+    rdfs:label "Total Order Quantity" ;
+    rdfs:domain biz:ProductionOrder ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "AFKO" ;
+    sap:sourceField "GAMNG" .
+
+biz:scheduled_finish a owl:DatatypeProperty ;
+    rdfs:label "Basic Finish Date" ;
+    rdfs:domain biz:ProductionOrder ;
+    rdfs:range xsd:date ;
+    sap:sourceTable "AFKO" ;
+    sap:sourceField "GLTRP" .
+
+biz:aufnr a owl:DatatypeProperty ;
+    rdfs:label "Order Number" ;
+    rdfs:domain biz:Reservation ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "RESB" ;
+    sap:sourceField "AUFNR" .
+
+biz:matnr a owl:DatatypeProperty ;
+    rdfs:label "Material Number" ;
+    rdfs:domain biz:Reservation ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "RESB" ;
+    sap:sourceField "MATNR" .
+
+biz:required_qty a owl:DatatypeProperty ;
+    rdfs:label "Requirement Quantity" ;
+    rdfs:domain biz:Reservation ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "RESB" ;
+    sap:sourceField "BDMNG" .
+
+biz:required_date a owl:DatatypeProperty ;
+    rdfs:label "Requirement Date" ;
+    rdfs:domain biz:Reservation ;
+    rdfs:range xsd:date ;
+    sap:sourceTable "RESB" ;
+    sap:sourceField "BDTER" .
+
+biz:vbeln a owl:DatatypeProperty ;
+    rdfs:label "Sales Document" ;
+    rdfs:domain biz:SalesOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "VBAK" ;
+    sap:sourceField "VBELN" .
+
+biz:kunnr a owl:DatatypeProperty ;
+    rdfs:label "Sold-To Party" ;
+    rdfs:domain biz:SalesOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "VBAK" ;
+    sap:sourceField "KUNNR" .
+
+biz:posnr a owl:DatatypeProperty ;
+    rdfs:label "Sales Document Item" ;
+    rdfs:domain biz:SalesOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "VBAP" ;
+    sap:sourceField "POSNR" .
+
+biz:matnr a owl:DatatypeProperty ;
+    rdfs:label "Material Number" ;
+    rdfs:domain biz:SalesOrder ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "VBAP" ;
+    sap:sourceField "MATNR" .
+
+biz:order_qty a owl:DatatypeProperty ;
+    rdfs:label "Cumulative Order Quantity" ;
+    rdfs:domain biz:SalesOrder ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "VBAP" ;
+    sap:sourceField "KWMENG" .
+
+biz:net_value a owl:DatatypeProperty ;
+    rdfs:label "Net Value of the Order Item" ;
+    rdfs:domain biz:SalesOrder ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "VBAP" ;
+    sap:sourceField "NETWR" .
+
+biz:vbeln a owl:DatatypeProperty ;
+    rdfs:label "Delivery Number" ;
+    rdfs:domain biz:Delivery ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "LIKP" ;
+    sap:sourceField "VBELN" .
+
+biz:kunnr a owl:DatatypeProperty ;
+    rdfs:label "Ship-To Party" ;
+    rdfs:domain biz:Delivery ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "LIKP" ;
+    sap:sourceField "KUNNR" .
+
+biz:planned_goods_issue a owl:DatatypeProperty ;
+    rdfs:label "Delivery Date" ;
+    rdfs:domain biz:Delivery ;
+    rdfs:range xsd:date ;
+    sap:sourceTable "LIKP" ;
+    sap:sourceField "LFDAT" .
+
+biz:ref_sales_order a owl:DatatypeProperty ;
+    rdfs:label "Reference Document" ;
+    rdfs:domain biz:Delivery ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "LIPS" ;
+    sap:sourceField "VGBEL" .
+
+biz:delivery_qty a owl:DatatypeProperty ;
+    rdfs:label "Actual Quantity Delivered" ;
+    rdfs:domain biz:Delivery ;
+    rdfs:range xsd:decimal ;
+    sap:sourceTable "LIPS" ;
+    sap:sourceField "LFIMG" .
+
+biz:kunnr a owl:DatatypeProperty ;
+    rdfs:label "Customer Number" ;
+    rdfs:domain biz:Customer ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "KNA1" ;
+    sap:sourceField "KUNNR" .
+
+biz:name a owl:DatatypeProperty ;
+    rdfs:label "Customer Name" ;
+    rdfs:domain biz:Customer ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "KNA1" ;
+    sap:sourceField "NAME1" .
+
+biz:country a owl:DatatypeProperty ;
+    rdfs:label "Country Key" ;
+    rdfs:domain biz:Customer ;
+    rdfs:range xsd:string ;
+    sap:sourceTable "KNA1" ;
+    sap:sourceField "LAND1" .
+
+
+# ======================================================================
+# Object properties (relationships)
+# ======================================================================
+
+biz:supplies a owl:ObjectProperty ;
+    rdfs:label "SUPPLIES" ;
+    skos:definition "Supplier is an approved source for this material" ;
+    rdfs:domain biz:Supplier ;
+    rdfs:range biz:Material ;
+    sap:derivedFrom "EINA.LIFNR -> LFA1.LIFNR" .
+
+biz:fulfills a owl:ObjectProperty ;
+    rdfs:label "FULFILLS" ;
+    skos:definition "Supplier is the vendor on this purchase order" ;
+    rdfs:domain biz:Supplier ;
+    rdfs:range biz:PurchaseOrder ;
+    sap:derivedFrom "EKKO.LIFNR -> LFA1.LIFNR" .
+
+biz:orders a owl:ObjectProperty ;
+    rdfs:label "ORDERS" ;
+    skos:definition "Purchase order line procures this material" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range biz:Material ;
+    sap:derivedFrom "EKPO.MATNR -> MARA.MATNR" .
+
+biz:scheduledat a owl:ObjectProperty ;
+    rdfs:label "SCHEDULED_AT" ;
+    skos:definition "Delivery schedule for the purchase order item" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range biz:ScheduleLine ;
+    sap:derivedFrom "EKET.EBELN+EBELP -> EKPO.EBELN+EBELP" .
+
+biz:deliveredto a owl:ObjectProperty ;
+    rdfs:label "DELIVERED_TO" ;
+    skos:definition "Receiving plant for the purchase order item" ;
+    rdfs:domain biz:PurchaseOrder ;
+    rdfs:range biz:Plant ;
+    sap:derivedFrom "EKPO.WERKS -> T001W.WERKS" .
+
+biz:stockedat a owl:ObjectProperty ;
+    rdfs:label "STOCKED_AT" ;
+    skos:definition "Material carries stock at this plant" ;
+    rdfs:domain biz:Material ;
+    rdfs:range biz:Plant ;
+    sap:derivedFrom "MARD.WERKS -> T001W.WERKS" .
+
+biz:produces a owl:ObjectProperty ;
+    rdfs:label "PRODUCES" ;
+    skos:definition "Production order manufactures this material" ;
+    rdfs:domain biz:ProductionOrder ;
+    rdfs:range biz:Material ;
+    sap:derivedFrom "AFPO.MATNR -> MARA.MATNR" .
+
+biz:requires a owl:ObjectProperty ;
+    rdfs:label "REQUIRES" ;
+    skos:definition "Production order raises this component requirement" ;
+    rdfs:domain biz:ProductionOrder ;
+    rdfs:range biz:Reservation ;
+    sap:derivedFrom "RESB.AUFNR -> AFKO.AUFNR" .
+
+biz:consumes a owl:ObjectProperty ;
+    rdfs:label "CONSUMES" ;
+    skos:definition "Requirement consumes this material" ;
+    rdfs:domain biz:Reservation ;
+    rdfs:range biz:Material ;
+    sap:derivedFrom "RESB.MATNR -> MARA.MATNR" .
+
+biz:runsat a owl:ObjectProperty ;
+    rdfs:label "RUNS_AT" ;
+    skos:definition "Plant executing the production order" ;
+    rdfs:domain biz:ProductionOrder ;
+    rdfs:range biz:Plant ;
+    sap:derivedFrom "AFKO.WERKS -> T001W.WERKS" .
+
+biz:soldto a owl:ObjectProperty ;
+    rdfs:label "SOLD_TO" ;
+    skos:definition "Customer that placed the sales order" ;
+    rdfs:domain biz:SalesOrder ;
+    rdfs:range biz:Customer ;
+    sap:derivedFrom "VBAK.KUNNR -> KNA1.KUNNR" .
+
+biz:demands a owl:ObjectProperty ;
+    rdfs:label "DEMANDS" ;
+    skos:definition "Sales order line demands this finished material" ;
+    rdfs:domain biz:SalesOrder ;
+    rdfs:range biz:Material ;
+    sap:derivedFrom "VBAP.MATNR -> MARA.MATNR" .
+
+biz:fulfillsorder a owl:ObjectProperty ;
+    rdfs:label "FULFILLS_ORDER" ;
+    skos:definition "Delivery fulfils this sales order" ;
+    rdfs:domain biz:Delivery ;
+    rdfs:range biz:SalesOrder ;
+    sap:inferred true ;
+    sap:derivedFrom "LIPS.VGBEL -> VBAK.VBELN" .
+
+biz:shipsfrom a owl:ObjectProperty ;
+    rdfs:label "SHIPS_FROM" ;
+    skos:definition "Shipping point plant for the delivery" ;
+    rdfs:domain biz:Delivery ;
+    rdfs:range biz:Plant ;
+    sap:derivedFrom "LIKP.VSTEL -> T001W.WERKS" .
+
+biz:shipsto a owl:ObjectProperty ;
+    rdfs:label "SHIPS_TO" ;
+    skos:definition "Customer receiving the delivery" ;
+    rdfs:domain biz:Delivery ;
+    rdfs:range biz:Customer ;
+    sap:derivedFrom "LIKP.KUNNR -> KNA1.KUNNR" .
+
+
+# ======================================================================
+# SHACL shapes -- the governance gate.
+# A record failing these is loaded but flagged, and lowers the
+# data_completeness component of the published confidence score.
+# ======================================================================
+
+biz:SupplierShape a sh:NodeShape ;
+    sh:targetClass biz:Supplier ;
+    sh:property [
+        sh:path biz:lifnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Supplier.lifnr is required (SAP source: LFA1.LIFNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Supplier.name is required (SAP source: LFA1.NAME1)" ;
+    ] ;
+    sh:closed false .
+
+biz:MaterialShape a sh:NodeShape ;
+    sh:targetClass biz:Material ;
+    sh:property [
+        sh:path biz:matnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Material.matnr is required (SAP source: MARA.MATNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Material.name is required (SAP source: MARA.MAKTX)" ;
+    ] ;
+    sh:closed false .
+
+biz:PlantShape a sh:NodeShape ;
+    sh:targetClass biz:Plant ;
+    sh:property [
+        sh:path biz:werks ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Plant.werks is required (SAP source: T001W.WERKS)" ;
+    ] ;
+    sh:property [
+        sh:path biz:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Plant.name is required (SAP source: T001W.NAME1)" ;
+    ] ;
+    sh:closed false .
+
+biz:PurchaseOrderShape a sh:NodeShape ;
+    sh:targetClass biz:PurchaseOrder ;
+    sh:property [
+        sh:path biz:ebeln ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "PurchaseOrder.ebeln is required (SAP source: EKKO.EBELN)" ;
+    ] ;
+    sh:property [
+        sh:path biz:matnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "PurchaseOrder.matnr is required (SAP source: EKPO.MATNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:net_value ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:message "PurchaseOrder.net_value is required (SAP source: EKPO.NETWR)" ;
+    ] ;
+    sh:closed false .
+
+biz:ScheduleLineShape a sh:NodeShape ;
+    sh:targetClass biz:ScheduleLine ;
+    sh:property [
+        sh:path biz:delivery_date ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:message "ScheduleLine.delivery_date is required (SAP source: EKET.EINDT)" ;
+    ] ;
+    sh:property [
+        sh:path biz:menge ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:message "ScheduleLine.menge is required (SAP source: EKET.MENGE)" ;
+    ] ;
+    sh:closed false .
+
+biz:SourceListShape a sh:NodeShape ;
+    sh:targetClass biz:SourceList ;
+    sh:property [
+        sh:path biz:matnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "SourceList.matnr is required (SAP source: EINA.MATNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:lifnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "SourceList.lifnr is required (SAP source: EINA.LIFNR)" ;
+    ] ;
+    sh:closed false .
+
+biz:ProductionOrderShape a sh:NodeShape ;
+    sh:targetClass biz:ProductionOrder ;
+    sh:property [
+        sh:path biz:aufnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "ProductionOrder.aufnr is required (SAP source: AFKO.AUFNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:output_matnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "ProductionOrder.output_matnr is required (SAP source: AFKO.PLNBEZ)" ;
+    ] ;
+    sh:property [
+        sh:path biz:scheduled_finish ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:message "ProductionOrder.scheduled_finish is required (SAP source: AFKO.GLTRP)" ;
+    ] ;
+    sh:closed false .
+
+biz:ReservationShape a sh:NodeShape ;
+    sh:targetClass biz:Reservation ;
+    sh:property [
+        sh:path biz:aufnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Reservation.aufnr is required (SAP source: RESB.AUFNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:matnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Reservation.matnr is required (SAP source: RESB.MATNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:required_qty ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:message "Reservation.required_qty is required (SAP source: RESB.BDMNG)" ;
+    ] ;
+    sh:property [
+        sh:path biz:required_date ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:message "Reservation.required_date is required (SAP source: RESB.BDTER)" ;
+    ] ;
+    sh:closed false .
+
+biz:SalesOrderShape a sh:NodeShape ;
+    sh:targetClass biz:SalesOrder ;
+    sh:property [
+        sh:path biz:vbeln ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "SalesOrder.vbeln is required (SAP source: VBAK.VBELN)" ;
+    ] ;
+    sh:property [
+        sh:path biz:matnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "SalesOrder.matnr is required (SAP source: VBAP.MATNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:net_value ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:message "SalesOrder.net_value is required (SAP source: VBAP.NETWR)" ;
+    ] ;
+    sh:closed false .
+
+biz:DeliveryShape a sh:NodeShape ;
+    sh:targetClass biz:Delivery ;
+    sh:property [
+        sh:path biz:vbeln ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Delivery.vbeln is required (SAP source: LIKP.VBELN)" ;
+    ] ;
+    sh:property [
+        sh:path biz:planned_goods_issue ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:message "Delivery.planned_goods_issue is required (SAP source: LIKP.LFDAT)" ;
+    ] ;
+    sh:closed false .
+
+biz:CustomerShape a sh:NodeShape ;
+    sh:targetClass biz:Customer ;
+    sh:property [
+        sh:path biz:kunnr ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Customer.kunnr is required (SAP source: KNA1.KUNNR)" ;
+    ] ;
+    sh:property [
+        sh:path biz:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Customer.name is required (SAP source: KNA1.NAME1)" ;
+    ] ;
+    sh:closed false .
+
+# Business rule: a schedule line cannot promise delivery before the
+# purchase order that contains it was even created.
+biz:ScheduleLineDateShape a sh:NodeShape ;
+    sh:targetClass biz:ScheduleLine ;
+    sh:property [
+        sh:path biz:delivery_date ;
+        sh:datatype xsd:date ;
+        sh:message "ScheduleLine.delivery_date must be a valid date (EKET.EINDT)" ;
+    ] .

@@ -1,0 +1,58 @@
+[
+  {
+    "AUFNR": "000009001",
+    "POSNR": "0001",
+    "MATNR": "ACU-500",
+    "PSMNG": 120.0,
+    "WERKS": "1010"
+  },
+  {
+    "AUFNR": "000009002",
+    "POSNR": "0001",
+    "MATNR": "FCB-100",
+    "PSMNG": 200.0,
+    "WERKS": "1010"
+  },
+  {
+    "AUFNR": "000009003",
+    "POSNR": "0001",
+    "MATNR": "CSM-300",
+    "PSMNG": 80.0,
+    "WERKS": "1010"
+  },
+  {
+    "AUFNR": "000009004",
+    "POSNR": "0001",
+    "MATNR": "NAV-700",
+    "PSMNG": 60.0,
+    "WERKS": "1020"
+  },
+  {
+    "AUFNR": "000009005",
+    "POSNR": "0001",
+    "MATNR": "PSU-220",
+    "PSMNG": 150.0,
+    "WERKS": "1020"
+  },
+  {
+    "AUFNR": "000009006",
+    "POSNR": "0001",
+    "MATNR": "LDG-900",
+    "PSMNG": 40.0,
+    "WERKS": "1030"
+  },
+  {
+    "AUFNR": "000009007",
+    "POSNR": "0001",
+    "MATNR": "ECS-400",
+    "PSMNG": 55.0,
+    "WERKS": "1030"
+  },
+  {
+    "AUFNR": "000009008",
+    "POSNR": "0001",
+    "MATNR": "FMS-850",
+    "PSMNG": 45.0,
+    "WERKS": "1010"
+  }
+]

@@ -1,0 +1,162 @@
+[
+  {
+    "RSNUM": "1001",
+    "RSPOS": "0001",
+    "AUFNR": "000009001",
+    "MATNR": "MCU-32",
+    "WERKS": "1010",
+    "BDMNG": 2000.0,
+    "BDTER": "2026-09-17",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1001",
+    "RSPOS": "0002",
+    "AUFNR": "000009001",
+    "MATNR": "CAP-TANT-22",
+    "WERKS": "1010",
+    "BDMNG": 4800.0,
+    "BDTER": "2026-09-17",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1001",
+    "RSPOS": "0003",
+    "AUFNR": "000009001",
+    "MATNR": "CONN-D38",
+    "WERKS": "1010",
+    "BDMNG": 480.0,
+    "BDTER": "2026-09-18",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1002",
+    "RSPOS": "0001",
+    "AUFNR": "000009002",
+    "MATNR": "MCU-32",
+    "WERKS": "1010",
+    "BDMNG": 900.0,
+    "BDTER": "2026-09-18",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1002",
+    "RSPOS": "0002",
+    "AUFNR": "000009002",
+    "MATNR": "PWR-IC-7",
+    "WERKS": "1010",
+    "BDMNG": 600.0,
+    "BDTER": "2026-09-18",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1003",
+    "RSPOS": "0001",
+    "AUFNR": "000009003",
+    "MATNR": "MCU-32",
+    "WERKS": "1010",
+    "BDMNG": 800.0,
+    "BDTER": "2026-09-19",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1003",
+    "RSPOS": "0002",
+    "AUFNR": "000009003",
+    "MATNR": "SEAL-PLY-4",
+    "WERKS": "1010",
+    "BDMNG": 640.0,
+    "BDTER": "2026-09-19",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1004",
+    "RSPOS": "0001",
+    "AUFNR": "000009004",
+    "MATNR": "PWR-IC-7",
+    "WERKS": "1020",
+    "BDMNG": 500.0,
+    "BDTER": "2026-09-21",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1004",
+    "RSPOS": "0002",
+    "AUFNR": "000009004",
+    "MATNR": "DISP-LCD-8",
+    "WERKS": "1020",
+    "BDMNG": 120.0,
+    "BDTER": "2026-09-21",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1005",
+    "RSPOS": "0001",
+    "AUFNR": "000009005",
+    "MATNR": "PWR-IC-7",
+    "WERKS": "1020",
+    "BDMNG": 700.0,
+    "BDTER": "2026-09-20",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1006",
+    "RSPOS": "0001",
+    "AUFNR": "000009006",
+    "MATNR": "TI-ALLOY-6",
+    "WERKS": "1030",
+    "BDMNG": 640.0,
+    "BDTER": "2026-09-23",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1006",
+    "RSPOS": "0002",
+    "AUFNR": "000009006",
+    "MATNR": "FAST-M8",
+    "WERKS": "1030",
+    "BDMNG": 1600.0,
+    "BDTER": "2026-09-23",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1007",
+    "RSPOS": "0001",
+    "AUFNR": "000009007",
+    "MATNR": "SEAL-PLY-4",
+    "WERKS": "1030",
+    "BDMNG": 880.0,
+    "BDTER": "2026-09-25",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1007",
+    "RSPOS": "0002",
+    "AUFNR": "000009007",
+    "MATNR": "WIRE-HARN-2",
+    "WERKS": "1030",
+    "BDMNG": 275.0,
+    "BDTER": "2026-09-25",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1008",
+    "RSPOS": "0001",
+    "AUFNR": "000009008",
+    "MATNR": "SENS-ACC-3",
+    "WERKS": "1010",
+    "BDMNG": 360.0,
+    "BDTER": "2026-09-29",
+    "ENMNG": 0.0
+  },
+  {
+    "RSNUM": "1008",
+    "RSPOS": "0002",
+    "AUFNR": "000009008",
+    "MATNR": "CONN-D38",
+    "WERKS": "1010",
+    "BDMNG": 180.0,
+    "BDTER": "2026-09-29",
+    "ENMNG": 0.0
+  }
+]

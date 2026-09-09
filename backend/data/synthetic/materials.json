@@ -1,0 +1,162 @@
+[
+  {
+    "MATNR": "MCU-32",
+    "MAKTX": "Microcontroller Unit 32-bit",
+    "MTART": "ROH",
+    "MATKL": "ELEC",
+    "MEINS": "EA",
+    "unit_cost": 120.0
+  },
+  {
+    "MATNR": "PWR-IC-7",
+    "MAKTX": "Power Management IC",
+    "MTART": "ROH",
+    "MATKL": "ELEC",
+    "MEINS": "EA",
+    "unit_cost": 85.0
+  },
+  {
+    "MATNR": "CAP-TANT-22",
+    "MAKTX": "Tantalum Capacitor 22uF",
+    "MTART": "ROH",
+    "MATKL": "ELEC",
+    "MEINS": "EA",
+    "unit_cost": 9.0
+  },
+  {
+    "MATNR": "TI-ALLOY-6",
+    "MAKTX": "Titanium Alloy Billet Grade 6",
+    "MTART": "ROH",
+    "MATKL": "METL",
+    "MEINS": "KG",
+    "unit_cost": 2400.0
+  },
+  {
+    "MATNR": "FAST-M8",
+    "MAKTX": "Fastener Set M8 Aerospace",
+    "MTART": "ROH",
+    "MATKL": "MECH",
+    "MEINS": "EA",
+    "unit_cost": 18.0
+  },
+  {
+    "MATNR": "SEAL-PLY-4",
+    "MAKTX": "Polymer Seal Ring",
+    "MTART": "ROH",
+    "MATKL": "POLY",
+    "MEINS": "EA",
+    "unit_cost": 32.0
+  },
+  {
+    "MATNR": "CONN-D38",
+    "MAKTX": "Connector D38999 Circular",
+    "MTART": "ROH",
+    "MATKL": "ELEC",
+    "MEINS": "EA",
+    "unit_cost": 145.0
+  },
+  {
+    "MATNR": "WIRE-HARN-2",
+    "MAKTX": "Wire Harness Assembly",
+    "MTART": "ROH",
+    "MATKL": "ELEC",
+    "MEINS": "EA",
+    "unit_cost": 610.0
+  },
+  {
+    "MATNR": "SENS-ACC-3",
+    "MAKTX": "Accelerometer Sensor 3-Axis",
+    "MTART": "ROH",
+    "MATKL": "ELEC",
+    "MEINS": "EA",
+    "unit_cost": 340.0
+  },
+  {
+    "MATNR": "DISP-LCD-8",
+    "MAKTX": "LCD Display Module 8in",
+    "MTART": "ROH",
+    "MATKL": "ELEC",
+    "MEINS": "EA",
+    "unit_cost": 520.0
+  },
+  {
+    "MATNR": "FCB-100",
+    "MAKTX": "Flight Control Board",
+    "MTART": "HALB",
+    "MATKL": "ASSY",
+    "MEINS": "EA",
+    "unit_cost": 3100.0
+  },
+  {
+    "MATNR": "PSU-220",
+    "MAKTX": "Power Supply Unit 220",
+    "MTART": "HALB",
+    "MATKL": "ASSY",
+    "MEINS": "EA",
+    "unit_cost": 1850.0
+  },
+  {
+    "MATNR": "SENSOR-ARR-4",
+    "MAKTX": "Sensor Array 4-Channel",
+    "MTART": "HALB",
+    "MATKL": "ASSY",
+    "MEINS": "EA",
+    "unit_cost": 2250.0
+  },
+  {
+    "MATNR": "ACU-500",
+    "MAKTX": "Avionics Control Unit 500",
+    "MTART": "FERT",
+    "MATKL": "AVIO",
+    "MEINS": "EA",
+    "unit_cost": 118000.0
+  },
+  {
+    "MATNR": "CSM-300",
+    "MAKTX": "Cabin Systems Module 300",
+    "MTART": "FERT",
+    "MATKL": "AVIO",
+    "MEINS": "EA",
+    "unit_cost": 96000.0
+  },
+  {
+    "MATNR": "NAV-700",
+    "MAKTX": "Navigation Computer 700",
+    "MTART": "FERT",
+    "MATKL": "AVIO",
+    "MEINS": "EA",
+    "unit_cost": 142000.0
+  },
+  {
+    "MATNR": "LDG-900",
+    "MAKTX": "Landing Gear Controller 900",
+    "MTART": "FERT",
+    "MATKL": "MECH",
+    "MEINS": "EA",
+    "unit_cost": 205000.0
+  },
+  {
+    "MATNR": "ECS-400",
+    "MAKTX": "Environmental Control System",
+    "MTART": "FERT",
+    "MATKL": "AVIO",
+    "MEINS": "EA",
+    "unit_cost": 174000.0
+  },
+  {
+    "MATNR": "FMS-850",
+    "MAKTX": "Flight Management System 850",
+    "MTART": "FERT",
+    "MATKL": "AVIO",
+    "MEINS": "EA",
+    "unit_cost": 268000.0
+  },
+  {
+    "MATNR": "APU-600",
+    "MAKTX": "Auxiliary Power Controller",
+    "MTART": "FERT",
+    "MATKL": "AVIO",
+    "MEINS": "EA",
+    "unit_cost": 88000.0
+  }
+]

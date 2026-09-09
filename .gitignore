@@ -1,3 +1,11 @@
+# Python
+backend/venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
 # Dependencies
 node_modules/
 frontend/node_modules/

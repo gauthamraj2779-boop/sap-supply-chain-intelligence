@@ -1,0 +1,186 @@
+[
+  {
+    "MATNR": "MCU-32",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 21,
+    "EISBE": 500.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "PWR-IC-7",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 21,
+    "EISBE": 300.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "MCU-32",
+    "WERKS": "1020",
+    "DISPO": "102",
+    "PLIFZ": 21,
+    "EISBE": 200.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "PWR-IC-7",
+    "WERKS": "1020",
+    "DISPO": "102",
+    "PLIFZ": 21,
+    "EISBE": 250.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "CAP-TANT-22",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 14,
+    "EISBE": 1000.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "TI-ALLOY-6",
+    "WERKS": "1030",
+    "DISPO": "103",
+    "PLIFZ": 30,
+    "EISBE": 800.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "SENS-ACC-3",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 25,
+    "EISBE": 600.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "FAST-M8",
+    "WERKS": "1030",
+    "DISPO": "103",
+    "PLIFZ": 10,
+    "EISBE": 2000.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "SEAL-PLY-4",
+    "WERKS": "1030",
+    "DISPO": "103",
+    "PLIFZ": 12,
+    "EISBE": 1200.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "SEAL-PLY-4",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 12,
+    "EISBE": 500.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "CONN-D38",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 18,
+    "EISBE": 400.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "WIRE-HARN-2",
+    "WERKS": "1030",
+    "DISPO": "103",
+    "PLIFZ": 20,
+    "EISBE": 200.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "DISP-LCD-8",
+    "WERKS": "1020",
+    "DISPO": "102",
+    "PLIFZ": 24,
+    "EISBE": 150.0,
+    "BESKZ": "F"
+  },
+  {
+    "MATNR": "FCB-100",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 0,
+    "EISBE": 10.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "PSU-220",
+    "WERKS": "1020",
+    "DISPO": "102",
+    "PLIFZ": 0,
+    "EISBE": 10.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "SENSOR-ARR-4",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 0,
+    "EISBE": 5.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "ACU-500",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 0,
+    "EISBE": 2.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "CSM-300",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 0,
+    "EISBE": 2.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "NAV-700",
+    "WERKS": "1020",
+    "DISPO": "102",
+    "PLIFZ": 0,
+    "EISBE": 1.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "LDG-900",
+    "WERKS": "1030",
+    "DISPO": "103",
+    "PLIFZ": 0,
+    "EISBE": 1.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "ECS-400",
+    "WERKS": "1030",
+    "DISPO": "103",
+    "PLIFZ": 0,
+    "EISBE": 2.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "FMS-850",
+    "WERKS": "1010",
+    "DISPO": "101",
+    "PLIFZ": 0,
+    "EISBE": 1.0,
+    "BESKZ": "E"
+  },
+  {
+    "MATNR": "APU-600",
+    "WERKS": "1020",
+    "DISPO": "102",
+    "PLIFZ": 0,
+    "EISBE": 2.0,
+    "BESKZ": "E"
+  }
+]

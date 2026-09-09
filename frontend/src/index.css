@@ -139,7 +139,7 @@ body {
   background: var(--paper);
 }
 
-.query-row { display: flex; gap: 0; align-items: stretch; max-width: 720px; }
+.query-row { position: relative; display: flex; gap: 0; align-items: stretch; max-width: 720px; }
 .query-field {
   flex: 1;
   border: 1px solid var(--rule);
@@ -266,13 +266,14 @@ body {
 .graph-card-head {
   padding: 10px 16px; border-bottom: 1px solid var(--rule-light);
   display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
 }
-.graph-card-label { font-size: 11px; color: var(--ink-4); font-family: var(--mono); }
-.graph-legend { display: flex; gap: 14px; }
+.graph-card-label { font-size: 11px; color: var(--ink-4); font-family: var(--mono); white-space: nowrap; }
+.graph-legend { display: flex; gap: 14px; flex-wrap: wrap; }
 .gl-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--ink-3); }
 .gl-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
-.graph-canvas-wrap { height: 340px; position: relative; }
+.graph-canvas-wrap { height: 460px; position: relative; }
 .graph-canvas { width: 100%; height: 100%; background: #fafaf8; }
 .graph-zoom-controls {
   position: absolute; bottom: 12px; right: 12px;
@@ -572,3 +573,171 @@ body {
 /* Animation helpers */
 .fade-in { animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ═══════════════════════════════════════════
+   BACKEND STATE — errors, warnings, degradation
+   The console reports what it could not do rather than
+   filling the gap with invented figures.
+═══════════════════════════════════════════ */
+.error-panel {
+  max-width: 780px; margin: 20px auto; padding: 18px 20px;
+  border: 1px solid var(--risk); border-left-width: 3px;
+  background: var(--risk-light); border-radius: 2px;
+}
+.error-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.error-title {
+  font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--risk);
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+.error-dismiss {
+  background: none; border: 1px solid var(--rule); border-radius: 2px;
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  padding: 3px 10px; cursor: pointer;
+}
+.error-dismiss:hover { border-color: var(--ink-3); color: var(--ink); }
+.error-msg { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+.error-detail {
+  margin-top: 10px; padding: 10px; background: var(--paper);
+  border: 1px solid var(--rule-light); border-radius: 2px;
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  white-space: pre-wrap; overflow-x: auto;
+}
+.error-hint { margin-top: 10px; font-size: 12px; color: var(--ink-3); font-style: italic; line-height: 1.6; }
+
+.warning-strip {
+  border-top: 1px solid var(--rule-light); border-bottom: 1px solid var(--rule-light);
+  background: #faf6ee; padding: 10px 32px;
+}
+.warning-row { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+.warning-row + .warning-row { margin-top: 4px; }
+
+.topbar-chip.online  { color: var(--teal);  border-color: #0d627040; }
+.topbar-chip.offline { color: #e0a0a0; border-color: #b8440a55; }
+
+/* ═══════════════════════════════════════════
+   QUERY — supplier autocomplete from the live graph
+═══════════════════════════════════════════ */
+.query-suggest {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 140px; z-index: 50;
+  background: #fff; border: 1px solid var(--rule); border-radius: 2px;
+  box-shadow: 0 6px 20px rgba(26, 23, 21, 0.10); overflow: hidden;
+}
+.qs-item {
+  display: flex; flex-direction: column; gap: 2px; width: 100%;
+  padding: 8px 12px; background: none; border: none; cursor: pointer; text-align: left;
+  border-bottom: 1px solid var(--rule-light);
+}
+.qs-item:last-child { border-bottom: none; }
+.qs-item:hover { background: var(--paper); }
+.qs-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+.qs-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-4); }
+
+/* ═══════════════════════════════════════════
+   SHARED HEADINGS & LISTS
+═══════════════════════════════════════════ */
+.subsection-title {
+  font-family: var(--serif); font-size: 16px; font-weight: 400;
+  color: var(--ink); margin-bottom: 6px;
+}
+.assumption-list, .trust-notes {
+  list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px;
+}
+.assumption-list li, .trust-notes li {
+  font-size: 12px; color: var(--ink-3); line-height: 1.6;
+  padding-left: 14px; position: relative;
+}
+.assumption-list li::before, .trust-notes li::before {
+  content: '—'; position: absolute; left: 0; color: var(--ink-4);
+}
+
+/* ═══════════════════════════════════════════
+   TRUST — formula and degraded-capability chips
+═══════════════════════════════════════════ */
+.trust-formula {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  background: var(--paper-2); border-left: 2px solid var(--rule);
+  padding: 10px 12px; line-height: 1.6;
+}
+.degraded-list { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.degraded-title {
+  font-size: 11px; font-weight: 600; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+.degraded-chip {
+  font-family: var(--mono); font-size: 11px; color: var(--risk);
+  border: 1px solid #b8440a40; border-radius: 2px; padding: 2px 8px;
+  background: var(--risk-light);
+}
+
+/* ═══════════════════════════════════════════
+   LINEAGE — record keys and derivation arithmetic
+═══════════════════════════════════════════ */
+.fl-key {
+  display: block; font-family: var(--mono); font-size: 10px;
+  color: var(--ink-4); margin-top: 2px;
+}
+.fl-derivation, .li-derivation {
+  margin-top: 12px; padding: 10px 12px;
+  background: var(--teal-light); border-left: 2px solid var(--teal);
+  font-family: var(--mono); font-size: 11px; color: var(--ink-2); line-height: 1.7;
+}
+
+/* ═══════════════════════════════════════════
+   LEDGER TOTAL
+═══════════════════════════════════════════ */
+.ledger-row.ledger-total {
+  border-top: 2px solid var(--ink); background: var(--paper-2); font-weight: 600;
+}
+.ledger-row.ledger-total .lr-amount { color: var(--ink); font-weight: 600; }
+
+/* ═══════════════════════════════════════════
+   AVOIDANCE — SAP evidence and rejected options
+═══════════════════════════════════════════ */
+.ai-evidence { margin-top: 10px; }
+.ai-evidence-toggle {
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-family: var(--mono); font-size: 11px; color: var(--teal);
+}
+.ai-evidence-toggle:hover { text-decoration: underline; }
+.ai-evidence-list {
+  list-style: none; overflow: hidden;
+  display: flex; flex-direction: column; gap: 4px; margin-top: 8px;
+  padding: 10px 12px; background: var(--paper-2);
+  border-left: 2px solid var(--rule);
+}
+.ai-evidence-list li { font-family: var(--mono); font-size: 11px; color: var(--ink-3); line-height: 1.6; }
+.ai-sap-src { font-size: 11px; color: var(--ink-4); font-family: var(--mono); }
+
+.rejected-block { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--rule-light); }
+.rejected-row {
+  display: grid; grid-template-columns: 1fr 100px 2fr; gap: 12px; align-items: baseline;
+  padding: 10px 0; border-bottom: 1px solid var(--rule-light);
+}
+.rj-summary { font-size: 13px; color: var(--ink-2); }
+.rj-cost { font-family: var(--mono); font-size: 12px; color: var(--risk); text-align: right; }
+.rj-reason { font-size: 12px; color: var(--ink-3); font-style: italic; line-height: 1.5; }
+
+/* ═══════════════════════════════════════════
+   TIMELINE — event detail and kind markers
+═══════════════════════════════════════════ */
+.tl-card-detail {
+  font-size: 11px; color: var(--ink-3); line-height: 1.5; margin-top: 2px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.tl-kind {
+  margin-left: 6px; font-family: var(--mono); font-size: 9px;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-4);
+}
+.tl-dot.kind-trigger        { background: var(--risk); }
+.tl-dot.kind-purchase_order { background: #8b7355; }
+.tl-dot.kind-material       { background: #6b6560; }
+.tl-dot.kind-production     { background: #2e7d5e; }
+.tl-dot.kind-delivery       { background: #6d4c8e; }
+
+/* ═══════════════════════════════════════════
+   GRAPH — empty state
+═══════════════════════════════════════════ */
+.graph-empty {
+  padding: 60px 24px; text-align: center;
+  font-size: 14px; color: var(--ink-3); font-style: italic;
+}

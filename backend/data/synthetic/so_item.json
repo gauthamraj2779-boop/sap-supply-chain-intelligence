@@ -1,0 +1,110 @@
+[
+  {
+    "VBELN": "0004502",
+    "POSNR": "10",
+    "MATNR": "ACU-500",
+    "ARKTX": "Avionics Control Unit 500",
+    "WERKS": "1010",
+    "KWMENG": 120.0,
+    "NETWR": 31200000.0
+  },
+  {
+    "VBELN": "0004508",
+    "POSNR": "10",
+    "MATNR": "CSM-300",
+    "ARKTX": "Cabin Systems Module 300",
+    "WERKS": "1010",
+    "KWMENG": 80.0,
+    "NETWR": 18700000.0
+  },
+  {
+    "VBELN": "0004511",
+    "POSNR": "10",
+    "MATNR": "NAV-700",
+    "ARKTX": "Navigation Computer 700",
+    "WERKS": "1020",
+    "KWMENG": 60.0,
+    "NETWR": 12400000.0
+  },
+  {
+    "VBELN": "0004514",
+    "POSNR": "10",
+    "MATNR": "LDG-900",
+    "ARKTX": "Landing Gear Controller 900",
+    "WERKS": "1030",
+    "KWMENG": 40.0,
+    "NETWR": 9800000.0
+  },
+  {
+    "VBELN": "0004517",
+    "POSNR": "10",
+    "MATNR": "ECS-400",
+    "ARKTX": "Environmental Control System",
+    "WERKS": "1030",
+    "KWMENG": 55.0,
+    "NETWR": 11300000.0
+  },
+  {
+    "VBELN": "0004520",
+    "POSNR": "10",
+    "MATNR": "FMS-850",
+    "ARKTX": "Flight Management System 850",
+    "WERKS": "1010",
+    "KWMENG": 45.0,
+    "NETWR": 14600000.0
+  },
+  {
+    "VBELN": "0004523",
+    "POSNR": "10",
+    "MATNR": "APU-600",
+    "ARKTX": "Auxiliary Power Controller",
+    "WERKS": "1020",
+    "KWMENG": 70.0,
+    "NETWR": 7200000.0
+  },
+  {
+    "VBELN": "0004526",
+    "POSNR": "10",
+    "MATNR": "ACU-500",
+    "ARKTX": "Avionics Control Unit 500",
+    "WERKS": "1010",
+    "KWMENG": 40.0,
+    "NETWR": 10400000.0
+  },
+  {
+    "VBELN": "0004529",
+    "POSNR": "10",
+    "MATNR": "CSM-300",
+    "ARKTX": "Cabin Systems Module 300",
+    "WERKS": "1010",
+    "KWMENG": 30.0,
+    "NETWR": 7000000.0
+  },
+  {
+    "VBELN": "0004532",
+    "POSNR": "10",
+    "MATNR": "NAV-700",
+    "ARKTX": "Navigation Computer 700",
+    "WERKS": "1020",
+    "KWMENG": 25.0,
+    "NETWR": 5200000.0
+  },
+  {
+    "VBELN": "0004535",
+    "POSNR": "10",
+    "MATNR": "LDG-900",
+    "ARKTX": "Landing Gear Controller 900",
+    "WERKS": "1030",
+    "KWMENG": 20.0,
+    "NETWR": 4900000.0
+  },
+  {
+    "VBELN": "0004538",
+    "POSNR": "10",
+    "MATNR": "ECS-400",
+    "ARKTX": "Environmental Control System",
+    "WERKS": "1030",
+    "KWMENG": 18.0,
+    "NETWR": 3700000.0
+  }
+]

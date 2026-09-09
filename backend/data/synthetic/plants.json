@@ -1,0 +1,26 @@
+[
+  {
+    "WERKS": "1010",
+    "NAME1": "Detroit Avionics Plant",
+    "LAND1": "US",
+    "ORT01": "Detroit",
+    "idle_plant_cost_per_day": 180000.0,
+    "_assumption": "idle_plant_cost_per_day is a management accounting input, not an SAP field"
+  },
+  {
+    "WERKS": "1020",
+    "NAME1": "Singapore Systems Plant",
+    "LAND1": "SG",
+    "ORT01": "Singapore",
+    "idle_plant_cost_per_day": 145000.0,
+    "_assumption": "idle_plant_cost_per_day is a management accounting input, not an SAP field"
+  },
+  {
+    "WERKS": "1030",
+    "NAME1": "Hamburg Structures Plant",
+    "LAND1": "DE",
+    "ORT01": "Hamburg",
+    "idle_plant_cost_per_day": 210000.0,
+    "_assumption": "idle_plant_cost_per_day is a management accounting input, not an SAP field"
+  }
+]

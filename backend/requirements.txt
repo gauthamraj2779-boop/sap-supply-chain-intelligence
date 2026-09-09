@@ -1,0 +1,21 @@
+# --- API layer ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+python-dotenv==1.0.1
+
+# --- Graph ---
+neo4j==5.27.0
+
+# --- Ontology / governance ---
+rdflib==7.1.1
+pyshacl==0.29.0
+
+# --- LLM providers (all optional at runtime) ---
+openai==1.59.6
+google-generativeai==0.8.3
+
+# --- Testing ---
+pytest==8.3.4
+httpx==0.28.1

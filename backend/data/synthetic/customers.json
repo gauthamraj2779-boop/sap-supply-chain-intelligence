@@ -1,0 +1,38 @@
+[
+  {
+    "KUNNR": "0000002001",
+    "NAME1": "Boeing Commercial",
+    "LAND1": "US",
+    "ORT01": "Everett"
+  },
+  {
+    "KUNNR": "0000002002",
+    "NAME1": "Airbus SAS",
+    "LAND1": "FR",
+    "ORT01": "Toulouse"
+  },
+  {
+    "KUNNR": "0000002003",
+    "NAME1": "Lockheed Martin Aero",
+    "LAND1": "US",
+    "ORT01": "Fort Worth"
+  },
+  {
+    "KUNNR": "0000002004",
+    "NAME1": "Embraer S.A.",
+    "LAND1": "BR",
+    "ORT01": "Sao Jose dos Campos"
+  },
+  {
+    "KUNNR": "0000002005",
+    "NAME1": "Bombardier Aviation",
+    "LAND1": "CA",
+    "ORT01": "Montreal"
+  },
+  {
+    "KUNNR": "0000002006",
+    "NAME1": "Gulfstream Aerospace",
+    "LAND1": "US",
+    "ORT01": "Savannah"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "LIFNR": "0000001000",
+    "NAME1": "Apex Microelectronics",
+    "LAND1": "TW",
+    "ORT01": "Hsinchu",
+    "risk_score": 0.82,
+    "_role": "sole-source villain"
+  },
+  {
+    "LIFNR": "0000001001",
+    "NAME1": "Nova Components GmbH",
+    "LAND1": "DE",
+    "ORT01": "Dresden",
+    "risk_score": 0.21,
+    "_role": "alternate source"
+  },
+  {
+    "LIFNR": "0000001002",
+    "NAME1": "Toshiro Metals K.K.",
+    "LAND1": "JP",
+    "ORT01": "Nagoya",
+    "risk_score": 0.18,
+    "_role": "contrast: well stocked"
+  },
+  {
+    "LIFNR": "0000001003",
+    "NAME1": "Continental Fasteners Inc",
+    "LAND1": "US",
+    "ORT01": "Cleveland",
+    "risk_score": 0.34,
+    "_role": "filler"
+  },
+  {
+    "LIFNR": "0000001004",
+    "NAME1": "Meridian Polymers LLC",
+    "LAND1": "US",
+    "ORT01": "Akron",
+    "risk_score": 0.29,
+    "_role": "filler"
+  }
+]

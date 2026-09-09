@@ -1,199 +1,154 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import cytoscape from 'cytoscape';
-import coseBilkent from 'cytoscape-cose-bilkent';
-import { enrichNodes, enrichEdges } from '../utils/graphLayout';
+import { NODE_COLORS, SEVERITY_COLORS, buildStylesheet, buildLayout } from '../utils/graphLayout';
 
-cytoscape.use(coseBilkent);
-
-// Cytoscape stylesheet tuned for the light editorial theme
-function buildStylesheet() {
-  return [
-    {
-      selector: 'node',
-      style: {
-        'background-color': 'data(color)',
-        'label': 'data(shortLabel)',
-        'color': '#1a1715',
-        'text-valign': 'bottom',
-        'text-halign': 'center',
-        'font-size': '9px',
-        'font-family': '"IBM Plex Sans", system-ui, sans-serif',
-        'font-weight': '500',
-        'text-wrap': 'wrap',
-        'text-max-width': '72px',
-        'width': 'data(size)',
-        'height': 'data(size)',
-        'border-width': 1.5,
-        'border-color': '#ccc9c1',
-        'text-margin-y': 4,
-        'transition-property': 'opacity, border-width, border-color',
-        'transition-duration': '200ms',
-      },
-    },
-    {
-      selector: 'node:selected, node.selected',
-      style: {
-        'border-width': 3,
-        'border-color': '#0d6270',
-      },
-    },
-    {
-      selector: 'node.dimmed',
-      style: { 'opacity': 0.25 },
-    },
-    {
-      selector: 'edge',
-      style: {
-        'width': 1.5,
-        'line-color': '#ccc9c1',
-        'target-arrow-color': '#ccc9c1',
-        'target-arrow-shape': 'vee',
-        'curve-style': 'bezier',
-        'label': 'data(label)',
-        'font-size': '8px',
-        'color': '#9b968f',
-        'font-family': '"IBM Plex Mono", monospace',
-        'text-rotation': 'autorotate',
-        'text-background-color': '#f2f0eb',
-        'text-background-opacity': 0.9,
-        'text-background-padding': '2px',
-        'opacity': 0.8,
-        'transition-property': 'opacity, line-color, width',
-        'transition-duration': '200ms',
-      },
-    },
-    {
-      selector: 'edge.highlighted',
-      style: { 'opacity': 1, 'line-color': '#0d6270', 'target-arrow-color': '#0d6270', 'width': 2 },
-    },
-    {
-      selector: 'edge.dimmed',
-      style: { 'opacity': 0.1 },
-    },
-  ];
-}
-
-// Node colors for the light theme
-const TYPE_COLORS = {
-  Supplier:        '#b8440a',
-  PurchaseOrder:   '#8b7355',
-  Material:        '#6b6560',
-  Plant:           '#1a5276',
-  ProductionOrder: '#2e7d5e',
-  SalesOrder:      '#0d6270',
-  Delivery:        '#6d4c8e',
-  Customer:        '#2c5f2e',
-};
-
-const LEGEND_ITEMS = [
-  { label: 'Supplier',  color: '#b8440a' },
-  { label: 'Material',  color: '#6b6560' },
-  { label: 'Plant',     color: '#1a5276' },
-  { label: 'Order',     color: '#0d6270' },
-  { label: 'Customer',  color: '#2c5f2e' },
-];
-
-function enrichForLightTheme(nodes) {
-  return nodes.map(n => {
-    const type = n.data.type || 'Material';
-    const color = TYPE_COLORS[type] || '#6b6560';
-    const exposure = n.data.exposure || 0;
-    const size = Math.max(22, Math.min(54, 22 + (exposure / 53600000) * 32));
-    const raw = n.data.label || '';
-    const shortLabel = raw.split('\n')[0].split('(')[0].trim().substring(0, 16);
-    return { ...n, data: { ...n.data, color, size, shortLabel } };
-  });
-}
-
+/**
+ * Interactive blast radius. Node size is scaled against the largest exposure in
+ * *this* report rather than a fixed constant, so the visual stays meaningful
+ * whether the answer is $95M or $50K. The legend lists only the node types the
+ * traversal actually reached.
+ */
 export default function BlastRadiusGraph({ data, onNodeSelect, selectedNodeId }) {
   const containerRef = useRef(null);
   const cyRef = useRef(null);
-  const [nodeCount, setNodeCount] = useState(0);
-  const [edgeCount, setEdgeCount] = useState(0);
+  const [counts, setCounts] = useState({ nodes: 0, edges: 0 });
+
+  const elements = useMemo(() => {
+    const nodes = data?.blast_radius?.nodes ?? [];
+    const edges = data?.blast_radius?.edges ?? [];
+    const maxExposure = Math.max(1, ...nodes.map((n) => n.data.exposure || 0));
+
+    const sized = nodes.map((n) => {
+      const type = n.data.type || 'Material';
+      const exposure = n.data.exposure || 0;
+      // Square-root scaling: area tracks exposure, so a 10x figure does not
+      // produce a node 10x wider that swamps the canvas.
+      const ratio = Math.sqrt(exposure / maxExposure);
+      return {
+        data: {
+          ...n.data,
+          color: NODE_COLORS[type] || NODE_COLORS.default,
+          borderColor: SEVERITY_COLORS[n.data.severity] || SEVERITY_COLORS.none,
+          size: Math.round(22 + ratio * 34),
+          shortLabel: String(n.data.label || '').slice(0, 20),
+        },
+      };
+    });
+
+    const root = nodes.find((n) => n.data.type === 'Supplier')?.data.id;
+    return { sized, edges, root, types: [...new Set(nodes.map((n) => n.data.type))] };
+  }, [data]);
 
   useEffect(() => {
-    if (!data?.blast_radius || !containerRef.current) return;
-    if (cyRef.current) { cyRef.current.destroy(); }
-
-    const enrichedNodes = enrichForLightTheme(data.blast_radius.nodes);
-    const enrichedEdges = data.blast_radius.edges.map(e => ({
-      ...e, data: { ...e.data }
-    }));
+    if (!containerRef.current || elements.sized.length === 0) return;
+    if (cyRef.current) cyRef.current.destroy();
 
     const cy = cytoscape({
       container: containerRef.current,
-      elements: [...enrichedNodes, ...enrichedEdges],
+      elements: [...elements.sized, ...elements.edges],
       style: buildStylesheet(),
-      layout: {
-        name: 'cose-bilkent',
-        quality: 'default',
-        nodeDimensionsIncludeLabels: true,
-        fit: true,
-        padding: 40,
-        randomize: false,
-        nodeRepulsion: 6000,
-        idealEdgeLength: 110,
-        animate: 'end',
-        animationDuration: 600,
-      },
+      // No `layout` here on purpose. A layout passed to the constructor runs
+      // before the container is measured and before styles resolve, which
+      // collapses every node into a single cluster. It is run explicitly below,
+      // once the element is laid out by the browser.
       userZoomingEnabled: true,
       userPanningEnabled: true,
       boxSelectionEnabled: false,
-      minZoom: 0.4,
+      minZoom: 0.3,
       maxZoom: 3,
     });
 
     cyRef.current = cy;
-    setNodeCount(cy.nodes().length);
-    setEdgeCount(cy.edges().length);
+    setCounts({ nodes: cy.nodes().length, edges: cy.edges().length });
+
+    cy.one('layoutstop', () => cy.fit(undefined, 36));
+
+    const raf = requestAnimationFrame(() => {
+      cy.resize();
+      cy.layout(buildLayout(elements.root)).run();
+    });
+
+    // Keep the graph framed when the pane or window is resized.
+    const ro = new ResizeObserver(() => {
+      if (!cyRef.current) return;
+      cy.resize();
+      cy.fit(undefined, 36);
+    });
+    ro.observe(containerRef.current);
 
     cy.on('tap', 'node', (evt) => {
       const node = evt.target;
       cy.elements().removeClass('selected dimmed highlighted');
-      const neighborhood = node.neighborhood().add(node);
-      neighborhood.addClass('selected');
-      cy.elements().not(neighborhood).addClass('dimmed');
+      const hood = node.neighborhood().add(node);
+      hood.addClass('selected');
+      cy.elements().not(hood).addClass('dimmed');
       node.connectedEdges().addClass('highlighted');
-      onNodeSelect && onNodeSelect(node.data());
+      onNodeSelect?.(node.data());
     });
 
     cy.on('tap', (evt) => {
       if (evt.target === cy) {
         cy.elements().removeClass('selected dimmed highlighted');
-        onNodeSelect && onNodeSelect(null);
+        onNodeSelect?.(null);
       }
     });
 
-    return () => { cy.destroy(); cyRef.current = null; };
-  }, [data]);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      cy.destroy();
+      cyRef.current = null;
+    };
+  }, [elements, onNodeSelect]);
 
   useEffect(() => {
-    if (!cyRef.current || !selectedNodeId) return;
-    const node = cyRef.current.getElementById(selectedNodeId);
+    const cy = cyRef.current;
+    if (!cy || !selectedNodeId) return;
+    const node = cy.getElementById(selectedNodeId);
     if (!node.length) return;
-    cyRef.current.elements().removeClass('selected dimmed highlighted');
-    const neighborhood = node.neighborhood().add(node);
-    neighborhood.addClass('selected');
-    cyRef.current.elements().not(neighborhood).addClass('dimmed');
+    cy.elements().removeClass('selected dimmed highlighted');
+    const hood = node.neighborhood().add(node);
+    hood.addClass('selected');
+    cy.elements().not(hood).addClass('dimmed');
     node.connectedEdges().addClass('highlighted');
   }, [selectedNodeId]);
 
-  const handleZoomIn  = () => cyRef.current?.zoom({ level: cyRef.current.zoom() * 1.3, renderedPosition: { x: cyRef.current.width() / 2, y: cyRef.current.height() / 2 } });
-  const handleZoomOut = () => cyRef.current?.zoom({ level: cyRef.current.zoom() * 0.75, renderedPosition: { x: cyRef.current.width() / 2, y: cyRef.current.height() / 2 } });
-  const handleFit     = () => cyRef.current?.fit(undefined, 30);
+  const zoomBy = (factor) => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    cy.zoom({
+      level: cy.zoom() * factor,
+      renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 },
+    });
+  };
+
+  if (elements.sized.length === 0) {
+    return (
+      <div className="graph-section">
+        <div className="graph-card">
+          <div className="graph-empty">
+            No downstream nodes were reached — this delay does not propagate.
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="graph-section">
       <div className="graph-card">
         <div className="graph-card-head">
           <span className="graph-card-label">
-            {nodeCount} nodes · {edgeCount} edges — powered by Cytoscape.js
+            {counts.nodes} nodes · {counts.edges} edges — node size scales with exposure
           </span>
           <div className="graph-legend">
-            {LEGEND_ITEMS.map(l => (
-              <div key={l.label} className="gl-item">
-                <div className="gl-dot" style={{ background: l.color }} />
-                {l.label}
+            {elements.types.map((t) => (
+              <div key={t} className="gl-item">
+                <div
+                  className="gl-dot"
+                  style={{ background: NODE_COLORS[t] || NODE_COLORS.default }}
+                />
+                {t}
               </div>
             ))}
           </div>
@@ -201,9 +156,9 @@ export default function BlastRadiusGraph({ data, onNodeSelect, selectedNodeId })
         <div className="graph-canvas-wrap">
           <div ref={containerRef} className="graph-canvas" />
           <div className="graph-zoom-controls">
-            <button className="graph-zoom-btn" onClick={handleZoomIn}  title="Zoom in">+</button>
-            <button className="graph-zoom-btn" onClick={handleZoomOut} title="Zoom out">−</button>
-            <button className="graph-zoom-btn" onClick={handleFit}     title="Fit">⊡</button>
+            <button className="graph-zoom-btn" onClick={() => zoomBy(1.3)} title="Zoom in">+</button>
+            <button className="graph-zoom-btn" onClick={() => zoomBy(0.75)} title="Zoom out">−</button>
+            <button className="graph-zoom-btn" onClick={() => cyRef.current?.fit(undefined, 30)} title="Fit">⊡</button>
           </div>
         </div>
       </div>

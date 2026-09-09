@@ -1,0 +1,140 @@
+[
+  {
+    "MATNR": "MCU-32",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 850.0
+  },
+  {
+    "MATNR": "PWR-IC-7",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 400.0
+  },
+  {
+    "MATNR": "MCU-32",
+    "WERKS": "1020",
+    "LGORT": "0001",
+    "LABST": 800.0
+  },
+  {
+    "MATNR": "PWR-IC-7",
+    "WERKS": "1020",
+    "LGORT": "0001",
+    "LABST": 300.0
+  },
+  {
+    "MATNR": "CAP-TANT-22",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 5000.0
+  },
+  {
+    "MATNR": "TI-ALLOY-6",
+    "WERKS": "1030",
+    "LGORT": "0001",
+    "LABST": 4200.0
+  },
+  {
+    "MATNR": "SENS-ACC-3",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 3600.0
+  },
+  {
+    "MATNR": "FAST-M8",
+    "WERKS": "1030",
+    "LGORT": "0001",
+    "LABST": 12000.0
+  },
+  {
+    "MATNR": "SEAL-PLY-4",
+    "WERKS": "1030",
+    "LGORT": "0001",
+    "LABST": 6500.0
+  },
+  {
+    "MATNR": "SEAL-PLY-4",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 2200.0
+  },
+  {
+    "MATNR": "CONN-D38",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 1800.0
+  },
+  {
+    "MATNR": "WIRE-HARN-2",
+    "WERKS": "1030",
+    "LGORT": "0001",
+    "LABST": 900.0
+  },
+  {
+    "MATNR": "DISP-LCD-8",
+    "WERKS": "1020",
+    "LGORT": "0001",
+    "LABST": 700.0
+  },
+  {
+    "MATNR": "FCB-100",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 40.0
+  },
+  {
+    "MATNR": "PSU-220",
+    "WERKS": "1020",
+    "LGORT": "0001",
+    "LABST": 35.0
+  },
+  {
+    "MATNR": "SENSOR-ARR-4",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 25.0
+  },
+  {
+    "MATNR": "ACU-500",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 8.0
+  },
+  {
+    "MATNR": "CSM-300",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 6.0
+  },
+  {
+    "MATNR": "NAV-700",
+    "WERKS": "1020",
+    "LGORT": "0001",
+    "LABST": 5.0
+  },
+  {
+    "MATNR": "LDG-900",
+    "WERKS": "1030",
+    "LGORT": "0001",
+    "LABST": 4.0
+  },
+  {
+    "MATNR": "ECS-400",
+    "WERKS": "1030",
+    "LGORT": "0001",
+    "LABST": 7.0
+  },
+  {
+    "MATNR": "FMS-850",
+    "WERKS": "1010",
+    "LGORT": "0001",
+    "LABST": 3.0
+  },
+  {
+    "MATNR": "APU-600",
+    "WERKS": "1020",
+    "LGORT": "0001",
+    "LABST": 9.0
+  }
+]

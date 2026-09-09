@@ -1,0 +1,98 @@
+[
+  {
+    "MATNR": "MCU-32",
+    "LIFNR": "0000001000",
+    "NETPR": 120.0,
+    "APLFZ": 21,
+    "is_primary": true,
+    "unit_cost": 120.0
+  },
+  {
+    "MATNR": "MCU-32",
+    "LIFNR": "0000001001",
+    "NETPR": 122.52,
+    "APLFZ": 4,
+    "is_primary": false,
+    "unit_cost": 120.0
+  },
+  {
+    "MATNR": "PWR-IC-7",
+    "LIFNR": "0000001000",
+    "NETPR": 85.0,
+    "APLFZ": 21,
+    "is_primary": true,
+    "unit_cost": 85.0
+  },
+  {
+    "MATNR": "CAP-TANT-22",
+    "LIFNR": "0000001000",
+    "NETPR": 9.0,
+    "APLFZ": 14,
+    "is_primary": true,
+    "unit_cost": 9.0
+  },
+  {
+    "MATNR": "CAP-TANT-22",
+    "LIFNR": "0000001001",
+    "NETPR": 9.45,
+    "APLFZ": 6,
+    "is_primary": false,
+    "unit_cost": 9.0
+  },
+  {
+    "MATNR": "TI-ALLOY-6",
+    "LIFNR": "0000001002",
+    "NETPR": 2400.0,
+    "APLFZ": 30,
+    "is_primary": true,
+    "unit_cost": 2400.0
+  },
+  {
+    "MATNR": "SENS-ACC-3",
+    "LIFNR": "0000001002",
+    "NETPR": 340.0,
+    "APLFZ": 25,
+    "is_primary": true,
+    "unit_cost": 340.0
+  },
+  {
+    "MATNR": "DISP-LCD-8",
+    "LIFNR": "0000001001",
+    "NETPR": 520.0,
+    "APLFZ": 24,
+    "is_primary": true,
+    "unit_cost": 520.0
+  },
+  {
+    "MATNR": "FAST-M8",
+    "LIFNR": "0000001003",
+    "NETPR": 18.0,
+    "APLFZ": 10,
+    "is_primary": true,
+    "unit_cost": 18.0
+  },
+  {
+    "MATNR": "CONN-D38",
+    "LIFNR": "0000001003",
+    "NETPR": 145.0,
+    "APLFZ": 18,
+    "is_primary": true,
+    "unit_cost": 145.0
+  },
+  {
+    "MATNR": "SEAL-PLY-4",
+    "LIFNR": "0000001004",
+    "NETPR": 32.0,
+    "APLFZ": 12,
+    "is_primary": true,
+    "unit_cost": 32.0
+  },
+  {
+    "MATNR": "WIRE-HARN-2",
+    "LIFNR": "0000001004",
+    "NETPR": 610.0,
+    "APLFZ": 20,
+    "is_primary": true,
+    "unit_cost": 610.0
+  }
+]
