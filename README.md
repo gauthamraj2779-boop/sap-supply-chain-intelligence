@@ -161,6 +161,7 @@ and every engine unit-testable without a database.
 | `POST /api/impact` | Impact analysis for `{supplier_id, delay_days}` |
 | `POST /api/query` | Natural-language question → full report |
 | `GET  /api/query/examples` | Worked example questions |
+| `POST /api/agent` | Tool-calling agent: answer + trajectory. 503 with no LLM |
 | `POST /api/cypher` | Read-only Cypher (Neo4j backend only) |
 | `GET  /api/graph` | Full graph snapshot for visualisation |
 | `GET  /api/schema` | SAP table/field → business ontology mapping |
