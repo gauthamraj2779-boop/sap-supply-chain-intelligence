@@ -63,6 +63,22 @@ body {
   cursor: default;
 }
 .topbar-chip.mode { color: var(--teal); border-color: #0d627040; }
+.topbar-new-query-btn {
+  font-size: 11px;
+  font-family: var(--sans);
+  font-weight: 500;
+  color: #f2f0eb;
+  background: #2a2724;
+  border: 1px solid #3d3a36;
+  border-radius: 2px;
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.topbar-new-query-btn:hover {
+  background: #383531;
+  border-color: #55514b;
+}
 
 /* ── Narrative banner ── */
 .narrative-banner {

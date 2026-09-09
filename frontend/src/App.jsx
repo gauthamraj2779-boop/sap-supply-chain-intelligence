@@ -309,11 +309,22 @@ export default function App() {
       {/* ── Top bar (always visible after query) */}
       {hasReport && (
         <div className="top-bar">
-          <div className="topbar-brand">
+          <div
+            className="topbar-brand"
+            onClick={() => { setReport(null); setStatus('idle'); }}
+            style={{ cursor: 'pointer' }}
+            title="Return to home"
+          >
             <span className="topbar-brand-name">SAP Knowledge Graph</span>
             <span className="topbar-brand-sub">Supplier exposure console</span>
           </div>
           <div className="topbar-right">
+            <button
+              className="topbar-new-query-btn"
+              onClick={() => { setReport(null); setStatus('idle'); }}
+            >
+              ← New analysis
+            </button>
             <span className="topbar-chip">Synthetic dataset · v0.3</span>
             <span className="topbar-chip mode">{backendOnline ? 'Live API' : 'Demo mode'}</span>
           </div>
@@ -323,34 +334,35 @@ export default function App() {
       {/* ── Landing: no report yet ── */}
       {!hasReport && (
         <div className="landing-shell">
-          <QueryInput onSubmit={handleQuery} loading={loading} />
-
           {loading ? (
             <LoadingScreen step={loadStep} />
           ) : (
-            <div className="landing-hero">
-              <h1 className="landing-h1">
-                Trace a supplier delay to its dollar cost before it happens.
-              </h1>
-              <p className="landing-subtext">
-                Ask a question in plain language. The system walks the SAP purchasing, production, and delivery graph and returns a financial exposure report, cross-checked against the source data.
-              </p>
-              <div className="landing-pillars">
-                {[
-                  { title: 'Exposure in dollars, not node counts', desc: <>Every affected purchase order, production run, and delivery is priced from EKPO, VBAP, and contract penalty data.</> },
-                  { title: 'Avoidance before alerting', desc: <>The same traversal that <span>finds the risk</span> also searches for alternate suppliers, safety stock, and re-sequencing options.</> },
-                  { title: "Numbers the model can't touch", desc: <>Financial figures are <span>computed by the graph engine</span>. The language model writes the summary, never the math.</> },
-                ].map((p, i) => (
-                  <div key={i} className="landing-pillar">
-                    <span className="lp-num">0{i + 1}</span>
-                    <div className="lp-body">
-                      <div className="lp-title">{p.title}</div>
-                      <div className="lp-desc">{p.desc}</div>
+            <>
+              <QueryInput onSubmit={handleQuery} loading={loading} />
+              <div className="landing-hero">
+                <h1 className="landing-h1">
+                  Trace a supplier delay to its dollar cost before it happens.
+                </h1>
+                <p className="landing-subtext">
+                  Ask a question in plain language. The system walks the SAP purchasing, production, and delivery graph and returns a financial exposure report, cross-checked against the source data.
+                </p>
+                <div className="landing-pillars">
+                  {[
+                    { title: 'Exposure in dollars, not node counts', desc: <>Every affected purchase order, production run, and delivery is priced from EKPO, VBAP, and contract penalty data.</> },
+                    { title: 'Avoidance before alerting', desc: <>The same traversal that <span>finds the risk</span> also searches for alternate suppliers, safety stock, and re-sequencing options.</> },
+                    { title: "Numbers the model can't touch", desc: <>Financial figures are <span>computed by the graph engine</span>. The language model writes the summary, never the math.</> },
+                  ].map((p, i) => (
+                    <div key={i} className="landing-pillar">
+                      <span className="lp-num">0{i + 1}</span>
+                      <div className="lp-body">
+                        <div className="lp-title">{p.title}</div>
+                        <div className="lp-desc">{p.desc}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       )}
@@ -396,9 +408,6 @@ export default function App() {
               </div>
             </div>
           </div>
-
-          {/* Query bar (still accessible) */}
-          <QueryInput onSubmit={handleQuery} loading={loading} />
 
           {/* Console body: left rail + content */}
           <div className="console-body">
