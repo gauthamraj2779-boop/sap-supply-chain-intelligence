@@ -10,9 +10,9 @@ function formatMoney(val) {
 }
 
 // Reusable count-up span component for monetary figures
-function AnimatedAmount({ value, delay = 0 }) {
-  const { formatted } = useCountUp(value, { duration: 900, delay, formatFn: formatMoney });
-  return <span>{formatted}</span>;
+function AnimatedAmount({ value, delay = 0, isActive = true }) {
+  const display = useCountUp(value, { active: isActive, duration: 750, delay, formatFn: formatMoney });
+  return <span>{display}</span>;
 }
 
 const CATEGORIES = [
@@ -29,7 +29,7 @@ const CUSTOMERS = [
   { name: 'Raytheon',        orders: 1, exposure:   900000 },
 ];
 
-export default function FinancialDashboard({ data, avoidanceApplied }) {
+export default function FinancialDashboard({ data, avoidanceApplied, isActive = true }) {
   if (!data) return null;
   const { financial_summary: fs } = data;
   const total = fs.total_exposure;
@@ -40,10 +40,10 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
       <div className="section-head">
         <h2 className="section-title">Financial exposure</h2>
         <p className="section-sub">
-          <AnimatedAmount value={total} delay={100} /> across four categories, computed from PO, production, sales, and penalty data.
+          <AnimatedAmount value={total} delay={100} isActive={isActive} /> across four categories, computed from PO, production, sales, and penalty data.
           {avoidanceApplied && (
             <span style={{ color: 'var(--teal)', fontWeight: 500 }}>
-              {' '}Avoidance actions reduce residual to <AnimatedAmount value={fs.residual_exposure} />.
+              {' '}Avoidance actions reduce residual to <AnimatedAmount value={fs.residual_exposure} isActive={isActive} />.
             </span>
           )}
         </p>
@@ -72,7 +72,7 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
                 <span className="lr-cat-src">{cat.src}</span>
               </div>
               <span className="lr-amount">
-                <AnimatedAmount value={val} delay={i * 80 + 150} />
+                <AnimatedAmount value={val} delay={i * 80 + 150} isActive={isActive} />
               </span>
               <div className="lr-share-cell">
                 <span className="lr-share-num">{pct}%</span>
@@ -118,7 +118,7 @@ export default function FinancialDashboard({ data, avoidanceApplied }) {
                 <span className="lr-cust-name">{cust.name}</span>
                 <span className="lr-orders">{cust.orders}</span>
                 <span className="lr-amount">
-                  <AnimatedAmount value={cust.exposure} delay={i * 80 + 200} />
+                  <AnimatedAmount value={cust.exposure} delay={i * 80 + 200} isActive={isActive} />
                 </span>
                 <div className="lr-share-cell">
                   <span className="lr-share-num">{pct}%</span>

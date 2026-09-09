@@ -1,70 +1,79 @@
 import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAnimatedNumber } from '../utils/useAnimatedNumber';
+import { useAnimatedNumber, fmtUSD } from '../utils/useAnimatedNumber';
 
-function formatMoney(val) {
-  if (!val && val !== 0) return '—';
-  if (val === 0) return '$0';
-  if (val >= 1_000_000) return `$${(val / 1_000_000).toFixed(1)}M`;
-  if (val >= 1_000) return `$${(val / 1_000).toFixed(1)}K`;
-  return `$${val}`;
-}
+const ACTIONS = [
+  {
+    id: 'act-1',
+    cost: 12000,
+    mitigated: 31200000,
+    roi: 2600,
+    lead_time_days: 4,
+    sap_table: 'EINA/EINE',
+    title: 'Re-source from Nova Components (Germany)',
+    description: 'Re-source 1,200 units from Nova Components GmbH. Stock available, lead time 4 days vs 14-day delay.',
+  },
+  {
+    id: 'act-2',
+    cost: 4200,
+    mitigated: 18700000,
+    roi: 4452,
+    lead_time_days: 2,
+    sap_table: 'MARD',
+    title: 'Deploy Safety Stock from Plant 1020 (Singapore)',
+    description: 'Transfer 800 units from Singapore hub. Covers 6 additional days of production.',
+  },
+  {
+    id: 'act-3',
+    cost: 0,
+    mitigated: 3700000,
+    roi: null,
+    lead_time_days: 0,
+    sap_table: 'AFKO',
+    title: 'Re-sequence Production Order #9003 → #9001',
+    description: 'Delay non-critical Order #9003 by 3 days. Prioritize Order #9001 (Boeing). No contractual penalty on #9003.',
+  },
+];
 
-export default function AvoidancePanel({ plan, onExecute }) {
-  // Set in useState tracks executed action IDs
-  const [executedIds, setExecutedIds] = useState(() => new Set());
+const RESIDUAL_MILESTONES = [53600000, 22400000, 3700000, 2100000];
+const TOTAL_EXPOSURE = 53600000;
 
-  // Baseline exposure if no actions are executed
-  const baselineExposure = useMemo(() => {
-    if (!plan) return 0;
-    return (plan.total_risk_mitigated || 0) + (plan.residual_exposure || 0);
-  }, [plan]);
+export default function AvoidancePanel({ executed = new Set(), setExecuted }) {
+  const [localExecuted, setLocalExecuted] = useState(() => new Set());
+  const [flashingId, setFlashingId] = useState(null);
 
-  // Totals calculated dynamically via useMemo based on executed Set
-  const { totalCost, totalMitigated, residualExposure, overallRoi, executedCount } = useMemo(() => {
-    if (!plan?.actions) {
-      return { totalCost: 0, totalMitigated: 0, residualExposure: 0, overallRoi: 0, executedCount: 0 };
-    }
+  // Support executed state passed from parent, or local fallback
+  const activeExecuted = setExecuted ? executed : localExecuted;
+  const updateExecuted = setExecuted || setLocalExecuted;
 
-    const executedActions = plan.actions.filter(a => executedIds.has(a.id));
-    const cost = executedActions.reduce((sum, a) => sum + (a.cost || 0), 0);
-    const mitigated = executedActions.reduce((sum, a) => sum + (a.risk_mitigated || 0), 0);
-    const residual = Math.max(0, baselineExposure - mitigated);
-    const roi = cost > 0 ? Math.round(mitigated / cost) : (plan.overall_roi || 0);
+  const totals = useMemo(() => {
+    const done = ACTIONS.filter((a) => activeExecuted.has(a.id));
+    const totalCost = done.reduce((s, a) => s + a.cost, 0);
+    const totalMitigated = done.reduce((s, a) => s + a.mitigated, 0);
+    const residual = RESIDUAL_MILESTONES[done.length] ?? 2100000;
+    const roi = totalCost > 0 ? Math.round(totalMitigated / totalCost) : 3309;
+    return { totalCost, totalMitigated, residual, count: done.length, roi };
+  }, [activeExecuted]);
 
-    return {
-      totalCost: cost,
-      totalMitigated: mitigated,
-      residualExposure: residual,
-      overallRoi: roi,
-      executedCount: executedActions.length,
-    };
-  }, [plan, executedIds, baselineExposure]);
+  const costDisplay = useAnimatedNumber(totals.totalCost, fmtUSD);
+  const mitigatedDisplay = useAnimatedNumber(totals.totalMitigated, fmtUSD);
+  const residualDisplay = useAnimatedNumber(totals.residual, fmtUSD);
+  const roiDisplay = useAnimatedNumber(totals.roi, (v) => `${Math.round(v).toLocaleString()}×`);
 
-  // useAnimatedNumber animates smoothly between two arbitrary values as clicks occur
-  const { formatted: animCost } = useAnimatedNumber(totalCost, { formatFn: formatMoney });
-  const { formatted: animMitigated } = useAnimatedNumber(totalMitigated, { formatFn: formatMoney });
-  const { formatted: animResidual } = useAnimatedNumber(residualExposure, { formatFn: formatMoney });
-  const { formatted: animRoi } = useAnimatedNumber(overallRoi, {
-    formatFn: (v) => (v > 0 ? `${v.toLocaleString()}×` : '—'),
-  });
+  const residualPct = Math.max(4, Math.min(100, (totals.residual / TOTAL_EXPOSURE) * 100));
+  const resolved = residualPct <= 15;
 
-  if (!plan) return null;
-
-  const toggleExecuted = (id) => {
-    setExecutedIds(prev => {
+  function toggleExecuted(id) {
+    updateExecuted((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
       } else {
         next.add(id);
+        setFlashingId(id);
       }
       return next;
     });
-    onExecute && onExecute(id);
-  };
-
-  const allExecuted = plan.actions?.length > 0 && executedCount === plan.actions.length;
+  }
 
   return (
     <div className="avoidance-section fade-in">
@@ -75,47 +84,59 @@ export default function AvoidancePanel({ plan, onExecute }) {
         </p>
       </div>
 
-      {/* Live animated summary stats */}
+      {/* Summary stats with animated numbers */}
       <div className="avoidance-summary-row">
         <div className="av-sum-stat">
-          <span className="avs-num mid">{animCost}</span>
+          <span className="avs-num mid">{costDisplay}</span>
           <span className="avs-label">Total cost committed</span>
         </div>
         <div className="avs-divider" />
         <div className="av-sum-stat">
-          <span className="avs-num teal">{animMitigated}</span>
+          <span className="avs-num teal">{mitigatedDisplay}</span>
           <span className="avs-label">Risk mitigated</span>
         </div>
         <div className="avs-divider" />
         <div className="av-sum-stat">
-          <span className="avs-num mid">{animRoi}</span>
+          <span className="avs-num mid">{roiDisplay}</span>
           <span className="avs-label">Realized return</span>
         </div>
         <div className="avs-divider" />
         <div className="av-sum-stat">
-          <span className="avs-num" style={{ color: residualExposure > 2100000 ? 'var(--risk)' : 'var(--teal)' }}>
-            {animResidual}
+          <span className="avs-num" style={{ color: resolved ? 'var(--teal)' : 'var(--risk)' }}>
+            {residualDisplay}
           </span>
           <span className="avs-label">Residual exposure</span>
         </div>
       </div>
 
-      {/* Numbered action list */}
+      {/* Residual progress bar with color swap */}
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: 'var(--ink-4)', fontFamily: 'var(--mono)', marginBottom: 6 }}>
+          <span>RESIDUAL EXPOSURE PROGRESS</span>
+          <span>{Math.round(residualPct)}% REMAINING</span>
+        </div>
+        <div className="residual-bar-track">
+          <div
+            className={`residual-bar-fill ${resolved ? 'mitigate' : 'risk'}`}
+            style={{
+              width: `${residualPct}%`,
+              transition: 'width .7s cubic-bezier(.4,0,.2,1), background .4s ease',
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Action list with execution flash and toggle */}
       <div className="avoidance-list">
-        {plan.actions.map((action, i) => {
-          const isDone = executedIds.has(action.id);
+        {ACTIONS.map((action, i) => {
+          const isDone = activeExecuted.has(action.id);
+          const isFlashing = flashingId === action.id;
+
           return (
-            <motion.div
+            <div
               key={action.id}
-              className={`action-item ${isDone ? 'executed' : ''}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08, duration: 0.3 }}
-              style={{
-                borderColor: isDone ? 'var(--teal)' : 'var(--rule)',
-                backgroundColor: isDone ? 'rgba(13, 98, 112, 0.03)' : '#fff',
-                transition: 'border-color 0.3s, background-color 0.3s',
-              }}
+              className={`action-item ${isDone ? 'executed' : ''} ${isFlashing ? 'just-executed' : ''}`}
+              onAnimationEnd={() => setFlashingId(null)}
             >
               <span className="ai-num" style={{ color: isDone ? 'var(--teal)' : 'var(--ink-4)' }}>
                 {i + 1}.
@@ -134,16 +155,16 @@ export default function AvoidancePanel({ plan, onExecute }) {
 
                 <div className="ai-metrics">
                   <div className="aim-group">
-                    <span className="aim-val neutral">{formatMoney(action.cost)}</span>
+                    <span className="aim-val neutral">{fmtUSD(action.cost)}</span>
                     <span className="aim-label">Cost</span>
                   </div>
                   <div className="aim-group">
-                    <span className="aim-val teal">{formatMoney(action.risk_mitigated)}</span>
+                    <span className="aim-val teal">{fmtUSD(action.mitigated)}</span>
                     <span className="aim-label">Risk mitigated</span>
                   </div>
                   {action.roi !== null && (
                     <div className="aim-group">
-                      <span className="aim-val mid">{action.roi?.toLocaleString()}×</span>
+                      <span className="aim-val mid">{action.roi.toLocaleString()}×</span>
                       <span className="aim-label">Return</span>
                     </div>
                   )}
@@ -161,45 +182,39 @@ export default function AvoidancePanel({ plan, onExecute }) {
                 </div>
 
                 <div className="ai-actions">
-                  <AnimatePresence mode="wait">
-                    {isDone ? (
-                      <motion.button
-                        key="done-btn"
-                        className="execute-btn done"
-                        onClick={() => toggleExecuted(action.id)}
-                        whileTap={{ scale: 0.97 }}
-                        title="Click to revert action"
-                      >
-                        ✓ Marked as executed (Undo)
-                      </motion.button>
-                    ) : (
-                      <motion.button
-                        key="execute-btn"
-                        className="execute-btn"
-                        onClick={() => toggleExecuted(action.id)}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        Mark as executed
-                      </motion.button>
-                    )}
-                  </AnimatePresence>
+                  {isDone ? (
+                    <button
+                      className="execute-btn done"
+                      onClick={() => toggleExecuted(action.id)}
+                      title="Click to revert action"
+                    >
+                      ✓ Executed (Undo)
+                    </button>
+                  ) : (
+                    <button
+                      className="execute-btn"
+                      onClick={() => toggleExecuted(action.id)}
+                    >
+                      Mark as executed
+                    </button>
+                  )}
                   <span style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--mono)' }}>
                     {action.sap_table}
                   </span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>
 
-      {/* Residual milestone tracker */}
+      {/* Residual footer */}
       <div className="avoidance-residual" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <span className="ar-label">
-            {allExecuted
-              ? 'All avoidance actions executed · Maximum risk avoided'
-              : `${executedCount} of ${plan.actions?.length || 3} actions executed`}
+            {resolved
+              ? 'All primary actions executed · 96% exposure avoided'
+              : `${totals.count} of ${ACTIONS.length} actions executed`}
           </span>
           <div style={{ fontSize: 11.5, color: 'var(--ink-3)', marginTop: 2 }}>
             Residual financial exposure remaining in supply chain
@@ -211,10 +226,10 @@ export default function AvoidancePanel({ plan, onExecute }) {
             fontFamily: 'var(--mono)',
             fontSize: 22,
             fontWeight: 600,
-            color: residualExposure > 2100000 ? 'var(--risk)' : 'var(--teal)',
+            color: resolved ? 'var(--teal)' : 'var(--risk)',
           }}
         >
-          {animResidual}
+          {residualDisplay}
         </span>
       </div>
     </div>

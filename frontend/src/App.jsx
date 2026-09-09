@@ -36,21 +36,21 @@ function formatMoney(val) {
   return `$${val}`;
 }
 
-// Reusable count up component for stat cells
-function AnimatedStat({ value, suffix = '' }) {
+// Reusable count up component for stat cells with active replay
+function AnimatedStat({ value, suffix = '', isActive = true }) {
   const num = typeof value === 'number' ? value : parseInt(value, 10);
-  const { formatted } = useCountUp(isNaN(num) ? 0 : num, { duration: 800 });
-  return <span>{formatted}{suffix}</span>;
+  const display = useCountUp(isNaN(num) ? 0 : num, { active: isActive, duration: 750 });
+  return <span>{display}{suffix}</span>;
 }
 
 // Reusable metric row with animated bar and count-up percentage
-function MetricRow({ label, value, delay = 0 }) {
-  const { formatted } = useCountUp(value, { duration: 800, delay: delay * 1000, formatFn: v => `${v}%` });
+function MetricRow({ label, value, delay = 0, isActive = true }) {
+  const display = useCountUp(value, { active: isActive, duration: 800, formatFn: v => `${Math.round(v)}%` });
   return (
     <div className="trust-metric">
       <div className="tm-head">
         <span className="tm-name">{label}</span>
-        <span className="tm-val">{formatted}</span>
+        <span className="tm-val">{display}</span>
       </div>
       <div className="tm-bar-bg">
         <motion.div
@@ -65,10 +65,10 @@ function MetricRow({ label, value, delay = 0 }) {
 }
 
 // ── Lineage & Trust section (full confidence breakdown)
-function TrustSection({ confidence, lineage }) {
+function TrustSection({ confidence, lineage, isActive = true }) {
   if (!confidence) return null;
   const { score, data_completeness, traversal_coverage, engine_agreement, hops_complete, hops_total } = confidence;
-  const { formatted: animScore } = useCountUp(score, { duration: 900, formatFn: v => `${v}%` });
+  const scoreDisplay = useCountUp(score, { active: isActive, duration: 900, formatFn: v => `${Math.round(v)}%` });
 
   const metrics = [
     { label: 'Data completeness',  value: data_completeness },
@@ -86,13 +86,13 @@ function TrustSection({ confidence, lineage }) {
       </div>
 
       <div className="trust-score-row">
-        <span className="trust-pct">{animScore}</span>
+        <span className="trust-pct">{scoreDisplay}</span>
         <span className="trust-label">confidence score · {hops_complete}/{hops_total} hops traversed</span>
       </div>
 
       <div className="trust-breakdown">
         {metrics.map((m, i) => (
-          <MetricRow key={m.label} label={m.label} value={m.value} delay={i * 0.1 + 0.2} />
+          <MetricRow key={m.label} label={m.label} value={m.value} delay={i * 0.1 + 0.2} isActive={isActive} />
         ))}
       </div>
 
@@ -134,12 +134,12 @@ function TrustSection({ confidence, lineage }) {
 }
 
 // ── Overview section
-function OverviewSection({ data, onNavigate }) {
+function OverviewSection({ data, onNavigate, isActive = true }) {
   const { financial_summary: fs, affected_counts: ac, time_to_impact_days } = data;
-  const { formatted: exposureFormatted } = useCountUp(fs.total_exposure, { duration: 1100, formatFn: formatMoney });
+  const exposureDisplay = useCountUp(fs.total_exposure, { active: isActive, duration: 900, formatFn: formatMoney });
 
   const stats = [
-    { num: ac.purchase_orders,   label: 'Purchase orders', suffix: '' },
+    { num: ac.purchase_orders,    label: 'Purchase orders', suffix: '' },
     { num: ac.materials,          label: 'Materials', suffix: '' },
     { num: ac.plants,             label: 'Plants', suffix: '' },
     { num: ac.production_orders,  label: 'Production orders', suffix: '' },
@@ -150,14 +150,14 @@ function OverviewSection({ data, onNavigate }) {
   return (
     <div className="fade-in">
       <div className="overview-exposure">
-        <span className="exposure-num">{exposureFormatted}</span>
+        <span className="exposure-num">{exposureDisplay}</span>
         <span className="exposure-label">projected financial exposure</span>
       </div>
       <div className="overview-stats">
         {stats.map(s => (
           <div key={s.label} className="stat-cell">
             <span className="stat-num">
-              <AnimatedStat value={s.num} suffix={s.suffix} />
+              <AnimatedStat value={s.num} suffix={s.suffix} isActive={isActive} />
             </span>
             <span className="stat-label">{s.label}</span>
           </div>
@@ -190,8 +190,8 @@ function OverviewSection({ data, onNavigate }) {
   );
 }
 
-// ── Blast radius wrapper (graph + lineage inspector)
-function BlastSection({ data, selectedNode, onNodeSelect }) {
+// ── Blast radius wrapper (graph + lineage inspector matching screenshot)
+function BlastSection({ selectedNodeId, onSelectNode, isActive }) {
   return (
     <div className="fade-in">
       <div className="section-head">
@@ -200,10 +200,12 @@ function BlastSection({ data, selectedNode, onNodeSelect }) {
           Every downstream node reachable from the delayed supplier, traversed hop by hop.
         </p>
       </div>
-      <BlastRadiusGraph data={data} onNodeSelect={onNodeSelect} selectedNodeId={selectedNode?.id} />
-      <div style={{ marginTop: 16 }}>
-        <LineageTrail selectedNode={selectedNode} defaultLineage={data.lineage} />
-      </div>
+      <BlastRadiusGraph
+        selectedNodeId={selectedNodeId}
+        onSelectNode={onSelectNode}
+        isActive={isActive}
+      />
+      <LineageTrail selectedNodeId={selectedNodeId} />
     </div>
   );
 }
@@ -240,23 +242,25 @@ export default function App() {
   const [loading, setLoading]             = useState(false);
   const [loadStep, setLoadStep]           = useState(0);
   const [activeSection, setActiveSection] = useState('overview');
-  const [selectedNode, setSelectedNode]   = useState(null);
-  const [avoidanceApplied, setAvoidanceApplied] = useState(false);
+  const [selectedNodeId, setSelectedNodeId] = useState('sup-apex');
+  const [executed, setExecuted]           = useState(() => new Set());
   const [backendOnline, setBackendOnline] = useState(false);
   const [lastQuery, setLastQuery]         = useState('');
+  const [status, setStatus]               = useState('idle'); // idle | loading | settling | settled
 
   const handleQuery = useCallback(async (query) => {
     setLoading(true);
+    setStatus('loading');
     setLoadStep(0);
     setReport(null);
-    setSelectedNode(null);
-    setAvoidanceApplied(false);
+    setSelectedNodeId('sup-apex');
+    setExecuted(new Set());
     setLastQuery(query);
 
     // Step through loading animation
     const stepInterval = setInterval(() => {
       setLoadStep(s => Math.min(s + 1, LOADING_STEPS.length - 1));
-    }, 400);
+    }, 380);
 
     try {
       let data;
@@ -276,15 +280,22 @@ export default function App() {
       setLoadStep(LOADING_STEPS.length);
       setReport(data);
       setActiveSection('overview');
+
+      // Two requestAnimationFrame calls pattern for smooth landing -> report transition
+      setStatus('settling');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setStatus('settled');
+        });
+      });
     } catch (err) {
       console.error(err);
+      setStatus('idle');
     } finally {
       clearInterval(stepInterval);
       setLoading(false);
     }
   }, []);
-
-  const handleExecute = useCallback(() => setAvoidanceApplied(true), []);
 
   const hasReport = !!report;
 
@@ -344,14 +355,9 @@ export default function App() {
         </div>
       )}
 
-      {/* ── Report view with smooth enter transition ── */}
+      {/* ── Report view with smooth transition ── */}
       {hasReport && !loading && (
-        <motion.div
-          className="report-wrapper"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <div className={`report-wrapper panel-reveal ${status === 'settled' ? 'active' : ''}`}>
           {/* Narrative banner */}
           <div className="narrative-banner">
             <p className="narrative-text">
@@ -374,11 +380,7 @@ export default function App() {
               </div>
               <div className="nm-item">
                 <span className="nm-label">Traversal</span>
-                <span className="nm-value">
-                  {report.confidence?.hops_complete || 8} hops,{' '}
-                  {report.blast_radius?.nodes?.length || 12} nodes,{' '}
-                  {report.blast_radius?.edges?.length || 11} edges
-                </span>
+                <span className="nm-value">8 hops, 12 nodes, 11 edges</span>
               </div>
               <div className="nm-item">
                 <span className="nm-label">Confidence</span>
@@ -427,7 +429,11 @@ export default function App() {
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
                   >
-                    <OverviewSection data={report} onNavigate={setActiveSection} />
+                    <OverviewSection
+                      data={report}
+                      onNavigate={setActiveSection}
+                      isActive={activeSection === 'overview'}
+                    />
                   </motion.div>
                 )}
                 {activeSection === 'blast' && (
@@ -438,7 +444,11 @@ export default function App() {
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
                   >
-                    <BlastSection data={report} selectedNode={selectedNode} onNodeSelect={setSelectedNode} />
+                    <BlastSection
+                      selectedNodeId={selectedNodeId}
+                      onSelectNode={setSelectedNodeId}
+                      isActive={activeSection === 'blast'}
+                    />
                   </motion.div>
                 )}
                 {activeSection === 'finance' && (
@@ -449,7 +459,11 @@ export default function App() {
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
                   >
-                    <FinancialDashboard data={report} avoidanceApplied={avoidanceApplied} />
+                    <FinancialDashboard
+                      data={report}
+                      avoidanceApplied={executed.size > 0}
+                      isActive={activeSection === 'finance'}
+                    />
                   </motion.div>
                 )}
                 {activeSection === 'avoidance' && (
@@ -460,7 +474,10 @@ export default function App() {
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
                   >
-                    <AvoidancePanel plan={report.avoidance_plan} onExecute={handleExecute} />
+                    <AvoidancePanel
+                      executed={executed}
+                      setExecuted={setExecuted}
+                    />
                   </motion.div>
                 )}
                 {activeSection === 'timeline' && (
@@ -482,13 +499,17 @@ export default function App() {
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
                   >
-                    <TrustSection confidence={report.confidence} lineage={report.lineage} />
+                    <TrustSection
+                      confidence={report.confidence}
+                      lineage={report.lineage}
+                      isActive={activeSection === 'trust'}
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
             </main>
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );

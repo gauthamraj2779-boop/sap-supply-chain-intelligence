@@ -1,11 +1,32 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // Easing functions
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-const easeOutQuad = (t) => 1 - (1 - t) * (1 - t);
+
+function formatNumber(value, decimals = 0) {
+  const fixed = Number(value).toFixed(decimals);
+  const [int, dec] = fixed.split('.');
+  const withCommas = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return dec ? `${withCommas}.${dec}` : withCommas;
+}
+
+function formatDisplay(value, target = {}) {
+  const prefix = target.prefix || '';
+  const suffix = target.suffix || '';
+  const decimals = target.decimals || 0;
+  return `${prefix}${formatNumber(value, decimals)}${suffix}`;
+}
+
+export function fmtUSD(val) {
+  if (!val && val !== 0) return '—';
+  if (val === 0) return '$0';
+  if (val >= 1_000_000) return `$${(val / 1_000_000).toFixed(1)}M`;
+  if (val >= 1_000) return `$${(val / 1_000).toFixed(1)}K`;
+  return `$${val}`;
+}
 
 /**
- * Hook to detect if user has prefers-reduced-motion enabled
+ * usePrefersReducedMotion
  */
 export function usePrefersReducedMotion() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
@@ -27,8 +48,6 @@ export function usePrefersReducedMotion() {
 /**
  * useDoubleRaf
  * Two requestAnimationFrame calls pattern for triggering CSS transitions reliably from React.
- * State changes in the same tick don't transition because the browser doesn't calculate the initial layout.
- * The double rAF ensures the browser paints the initial un-transitioned frame before applying the active class.
  */
 export function useDoubleRaf(initialState = false) {
   const [ready, setReady] = useState(initialState);
@@ -54,125 +73,111 @@ export function useDoubleRaf(initialState = false) {
 
 /**
  * useCountUp
- * Always animates from 0 to targetValue on mount or when targetValue changes.
- * Used for FinancialDashboard, OverviewSection, ConfidenceBadge.
- *
- * @param {number} targetValue - Target number to count up to
- * @param {object} options - Options: duration (ms), formatFn, delay (ms), easing
+ * Animates from 0 up to target value. Re-runs whenever target or active changes.
+ * Supports target as { value, prefix, suffix, decimals } or a raw number.
  */
-export function useCountUp(targetValue, { duration = 1000, delay = 0, formatFn, easing = easeOutCubic } = {}) {
+export function useCountUp(target, options = {}) {
+  const active = options.active !== undefined ? options.active : true;
+  const duration = options.duration || 700;
+  const formatFn = options.formatFn;
   const prefersReduced = usePrefersReducedMotion();
-  const target = typeof targetValue === 'number' ? targetValue : 0;
-  const [current, setCurrent] = useState(prefersReduced ? target : 0);
+
+  // Normalize target
+  const targetObj = typeof target === 'number'
+    ? { value: target, prefix: '', suffix: '', decimals: 0 }
+    : (target || { value: 0 });
+
+  const format = (v) => {
+    if (formatFn) return formatFn(v);
+    return formatDisplay(v, targetObj);
+  };
+
+  const [display, setDisplay] = useState(() => format(prefersReduced ? targetObj.value : 0));
+  const frameRef = useRef();
 
   useEffect(() => {
+    if (!active) return;
+
     if (prefersReduced) {
-      setCurrent(target);
+      setDisplay(format(targetObj.value));
       return;
     }
 
-    let animationFrameId;
-    let timeoutId;
-    let startTime = null;
+    const start = performance.now();
+    const from = 0;
+    const to = targetObj.value;
 
-    const startAnimation = () => {
-      const step = (timestamp) => {
-        if (!startTime) startTime = timestamp;
-        const elapsed = timestamp - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easedProgress = easing(progress);
-        const nextValue = Math.round(0 + (target - 0) * easedProgress);
-
-        setCurrent(nextValue);
-
-        if (progress < 1) {
-          animationFrameId = requestAnimationFrame(step);
-        } else {
-          setCurrent(target);
-        }
-      };
-
-      animationFrameId = requestAnimationFrame(step);
-    };
-
-    if (delay > 0) {
-      timeoutId = setTimeout(startAnimation, delay);
-    } else {
-      startAnimation();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = easeOutCubic(progress);
+      const current = from + (to - from) * eased;
+      setDisplay(format(current));
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(tick);
+      } else {
+        setDisplay(format(to));
+      }
     }
 
+    frameRef.current = requestAnimationFrame(tick);
     return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
-  }, [target, duration, delay, prefersReduced, easing]);
+  }, [active, targetObj.value, duration, prefersReduced]);
 
-  const formatted = useMemo(() => {
-    if (formatFn) return formatFn(current);
-    return current.toLocaleString();
-  }, [current, formatFn]);
-
-  return { value: current, formatted };
+  return display;
 }
 
 /**
  * useAnimatedNumber
- * Animates between two arbitrary values (starts from wherever the number currently sits).
- * Crucial for AvoidancePanel where each click moves totals up/down from their current state.
- *
- * @param {number} targetValue - Target number
- * @param {object} options - Options: duration (ms), formatFn, easing
+ * Animates between two arbitrary values (from previous value to new target).
+ * Supports (targetValue, formatFn, duration) and (targetValue, { formatFn, duration }).
  */
-export function useAnimatedNumber(targetValue, { duration = 500, formatFn, easing = easeOutQuad } = {}) {
-  const prefersReduced = usePrefersReducedMotion();
-  const target = typeof targetValue === 'number' ? targetValue : 0;
-  const [current, setCurrent] = useState(target);
+export function useAnimatedNumber(targetValue, formatFnOrOptions, durationOption = 650) {
+  let formatFn = fmtUSD;
+  let duration = durationOption;
 
-  const startValueRef = useRef(target);
-  const currentValRef = useRef(target);
+  if (typeof formatFnOrOptions === 'function') {
+    formatFn = formatFnOrOptions;
+  } else if (typeof formatFnOrOptions === 'object' && formatFnOrOptions !== null) {
+    if (formatFnOrOptions.formatFn) formatFn = formatFnOrOptions.formatFn;
+    if (formatFnOrOptions.duration) duration = formatFnOrOptions.duration;
+  }
+
+  const prefersReduced = usePrefersReducedMotion();
+  const [display, setDisplay] = useState(() => formatFn(targetValue));
+  const prevValue = useRef(targetValue);
+  const frameRef = useRef();
 
   useEffect(() => {
     if (prefersReduced) {
-      currentValRef.current = target;
-      setCurrent(target);
+      setDisplay(formatFn(targetValue));
+      prevValue.current = targetValue;
       return;
     }
 
-    const startVal = currentValRef.current;
-    startValueRef.current = startVal;
+    const from = prevValue.current;
+    const to = targetValue;
+    const start = performance.now();
 
-    let animationFrameId;
-    let startTime = null;
-
-    const step = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = easing(progress);
-
-      const nextValue = Math.round(startVal + (target - startVal) * eased);
-      currentValRef.current = nextValue;
-      setCurrent(nextValue);
-
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = easeOutCubic(progress);
+      const current = from + (to - from) * eased;
+      setDisplay(formatFn(current));
       if (progress < 1) {
-        animationFrameId = requestAnimationFrame(step);
+        frameRef.current = requestAnimationFrame(tick);
       } else {
-        currentValRef.current = target;
-        setCurrent(target);
+        prevValue.current = to;
+        setDisplay(formatFn(to));
       }
-    };
+    }
 
-    animationFrameId = requestAnimationFrame(step);
-
+    frameRef.current = requestAnimationFrame(tick);
     return () => {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
-  }, [target, duration, prefersReduced, easing]);
+  }, [targetValue, duration, prefersReduced]);
 
-  const formatted = useMemo(() => {
-    if (formatFn) return formatFn(current);
-    return current.toLocaleString();
-  }, [current, formatFn]);
-
-  return { value: current, formatted };
+  return display;
 }

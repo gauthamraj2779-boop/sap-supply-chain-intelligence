@@ -287,28 +287,149 @@ body {
 }
 .graph-zoom-btn:hover { border-color: var(--ink-3); color: var(--ink); }
 
-/* Lineage inspector (below graph) */
-.lineage-inspector {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
-  border: 1px solid var(--rule); border-radius: 2px; overflow: hidden;
-  background: var(--rule);
+/* Blast Radius Bottom Inspection Cards (matching reference mockup) */
+.blast-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 16px;
+  align-items: flex-start;
+  margin-top: 16px;
 }
-.li-left, .li-right { background: var(--paper); padding: 16px; }
-.li-title { font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; }
-.li-node-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
 
-.li-trail { display: flex; flex-direction: column; gap: 8px; }
-.li-trail-row {
-  display: grid; grid-template-columns: 48px 60px 1fr;
-  gap: 8px; align-items: baseline;
-  font-size: 12px;
+.blast-lineage-card {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 16px 18px;
 }
-.ltr-table { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--ink-4); text-transform: uppercase; }
-.ltr-field { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
-.ltr-value { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); }
-.ltr-desc  { font-size: 11px; color: var(--ink-4); grid-column: 2 / -1; margin-top: -4px; }
 
-.li-empty { font-size: 13px; color: var(--ink-4); font-style: italic; line-height: 1.5; }
+.blast-lineage-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.blast-lineage-header span.prefix {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+.blast-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.blast-row {
+  display: flex;
+  flex-direction: column;
+  padding: 9px 0;
+  border-top: 1px solid var(--rule-light);
+  gap: 3px;
+}
+.blast-row:first-child {
+  border-top: none;
+  padding-top: 2px;
+}
+
+.blast-row-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.blast-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-3);
+  background: var(--paper-2);
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.02em;
+}
+
+.blast-val {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.blast-desc {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  padding-left: 2px;
+}
+
+/* Callout info card on the right */
+.blast-callout-card {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 18px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.blast-callout-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b8440a;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.blast-callout-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.blast-callout-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.blast-callout-text {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.55;
+}
+
+/* Residual progress bar */
+.residual-bar-track {
+  width: 100%;
+  height: 5px;
+  background: var(--paper-3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.residual-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+.residual-bar-fill.risk {
+  background: var(--risk);
+}
+.residual-bar-fill.mitigate {
+  background: var(--teal);
+}
+
+/* Just executed row flash animation */
+@keyframes just-executed-flash {
+  0%   { background-color: rgba(13, 98, 112, 0.22); }
+  100% { background-color: rgba(13, 98, 112, 0.03); }
+}
+.action-item.just-executed {
+  animation: just-executed-flash 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 /* ═══════════════════════════════════════════
    FINANCIAL EXPOSURE SECTION
