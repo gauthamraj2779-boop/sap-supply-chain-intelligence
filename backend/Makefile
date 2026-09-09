@@ -2,13 +2,16 @@ VENV := venv
 PY   := $(VENV)/bin/python
 PIP  := $(VENV)/bin/pip
 
-.PHONY: help setup data ontology load test run clean check
+.PHONY: help setup data catalog metadata discover ontology load test run clean check
 
 help:
 	@echo "SAP Knowledge Graph - backend"
 	@echo ""
 	@echo "  make setup     create venv (Python 3.12) and install dependencies"
 	@echo "  make data      generate the SAP-faithful synthetic dataset"
+	@echo "  make catalog   emit the DDIC-style field catalog"
+	@echo "  make metadata  refresh the SAP OData \$$metadata cache (needs SAP_API_KEY)"
+	@echo "  make discover  profile the data and discover entities + relationships"
 	@echo "  make ontology  emit the OWL ontology + SHACL shapes"
 	@echo "  make test      run the full test suite"
 	@echo "  make run       start the API on http://localhost:8000 (docs at /docs)"
@@ -26,6 +29,19 @@ setup:
 
 data:
 	$(PY) -m data.synthetic.generate_sap_data
+
+catalog:
+	$(PY) -m data.synthetic.ddic_catalog
+
+# Reads the cache only. Add SAP_API_KEY to .env and run `make metadata` to fill it.
+metadata:
+	$(PY) -m app.ingest.sapapi --refresh
+
+# Uses the LLM to name what it finds; falls back to the deterministic path with
+# no credentials at all. Either way it writes artifacts/discovery.json.
+discover: catalog
+	$(PY) -m app.discovery.profile
+	$(PY) -m app.discovery.discover
 
 ontology:
 	$(PY) -m app.graph.ontology

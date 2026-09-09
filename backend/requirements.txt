@@ -12,6 +12,11 @@ neo4j==5.27.0
 rdflib==7.1.1
 pyshacl==0.29.0
 
+# --- Metadata ingest ---
+# Optional: app/ingest/sapapi.py prefers lxml for EDMX and falls back to the
+# stdlib parser, so the discovery stage works without it.
+lxml==5.3.0
+
 # --- LLM providers (all optional at runtime) ---
 openai==1.59.6
 google-generativeai==0.8.3

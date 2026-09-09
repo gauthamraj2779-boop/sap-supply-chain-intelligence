@@ -1,0 +1,854 @@
+{
+  "generated_at": "2026-09-09T12:23:35+00:00",
+  "method": "llm",
+  "llm": {
+    "provider": "azure",
+    "model": "DeepSeek-V4-Pro",
+    "available": true,
+    "detail": "ready"
+  },
+  "sources": {
+    "ddic_catalog": {
+      "fields": 105,
+      "tables": 17,
+      "declared_check_tables": 42
+    },
+    "profile": {
+      "columns": 105,
+      "containment_pairs": 228,
+      "foreign_key_threshold": 0.95
+    },
+    "odata": {
+      "available": false,
+      "reason": "no $metadata cached for 5 service(s) in /Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/.claude/worktrees/agent-ae18a848b3482b5fe/backend/data/metadata/odata; see data/metadata/odata/README.md",
+      "entity_types": 0,
+      "services": [
+        {
+          "service": "API_BUSINESS_PARTNER",
+          "source": "unavailable",
+          "entity_types": 0
+        },
+        {
+          "service": "API_PRODUCT_SRV",
+          "source": "unavailable",
+          "entity_types": 0
+        },
+        {
+          "service": "API_PURCHASEORDER_PROCESS_SRV",
+          "source": "unavailable",
+          "entity_types": 0
+        },
+        {
+          "service": "API_PRODUCTION_ORDER_2_SRV",
+          "source": "unavailable",
+          "entity_types": 0
+        },
+        {
+          "service": "API_OUTBOUND_DELIVERY_SRV",
+          "source": "unavailable",
+          "entity_types": 0
+        }
+      ]
+    }
+  },
+  "confidence_formula": {
+    "entity": "0.40 base (table profiled and catalogued) + 0.30 DDIC declares a key + 0.20 that key is unique across the rows + 0.10 a matching OData EntityType exists; capped at 0.99",
+    "relationship": "0.35 base (a profiled join candidate at all) + 0.30 DDIC check table declares it + 0.25 x containment ratio + 0.05 the target field is a declared key + 0.10 a corroborating OData NavigationProperty; capped at 0.99",
+    "note": "Confidence is computed from the deterministic evidence listed on each record. It is never the model's self-report, and it is identical whether or not an LLM ran."
+  },
+  "entities": [
+    {
+      "name": "Customer",
+      "source_table": "KNA1",
+      "key_fields": [
+        "KUNNR"
+      ],
+      "business_definition": "A business partner to whom goods or services are sold.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'General Data in Customer Master'",
+        "6 rows profiled",
+        "DD03L key flag on KUNNR",
+        "declared key is unique across all 6 rows"
+      ]
+    },
+    {
+      "name": "Material",
+      "source_table": "MARA",
+      "key_fields": [
+        "MATNR"
+      ],
+      "business_definition": "A product or substance that is procured, produced, stored, or sold.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'General Material Data'",
+        "20 rows profiled",
+        "DD03L key flag on MATNR",
+        "declared key is unique across all 20 rows"
+      ]
+    },
+    {
+      "name": "MaterialPlant",
+      "source_table": "MARC",
+      "key_fields": [
+        "MATNR",
+        "WERKS"
+      ],
+      "business_definition": "Plant-specific data for a material, including planning and procurement parameters.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Plant Data for Material'",
+        "23 rows profiled",
+        "DD03L key flag on MATNR, WERKS",
+        "declared key is unique across all 23 rows"
+      ]
+    },
+    {
+      "name": "MaterialStorageLocation",
+      "source_table": "MARD",
+      "key_fields": [
+        "MATNR",
+        "WERKS",
+        "LGORT"
+      ],
+      "business_definition": "Storage-location-specific stock data for a material within a plant.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Storage Location Data for Material'",
+        "23 rows profiled",
+        "DD03L key flag on MATNR, WERKS, LGORT",
+        "declared key is unique across all 23 rows"
+      ]
+    },
+    {
+      "name": "OutboundDelivery",
+      "source_table": "LIKP",
+      "key_fields": [
+        "VBELN"
+      ],
+      "business_definition": "A document that controls the shipment of goods to a customer.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'SD Document: Delivery Header Data'",
+        "10 rows profiled",
+        "DD03L key flag on VBELN",
+        "declared key is unique across all 10 rows",
+        "also spans LIPS (SD Document: Delivery: Item Data), key VBELN, POSNR"
+      ]
+    },
+    {
+      "name": "Plant",
+      "source_table": "T001W",
+      "key_fields": [
+        "WERKS"
+      ],
+      "business_definition": "A physical location where materials are produced, stored, or distributed.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Plants/Branches'",
+        "3 rows profiled",
+        "DD03L key flag on WERKS",
+        "declared key is unique across all 3 rows"
+      ]
+    },
+    {
+      "name": "ProductionOrder",
+      "source_table": "AFKO",
+      "key_fields": [
+        "AUFNR"
+      ],
+      "business_definition": "An order that specifies the material to be produced, the quantity, and the production timeline.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Order Header Data PP Orders'",
+        "8 rows profiled",
+        "DD03L key flag on AUFNR",
+        "declared key is unique across all 8 rows",
+        "also spans AFPO (Order Item), key AUFNR, POSNR"
+      ]
+    },
+    {
+      "name": "PurchaseOrder",
+      "source_table": "EKKO",
+      "key_fields": [
+        "EBELN"
+      ],
+      "business_definition": "A formal request to a supplier for the delivery of materials or services under agreed terms.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Purchasing Document Header'",
+        "15 rows profiled",
+        "DD03L key flag on EBELN",
+        "declared key is unique across all 15 rows",
+        "also spans EKET (Scheduling Agreement Schedule Lines), key EBELN, EBELP, ETENR",
+        "also spans EKPO (Purchasing Document Item), key EBELN, EBELP"
+      ]
+    },
+    {
+      "name": "PurchasingInfoRecord",
+      "source_table": "EINA",
+      "key_fields": [
+        "MATNR",
+        "LIFNR"
+      ],
+      "business_definition": "A record linking a material and a supplier, containing procurement-specific data such as net price and planned delivery time.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Purchasing Info Record: General Data (joined with EINE org data)'",
+        "12 rows profiled",
+        "DD03L key flag on MATNR, LIFNR",
+        "declared key is unique across all 12 rows"
+      ]
+    },
+    {
+      "name": "Reservation",
+      "source_table": "RESB",
+      "key_fields": [
+        "RSNUM",
+        "RSPOS"
+      ],
+      "business_definition": "A request for materials to be set aside for a specific purpose, such as a production order.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Reservation/Dependent Requirements'",
+        "16 rows profiled",
+        "DD03L key flag on RSNUM, RSPOS",
+        "declared key is unique across all 16 rows"
+      ]
+    },
+    {
+      "name": "SalesOrder",
+      "source_table": "VBAK",
+      "key_fields": [
+        "VBELN"
+      ],
+      "business_definition": "A customer's request to purchase goods or services under specific terms.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Sales Document: Header Data'",
+        "12 rows profiled",
+        "DD03L key flag on VBELN",
+        "declared key is unique across all 12 rows",
+        "also spans VBAP (Sales Document: Item Data), key VBELN, POSNR"
+      ]
+    },
+    {
+      "name": "Supplier",
+      "source_table": "LFA1",
+      "key_fields": [
+        "LIFNR"
+      ],
+      "business_definition": "A business partner from whom materials or services are procured.",
+      "confidence": 0.9,
+      "evidence": [
+        "DD02T table text 'Vendor Master (General Section)'",
+        "5 rows profiled",
+        "DD03L key flag on LIFNR",
+        "declared key is unique across all 5 rows"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "name": "produces",
+      "from": "ProductionOrder",
+      "to": "Material",
+      "cardinality": "1:1",
+      "join": {
+        "from_field": "AFKO.PLNBEZ",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on AFKO.PLNBEZ",
+        "containment 1.00 of AFKO.PLNBEZ into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality 1:1 observed: AFKO.PLNBEZ is unique in this extract"
+      ],
+      "business_meaning": "A production order produces a specific material."
+    },
+    {
+      "name": "producedAt",
+      "from": "ProductionOrder",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "AFKO.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on AFKO.WERKS",
+        "containment 1.00 of AFKO.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: AFKO.WERKS is repeated in this extract"
+      ],
+      "business_meaning": "A production order is executed at a specific plant."
+    },
+    {
+      "name": "partOfProductionOrder",
+      "from": "ProductionOrder",
+      "to": "ProductionOrder",
+      "cardinality": "1:1",
+      "join": {
+        "from_field": "AFPO.AUFNR",
+        "to_field": "AFKO.AUFNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=AFKO on AFPO.AUFNR",
+        "containment 1.00 of AFPO.AUFNR into AFKO.AUFNR",
+        "DD03L key flag on AFKO.AUFNR",
+        "AFKO.AUFNR is unique across its rows",
+        "cardinality 1:1 observed: AFPO.AUFNR is unique in this extract",
+        "AFPO and AFKO were folded into one ProductionOrder entity, so this is its internal header/item join"
+      ]
+    },
+    {
+      "name": "hasMaterial",
+      "from": "ProductionOrder",
+      "to": "Material",
+      "cardinality": "1:1",
+      "join": {
+        "from_field": "AFPO.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on AFPO.MATNR",
+        "containment 1.00 of AFPO.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality 1:1 observed: AFPO.MATNR is unique in this extract"
+      ]
+    },
+    {
+      "name": "hasPlant",
+      "from": "ProductionOrder",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "AFPO.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on AFPO.WERKS",
+        "containment 1.00 of AFPO.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: AFPO.WERKS is repeated in this extract"
+      ]
+    },
+    {
+      "name": "suppliedBy",
+      "from": "PurchasingInfoRecord",
+      "to": "Supplier",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "EINA.LIFNR",
+        "to_field": "LFA1.LIFNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=LFA1 on EINA.LIFNR",
+        "containment 1.00 of EINA.LIFNR into LFA1.LIFNR",
+        "DD03L key flag on LFA1.LIFNR",
+        "LFA1.LIFNR is unique across its rows",
+        "cardinality n:1 observed: EINA.LIFNR is repeated in this extract"
+      ],
+      "business_meaning": "A purchasing info record defines procurement terms for a specific supplier."
+    },
+    {
+      "name": "forMaterial",
+      "from": "PurchasingInfoRecord",
+      "to": "Material",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "EINA.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on EINA.MATNR",
+        "containment 1.00 of EINA.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality n:1 observed: EINA.MATNR is repeated in this extract"
+      ],
+      "business_meaning": "A purchasing info record defines procurement terms for a specific material."
+    },
+    {
+      "name": "partOfPurchaseOrder",
+      "from": "PurchaseOrder",
+      "to": "PurchaseOrder",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "EKET.EBELN",
+        "to_field": "EKKO.EBELN"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=EKKO on EKET.EBELN",
+        "containment 1.00 of EKET.EBELN into EKKO.EBELN",
+        "DD03L key flag on EKKO.EBELN",
+        "EKKO.EBELN is unique across its rows",
+        "cardinality n:1 observed: EKET.EBELN is repeated in this extract",
+        "EKET and EKKO were folded into one PurchaseOrder entity, so this is its internal header/item join"
+      ]
+    },
+    {
+      "name": "partOfPurchaseOrderViaEBELP",
+      "from": "PurchaseOrder",
+      "to": "PurchaseOrder",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "EKET.EBELP",
+        "to_field": "EKPO.EBELP"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=EKPO on EKET.EBELP",
+        "containment 1.00 of EKET.EBELP into EKPO.EBELP",
+        "DD03L key flag on EKPO.EBELP",
+        "EKPO.EBELP is one field of a composite key; join on the full key",
+        "cardinality n:1 observed: EKET.EBELP is repeated in this extract",
+        "EKET and EKPO were folded into one PurchaseOrder entity, so this is its internal header/item join"
+      ]
+    },
+    {
+      "name": "orderedFrom",
+      "from": "PurchaseOrder",
+      "to": "Supplier",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "EKKO.LIFNR",
+        "to_field": "LFA1.LIFNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=LFA1 on EKKO.LIFNR",
+        "containment 1.00 of EKKO.LIFNR into LFA1.LIFNR",
+        "DD03L key flag on LFA1.LIFNR",
+        "LFA1.LIFNR is unique across its rows",
+        "cardinality n:1 observed: EKKO.LIFNR is repeated in this extract"
+      ],
+      "business_meaning": "A purchase order is placed with a specific supplier."
+    },
+    {
+      "name": "partOfPurchaseOrderViaEBELN",
+      "from": "PurchaseOrder",
+      "to": "PurchaseOrder",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "EKPO.EBELN",
+        "to_field": "EKKO.EBELN"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=EKKO on EKPO.EBELN",
+        "containment 1.00 of EKPO.EBELN into EKKO.EBELN",
+        "DD03L key flag on EKKO.EBELN",
+        "EKKO.EBELN is unique across its rows",
+        "cardinality n:1 observed: EKPO.EBELN is repeated in this extract",
+        "EKPO and EKKO were folded into one PurchaseOrder entity, so this is its internal header/item join"
+      ]
+    },
+    {
+      "name": "requestsMaterial",
+      "from": "PurchaseOrder",
+      "to": "Material",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "EKPO.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on EKPO.MATNR",
+        "containment 1.00 of EKPO.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality n:1 observed: EKPO.MATNR is repeated in this extract"
+      ],
+      "business_meaning": "A purchase order item requests a specific material."
+    },
+    {
+      "name": "deliversTo",
+      "from": "PurchaseOrder",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "EKPO.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on EKPO.WERKS",
+        "containment 1.00 of EKPO.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: EKPO.WERKS is repeated in this extract"
+      ],
+      "business_meaning": "A purchase order item is delivered to a specific plant."
+    },
+    {
+      "name": "shippedTo",
+      "from": "OutboundDelivery",
+      "to": "Customer",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "LIKP.KUNNR",
+        "to_field": "KNA1.KUNNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=KNA1 on LIKP.KUNNR",
+        "containment 1.00 of LIKP.KUNNR into KNA1.KUNNR",
+        "DD03L key flag on KNA1.KUNNR",
+        "KNA1.KUNNR is unique across its rows",
+        "cardinality n:1 observed: LIKP.KUNNR is repeated in this extract"
+      ],
+      "business_meaning": "An outbound delivery is shipped to a specific customer."
+    },
+    {
+      "name": "outboundDeliveryHasPlant",
+      "from": "OutboundDelivery",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "LIKP.VSTEL",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.65,
+      "inferred": true,
+      "evidence": [
+        "no check table declares LIKP.VSTEL; inferred from data overlap alone",
+        "containment 1.00 of LIKP.VSTEL into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: LIKP.VSTEL is repeated in this extract"
+      ]
+    },
+    {
+      "name": "deliversMaterial",
+      "from": "OutboundDelivery",
+      "to": "Material",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "LIPS.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on LIPS.MATNR",
+        "containment 1.00 of LIPS.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality n:1 observed: LIPS.MATNR is repeated in this extract"
+      ],
+      "business_meaning": "An outbound delivery item delivers a specific material."
+    },
+    {
+      "name": "partOfOutboundDelivery",
+      "from": "OutboundDelivery",
+      "to": "OutboundDelivery",
+      "cardinality": "1:1",
+      "join": {
+        "from_field": "LIPS.VBELN",
+        "to_field": "LIKP.VBELN"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=LIKP on LIPS.VBELN",
+        "containment 1.00 of LIPS.VBELN into LIKP.VBELN",
+        "DD03L key flag on LIKP.VBELN",
+        "LIKP.VBELN is unique across its rows",
+        "cardinality 1:1 observed: LIPS.VBELN is unique in this extract",
+        "LIPS and LIKP were folded into one OutboundDelivery entity, so this is its internal header/item join"
+      ]
+    },
+    {
+      "name": "fulfils",
+      "from": "OutboundDelivery",
+      "to": "SalesOrder",
+      "cardinality": "1:1",
+      "join": {
+        "from_field": "LIPS.VGBEL",
+        "to_field": "VBAK.VBELN"
+      },
+      "confidence": 0.65,
+      "inferred": true,
+      "evidence": [
+        "no check table declares LIPS.VGBEL; inferred from data overlap alone",
+        "containment 1.00 of LIPS.VGBEL into VBAK.VBELN",
+        "DD03L key flag on VBAK.VBELN",
+        "VBAK.VBELN is unique across its rows",
+        "cardinality 1:1 observed: LIPS.VGBEL is unique in this extract"
+      ],
+      "business_meaning": "An outbound delivery fulfils a sales order."
+    },
+    {
+      "name": "shippedFrom",
+      "from": "OutboundDelivery",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "LIPS.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on LIPS.WERKS",
+        "containment 1.00 of LIPS.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: LIPS.WERKS is repeated in this extract"
+      ],
+      "business_meaning": "An outbound delivery item is shipped from a specific plant."
+    },
+    {
+      "name": "definedFor",
+      "from": "MaterialPlant",
+      "to": "Material",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "MARC.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on MARC.MATNR",
+        "containment 1.00 of MARC.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality n:1 observed: MARC.MATNR is repeated in this extract"
+      ],
+      "business_meaning": "Plant-specific data is defined for a material."
+    },
+    {
+      "name": "definedAt",
+      "from": "MaterialPlant",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "MARC.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on MARC.WERKS",
+        "containment 1.00 of MARC.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: MARC.WERKS is repeated in this extract"
+      ],
+      "business_meaning": "Plant-specific data is defined for a plant."
+    },
+    {
+      "name": "stockedAs",
+      "from": "MaterialStorageLocation",
+      "to": "Material",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "MARD.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on MARD.MATNR",
+        "containment 1.00 of MARD.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality n:1 observed: MARD.MATNR is repeated in this extract"
+      ],
+      "business_meaning": "Storage location data is maintained for a material."
+    },
+    {
+      "name": "stockedAt",
+      "from": "MaterialStorageLocation",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "MARD.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on MARD.WERKS",
+        "containment 1.00 of MARD.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: MARD.WERKS is repeated in this extract"
+      ],
+      "business_meaning": "Storage location data is maintained for a plant."
+    },
+    {
+      "name": "reservesFor",
+      "from": "Reservation",
+      "to": "ProductionOrder",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "RESB.AUFNR",
+        "to_field": "AFKO.AUFNR"
+      },
+      "confidence": 0.65,
+      "inferred": true,
+      "evidence": [
+        "no check table declares RESB.AUFNR; inferred from data overlap alone",
+        "containment 1.00 of RESB.AUFNR into AFKO.AUFNR",
+        "DD03L key flag on AFKO.AUFNR",
+        "AFKO.AUFNR is unique across its rows",
+        "cardinality n:1 observed: RESB.AUFNR is repeated in this extract"
+      ],
+      "business_meaning": "A reservation reserves materials for a production order."
+    },
+    {
+      "name": "reservesMaterial",
+      "from": "Reservation",
+      "to": "Material",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "RESB.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on RESB.MATNR",
+        "containment 1.00 of RESB.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality n:1 observed: RESB.MATNR is repeated in this extract"
+      ],
+      "business_meaning": "A reservation reserves a specific material."
+    },
+    {
+      "name": "reservedAt",
+      "from": "Reservation",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "RESB.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on RESB.WERKS",
+        "containment 1.00 of RESB.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: RESB.WERKS is repeated in this extract"
+      ],
+      "business_meaning": "A reservation is made for a specific plant."
+    },
+    {
+      "name": "soldTo",
+      "from": "SalesOrder",
+      "to": "Customer",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "VBAK.KUNNR",
+        "to_field": "KNA1.KUNNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=KNA1 on VBAK.KUNNR",
+        "containment 1.00 of VBAK.KUNNR into KNA1.KUNNR",
+        "DD03L key flag on KNA1.KUNNR",
+        "KNA1.KUNNR is unique across its rows",
+        "cardinality n:1 observed: VBAK.KUNNR is repeated in this extract"
+      ],
+      "business_meaning": "A sales order is sold to a specific customer."
+    },
+    {
+      "name": "sellsMaterial",
+      "from": "SalesOrder",
+      "to": "Material",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "VBAP.MATNR",
+        "to_field": "MARA.MATNR"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=MARA on VBAP.MATNR",
+        "containment 1.00 of VBAP.MATNR into MARA.MATNR",
+        "DD03L key flag on MARA.MATNR",
+        "MARA.MATNR is unique across its rows",
+        "cardinality n:1 observed: VBAP.MATNR is repeated in this extract"
+      ],
+      "business_meaning": "A sales order item sells a specific material."
+    },
+    {
+      "name": "partOfSalesOrder",
+      "from": "SalesOrder",
+      "to": "SalesOrder",
+      "cardinality": "1:1",
+      "join": {
+        "from_field": "VBAP.VBELN",
+        "to_field": "VBAK.VBELN"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=VBAK on VBAP.VBELN",
+        "containment 1.00 of VBAP.VBELN into VBAK.VBELN",
+        "DD03L key flag on VBAK.VBELN",
+        "VBAK.VBELN is unique across its rows",
+        "cardinality 1:1 observed: VBAP.VBELN is unique in this extract",
+        "VBAP and VBAK were folded into one SalesOrder entity, so this is its internal header/item join"
+      ]
+    },
+    {
+      "name": "suppliedFrom",
+      "from": "SalesOrder",
+      "to": "Plant",
+      "cardinality": "n:1",
+      "join": {
+        "from_field": "VBAP.WERKS",
+        "to_field": "T001W.WERKS"
+      },
+      "confidence": 0.95,
+      "inferred": false,
+      "evidence": [
+        "DDIC check_table=T001W on VBAP.WERKS",
+        "containment 1.00 of VBAP.WERKS into T001W.WERKS",
+        "DD03L key flag on T001W.WERKS",
+        "T001W.WERKS is unique across its rows",
+        "cardinality n:1 observed: VBAP.WERKS is repeated in this extract"
+      ],
+      "business_meaning": "A sales order item is supplied from a specific plant."
+    }
+  ],
+  "notes": [
+    "3 of 30 relationships carry inferred=true: no check table declares them, so they were recovered from data containment alone and scored lower accordingly.",
+    "OData $metadata unavailable (no $metadata cached for 5 service(s) in /Users/deeptanushkapaka/Documents/Projects/sap-supply-chain-intelligence/.claude/worktrees/agent-ae18a848b3482b5fe/backend/data/metadata/odata; see data/metadata/odata/README.md). No NavigationProperty corroboration was applied, so every confidence below is the 0.10 OData term short of its ceiling."
+  ]
+}
